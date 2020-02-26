@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method='POST' action="<?php echo base_url(); ?>index.php/report/search_employee/">
+            <form method='POST' action="<?php echo base_url(); ?>report/search_employee/">
                 <div class="modal-body">
                     <table width="100%">
                         <tr>
@@ -63,7 +63,7 @@
                         </h4>
 
                         <?php if(!empty($filt)) { ?>     
-                        <div class='sufee-alert alert with-close alert-success fade show m-l-30  m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filt ?>, <a href='<?php echo base_url(); ?>index.php/report/report_main_emp' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a>.</div>                    
+                        <div class='sufee-alert alert with-close alert-success fade show m-l-30  m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filt ?>, <a href='<?php echo base_url(); ?>report/report_main_emp' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a>.</div>                    
                         <?php } ?>
 
 
@@ -83,7 +83,7 @@
                                 <tr>
                                     <td>
                                         <?php echo $emp['employee'];?>
-                                        <!-- <a href="<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $emp['employee_id']?>" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
+                                        <!-- <a href="<?php echo base_url(); ?>report/report_sub/<?php echo $emp['employee_id']?>" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
                                             <?php echo $emp['employee'];?>
                                         </a> -->                                            
                                     </td>
@@ -91,20 +91,20 @@
                                     <td>
                                         <div class="btn-group">
                                             
-                                            <a href="<?php echo base_url(); ?>index.php/report/report_history/<?php echo $emp['employee_id']?>" class="btn text-white btn-secondary-alt item btn-sm" data-toggle="tooltip" data-placement="top"   title="View Overall Items"><span class="fa fa-eye"></span></a>
+                                            <a href="<?php echo base_url(); ?>report/report_history/<?php echo $emp['employee_id']?>" class="btn text-white btn-secondary-alt item btn-sm" data-toggle="tooltip" data-placement="top"   title="View Overall Items"><span class="fa fa-eye"></span></a>
 
-                                            <a href="<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $emp['employee_id']?>" class="btn text-white btn-warning-alt item btn-sm" data-toggle="tooltip" data-placement="top"   title="View Current Items"><span class="fa fa-eye"></span></a>
+                                            <a href="<?php echo base_url(); ?>report/report_sub/<?php echo $emp['employee_id']?>" class="btn text-white btn-warning-alt item btn-sm" data-toggle="tooltip" data-placement="top"   title="View Current Items"><span class="fa fa-eye"></span></a>
 
 
                                             <?php if($_SESSION['usertype'] == 1){ ?>
-                                            <a href="<?php echo base_url(); ?>index.php/report/multi_return/<?php echo $emp['employee_id']?>" class="btn btn-success-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Return">
+                                            <a href="<?php echo base_url(); ?>report/multi_return/<?php echo $emp['employee_id']?>" class="btn btn-success-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Return">
                                                 <i class="fa fa-dedent"></i>
                                             </a>
                                             <?php } ?>
-                                            <!-- <a href="<?php echo base_url(); ?>index.php/report/multi_transfer/<?php echo $emp['employee_id']?>" class="btn text-white btn-warning item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Transfer">
+                                            <!-- <a href="<?php echo base_url(); ?>report/multi_transfer/<?php echo $emp['employee_id']?>" class="btn text-white btn-warning item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Transfer">
                                                 <i class="fa fa-indent"></i>
                                             </a> -->
-                                            <a href="<?php echo base_url(); ?>index.php/report/seaaf_report/<?php echo $emp['employee_id']?>" class="btn text-white btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top"   title="Summary of Employee's Asset Accountability Form"><span class="fa fa-print"></span></a>
+                                            <a href="<?php echo base_url(); ?>report/seaaf_report/<?php echo $emp['employee_id']?>" class="btn text-white btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top"   title="Summary of Employee's Asset Accountability Form"><span class="fa fa-print"></span></a>
                                                  
                                             
                                         </div>
