@@ -107,13 +107,17 @@
                                 <span class="hide-menu"></span>Inventory Report
                             </a>
                             <div class="panel">
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main">Equipment/Tools</a>
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_draft">Drafts</a>
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main_hist">History</a>
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main_emp">Per Employee</a>
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main_avail">Available</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep">Per Sub Category</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep_itm">Per Item</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep_overall">Overall Item Report</a>
                               <!-- <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/physical_list">Physical Condition</a> -->
                             </div>
+                        </li>
+                        <li> 
+                            <a class="waves-effect waves-dark" href="<?php echo base_url(); ?>borrow/borrow_list" aria-expanded="false">
+                                <i class="fa fa-bold"></i>
+                                <span class="hide-menu">Borrow</span>
+                            </a>
                         </li>
                     </ul>
                 </nav>

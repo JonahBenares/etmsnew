@@ -14377,23 +14377,23 @@ input[type=checkbox]
     }
     
     .encode_css{
-        border-radius: 20px 20px;
+        border-radius: 5px 5px;
         border: 10px solid #3194fa;
         transition: 1s; 
         box-shadow: -6px 18px 20px 0px #b2b2b2!important;
     }
     .encode_css_danger{
-        border-radius: 20px 20px;
-        border: 10px solid #dc3646;
+        border-radius: 5px 5px;
+        border: 10px solid #ff3547;
         transition: 1s; 
-        box-shadow: -6px 18px 20px 0px #b2b2b2!important;
+        box-shadow: 0px 3px 6px 1px #00000024, 0px 2px 4px 0px #00000026;
     }
 
     .encode_css_success{
-        border-radius: 20px 20px;
+        border-radius: 5px 5px;
         border: 10px solid #29a746;
         transition: 1s; 
-        box-shadow: -6px 18px 20px 0px #b2b2b2!important;
+        box-shadow: 0px 3px 6px 1px #00000024, 0px 2px 4px 0px #00000026;
     }
 
     .bg-success{

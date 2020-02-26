@@ -383,10 +383,10 @@
         <div class="row">
             <div class="col-lg-12 ">
                 <div class="card bor-radius shadow ">
-                     <div class="card-header">
-                        <a href="" onclick="closeWindow()" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
+                     <div class="card-header bg-white">
+                        <a href="" onclick="closeWindow()" class="btn btn-default-alt"><span class="fa fa-arrow-left"></span></a>
                         <center>
-                                <table class= " m-l-30 m-b-30 m-t-30">
+                                <table class= "">
                                     <tr>
                                         <td align="center"><h5><?php echo $item ?></h5></td>
                                         <td><h5 class="m-l-5 m-r-20">-</h5></td>

@@ -605,7 +605,7 @@ class Report extends CI_Controller {
     }
 
     public function report_print_overall(){  
-        $this->load->view('template/header_report');
+        $this->load->view('template/header');
         $from=$this->uri->segment(3);
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
@@ -1207,7 +1207,7 @@ class Report extends CI_Controller {
     }
 
     public function report_print(){  
-        $this->load->view('template/header_report');
+        $this->load->view('template/header');
         $from=$this->uri->segment(3);
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
@@ -1448,7 +1448,7 @@ class Report extends CI_Controller {
     }
 
     public function report_print_draft(){  
-        $this->load->view('template/header_report');
+        $this->load->view('template/header');
         $from=$this->uri->segment(3);
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);

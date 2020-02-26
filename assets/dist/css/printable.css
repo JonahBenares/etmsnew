@@ -58,3 +58,6 @@ p, .main-tab, h5, label.nomarg{
     background-size: contain!important;
     background-position: center center!important;
 }
+ul#name-item{
+    width: 40%;
+}

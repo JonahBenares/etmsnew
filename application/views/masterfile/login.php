@@ -38,10 +38,10 @@
                                                       
                             <form method="POST" action="<?php echo base_url(); ?>masterfile/login">
                                 <div class="form-group ">
-                                    <input class="form-control shadow" type="text" name="username" placeholder="Username">
+                                    <input class="form-control form-alt" type="text" name="username" placeholder="Username">
                                 </div>
                                 <div class="form-group ">
-                                    <input class="form-control shadow" type="password" name="password" placeholder="Password">
+                                    <input class="form-control form-alt" type="password" name="password" placeholder="Password">
                                 </div>
                                 <button class="btn btn-lg btn-dark btn-block" type="submit">SIGN IN</button>                              
                             </form>   
@@ -52,7 +52,7 @@
                             <?php 
                                 if($error_msg){
                             ?>
-                                <div class="alert bor-radius10 shadow alert-danger alert-shake animated headShake">
+                                <div class="alert bor-radius10 alert-danger alert-shake animated headShake">
                                     <center><?php echo $error_msg; ?></center>                    
                                 </div>
                             <?php } ?>                             

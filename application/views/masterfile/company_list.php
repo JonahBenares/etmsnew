@@ -62,8 +62,8 @@
                                 </thead>
                                 <?php foreach($company AS $dep){ ?>
                                     <tr>
-                                        <td class="p-5"><?php echo $dep->company_name;?></td>
-                                        <td class="p-5">                                            
+                                        <td><?php echo $dep->company_name;?></td>
+                                        <td>                                            
                                             <div class="btn-group">
                                                 <a href="<?php echo base_url(); ?>masterfile/company_update/<?php echo $dep->company_id?>" class="btn btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
                                                     <i class="fa fa-pencil-square-o"></i>

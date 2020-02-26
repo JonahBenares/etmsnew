@@ -234,7 +234,7 @@
                                     <td><?php echo $m['cat']; ?></td>
                                     <td><?php echo $m['subcat']; ?></td>
                                     <td>
-                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $m['et_id'];?>" class=""  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
+                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $m['et_id'];?>" class=""  data-toggle="tooltip" data-placement="left" title="View" style="word-wrap: break-word;">
                                             <?php echo $m['et_desc']; ?>
                                         </a>   
                                     </td>

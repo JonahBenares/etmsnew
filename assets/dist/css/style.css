@@ -5148,6 +5148,14 @@ tbody.collapse.show {
   border-top-right-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem; }
 
+.badge-alt{
+  padding: 5px 10px!important;
+  border-radius: 50px!important
+}
+.badge-white{
+  background: #fff;
+  color: orange;
+}
 .badge {
   display: inline-block;
   padding: 0.25em 0.4em;
@@ -11071,7 +11079,7 @@ html {
   min-height: 100%; }
 
 a {
-  color: #c38004; }
+  color: #fb8c02; }
 
 a:hover,
 a:focus {
@@ -22256,6 +22264,10 @@ input.bg-white{
 }
 .bg-success-alt{
   background-image: linear-gradient(45deg, #0a9343, #ece922);
+  color: #fff;
+}
+.bg-dark-alt{
+  background-image: linear-gradient(45deg, #424242 , #757575 );
   color: #fff;
 }
 .cheader-bor{
