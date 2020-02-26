@@ -20,10 +20,10 @@
                     <div class="card-body">
                         <h4 class="card-title">Available Set Equipment/Tools
                             <div class="pull-right btn-group">
-                                <a href="<?php echo base_url(); ?>index.php/report/set_print_avail_all" class="btn btn-info-alt btn-sm" title="Set Print">
+                                <a href="<?php echo base_url(); ?>report/set_print_avail_all" class="btn btn-info-alt btn-sm" title="Set Print">
                                 <span class="fa fa-print"></span></a>
                                 <?php if($_SESSION['usertype'] == 1){ ?> 
-                                <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success-alt btn-sm">
+                                <a href="<?php echo base_url(); ?>report/aaf_assign_rep" class="btn btn-success-alt btn-sm">
                                     Assign
                                 </a>
                                 <?php } ?>             
@@ -56,7 +56,7 @@
                                     <td><?php echo $a['category']; ?></td>
                                     <td><?php echo $a['subcat']; ?></td>
                                     <td>
-                                        <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $a['et_id']; ?>" class="pull-left" data-toggle="tooltip" data-placement="left" title="View Item">
+                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $a['et_id']; ?>" class="pull-left" data-toggle="tooltip" data-placement="left" title="View Item">
                                         <?php echo $a['et_desc']; ?>
                                          </a>
                                         
@@ -64,7 +64,7 @@
                                     <td align="center"><?php echo $a['unit']; ?></td>
                                     <td align="center"><?php echo $a['qty']; ?></td>
                                     <td>
-                                        <a href="<?php echo base_url(); ?>index.php/report/set_print_avail/<?php echo $a['set_id'];?>" class="" data-toggle="tooltip" data-placement="top" title="View Set"  style="white-space: normal!important;text-align: left">
+                                        <a href="<?php echo base_url(); ?>report/set_print_avail/<?php echo $a['set_id'];?>" class="" data-toggle="tooltip" data-placement="top" title="View Set"  style="white-space: normal!important;text-align: left">
                                              <?php echo $a['set_name'];?>
                                         </a> 
                                     </td>
@@ -72,7 +72,7 @@
                                         <div class="btn-group">
                                         <?php if($a['damaged']!=1){ ?>         
                                             <?php if($_SESSION['usertype'] == 1){ ?>                                 
-                                            <a class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode/<?php echo $a['et_id'];?>">
+                                            <a class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>report/edit_encode/<?php echo $a['et_id'];?>">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $a['empid'];?>,<?php echo $a['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">

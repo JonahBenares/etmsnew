@@ -9,7 +9,7 @@
                     <div class="card-header bg-danger-alt cheader-bor">
                         <strong>DAMAGE</strong> Equipment / Tools
                     </div>
-                    <form action="<?php echo base_url(); ?>index.php/report/insert_transfer" method="POST">
+                    <form action="<?php echo base_url(); ?>report/insert_transfer" method="POST">
                         <div class="card-body card-block">
                             <table class="table table-hover table-bordered">
                                 <thead>       
@@ -29,7 +29,7 @@
                                 ?>
                                 <tr>       
                                     <td class="p-2" align="center">
-                                        <a href="<?php echo base_url(); ?>index.php/report/damage_report/<?php echo $det['damage_id']?>" class="btn btn-warning-alt item btn-sm"  data-toggle="tooltip" data-placement="top" title="View">
+                                        <a href="<?php echo base_url(); ?>report/damage_report/<?php echo $det['damage_id']?>" class="btn btn-warning-alt item btn-sm"  data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>

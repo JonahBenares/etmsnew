@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method='POST' action="<?php echo base_url(); ?>index.php/report/insert_lost">
+            <form method='POST' action="<?php echo base_url(); ?>report/insert_lost">
                 <div class="modal-body">
                     <table width="100%">
                         <tr>
@@ -62,12 +62,12 @@
                         <h4 class="card-title">Available Equipment / Tools
                             <div class="pull-right btn-group">
                                 <?php if($_SESSION['usertype'] == 1){ ?>
-                                <a href="<?php echo base_url(); ?>index.php/report/create_set_avail" class="btn btn-warning-alt btn-sm text-white">Create Set</a>
-                                <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success-alt btn-sm">
+                                <a href="<?php echo base_url(); ?>report/create_set_avail" class="btn btn-warning-alt btn-sm text-white">Create Set</a>
+                                <a href="<?php echo base_url(); ?>report/aaf_assign_rep" class="btn btn-success-alt btn-sm">
                                     Assign
                                 </a>
                                 <?php } ?>
-                                <a href = "<?php echo base_url(); ?>index.php/report/report_print_avail" class="btn btn-info-alt btn-sm"><span class="fa fa-print"></span> Print</a>               
+                                <a href = "<?php echo base_url(); ?>report/report_print_avail" class="btn btn-info-alt btn-sm"><span class="fa fa-print"></span> Print</a>               
                             </div>                            
                         </h4>
                         
@@ -88,7 +88,7 @@
                                         <td><?php echo $a['category']; ?></td>
                                         <td><?php echo $a['subcat']; ?></td>
                                         <td>
-                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $a['et_id']; ?>"  data-toggle="tooltip" data-placement="left" title="View">
+                                            <a href="<?php echo base_url(); ?>report/view_more/<?php echo $a['et_id']; ?>"  data-toggle="tooltip" data-placement="left" title="View">
                                             <?php echo $a['et_desc']; ?>
                                              </a>
                                             
@@ -102,11 +102,11 @@
                                                 <a class="btn btn-secondary-alt text-white item btn-sm" data-toggle="modal" id = "lost_button" data-id = "<?php echo $a['empid'];?>" data-name = "<?php echo $a['accountability'];?>" data-ab = "<?php echo $a['ed_id'];?>" data-ac = '<?php echo $a['et_id']; ?>' data-target="#lostTag" title="Lost">
                                                     <i class="fa fa-minus-circle"></i>
                                                 </a>
-                                                <a class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode/<?php echo $a['et_id'];?>">
+                                                <a class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>report/edit_encode/<?php echo $a['et_id'];?>">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                                 <?php } ?> 
-                                                <a href = "<?php echo base_url(); ?>index.php/report/encode_report/<?php echo $a['et_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                                <a href = "<?php echo base_url(); ?>report/encode_report/<?php echo $a['et_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                                 <?php if($_SESSION['usertype'] == 1){ ?>

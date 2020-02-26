@@ -42,7 +42,7 @@
                                     <td><?php echo $m['remarks']; ?></td>
                                     <td>                                            
                                         <div class="table-data-feature">
-                                            <a href = "<?php echo base_url(); ?>index.php/report/ars_report/<?php echo $m['return_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                            <a href = "<?php echo base_url(); ?>report/ars_report/<?php echo $m['return_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                                 <i class="fa fa-print"></i>
                                             </a>
                                         </div>

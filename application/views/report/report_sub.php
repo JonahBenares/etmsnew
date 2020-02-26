@@ -1,7 +1,7 @@
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 <script type="text/javascript">
     function viewSet(){
-        window.open('<?php echo base_url(); ?>index.php/report/add_set_pop/', '_blank', 'top=50px,left=350px,width=600,height=500');
+        window.open('<?php echo base_url(); ?>report/add_set_pop/', '_blank', 'top=50px,left=350px,width=600,height=500');
     }
 </script>
 
@@ -53,7 +53,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method='POST' action="<?php echo base_url(); ?>index.php/report/insert_lost">
+            <form method='POST' action="<?php echo base_url(); ?>report/insert_lost">
                 <div class="modal-body">
                     <table width="100%">
                         <tr>
@@ -111,12 +111,12 @@
                             </a>
                             <b><?php echo $name;?></b>
                             <div class="btn-group pull-right">
-                                <a href="<?php echo base_url(); ?>index.php/report/create_set/<?php echo $id;?>" class="btn btn-warning-alt btn-sm text-white pull-right" data-toggle="tooltip" data-placement="top" title='Create Set'>Create Set</a>
-                                <a href="<?php echo base_url(); ?>index.php/report/multi_return/<?php echo $id;?>" class="btn btn-success-alt btn-sm " data-toggle="tooltip" data-placement="top" title='Multiple Return'>
+                                <a href="<?php echo base_url(); ?>report/create_set/<?php echo $id;?>" class="btn btn-warning-alt btn-sm text-white pull-right" data-toggle="tooltip" data-placement="top" title='Create Set'>Create Set</a>
+                                <a href="<?php echo base_url(); ?>report/multi_return/<?php echo $id;?>" class="btn btn-success-alt btn-sm " data-toggle="tooltip" data-placement="top" title='Multiple Return'>
                                     <span class="fa fa-dedent"></span></a>
-                                <a href="<?php echo base_url(); ?>index.php/report/return_report/<?php echo $id;?>" class="btn btn-success-alt btn-sm" data-toggle="tooltip" data-placement="top" title='Return Report'>
+                                <a href="<?php echo base_url(); ?>report/return_report/<?php echo $id;?>" class="btn btn-success-alt btn-sm" data-toggle="tooltip" data-placement="top" title='Return Report'>
                                     <span class="fa fa-clipboard"></span></a>
-                                <a href="<?php echo base_url(); ?>index.php/report/seaaf_report/<?php echo $id;?>" class="btn btn-info-alt btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                <a href="<?php echo base_url(); ?>report/seaaf_report/<?php echo $id;?>" class="btn btn-info-alt btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                     <span class="fa fa-print"></span></a>
                             </div>
                         </h4>
@@ -145,7 +145,7 @@
                                     <td><?php echo $s['cat']; ?></td>
                                     <td><?php echo $s['subcat']; ?></td>
                                     <td>
-                                        <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More" style="white-space: normal!important;text-align: left">
+                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More" style="white-space: normal!important;text-align: left">
                                              <?php echo ($s['lost']!=0) ? $s['et_desc']." - <b>Lost Item</b>" : $s['et_desc']; ?>
                                         </a>                                           
                                     </td>
@@ -153,7 +153,7 @@
                                     <td ><?php echo $s['qty']; ?></td>
                                     <td><?php echo $s['department']; ?></td>
                                     <td>
-                                        <a href="<?php echo base_url(); ?>index.php/report/set_print_account/<?php echo $s['set_id'];?>/<?php echo $s['empid'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View Set"  style="white-space: normal!important;text-align: left">
+                                        <a href="<?php echo base_url(); ?>report/set_print_account/<?php echo $s['set_id'];?>/<?php echo $s['empid'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View Set"  style="white-space: normal!important;text-align: left">
                                             <?php echo $s['set_name'];?> 
                                         </a>
                                     </td>

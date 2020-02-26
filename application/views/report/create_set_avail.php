@@ -26,7 +26,7 @@
                             </a>
                             <b>Create Set for Available E/T</b>
                         </h4>
-                        <form action="<?php echo base_url(); ?>index.php/report/insert_set_avail" method = "POST">
+                        <form action="<?php echo base_url(); ?>report/insert_set_avail" method = "POST">
                             <div class="row m-b-20">
                                 <div class = "col-lg-4">
                                     <label>Set Name:</label>
@@ -69,10 +69,10 @@
                                         <td align="center" hidden><input type="text" name="etid[]" value='<?php echo $s['et_id']; ?>' disabled></td>
                                         <td align="center" width = '10%'>
                                             <div class="btn-group">
-                                                <a href = '<?php echo base_url(); ?>index.php/report/rem_set_avail/<?php echo $s['ed_id'];?>' class="btn btn-danger-alt item btn-sm text-white" data-toggle="tooltip" onclick="confirmationDeleteSet(this);return false;" data-placement="top" title="Remove Set">
+                                                <a href = '<?php echo base_url(); ?>report/rem_set_avail/<?php echo $s['ed_id'];?>' class="btn btn-danger-alt item btn-sm text-white" data-toggle="tooltip" onclick="confirmationDeleteSet(this);return false;" data-placement="top" title="Remove Set">
                                                     <i class="fa fa-times"></i>
                                                 </a>
-                                                <a href = '<?php echo base_url(); ?>index.php/report/create_set_avail/<?php echo $s['ed_id'];?>' class="btn btn-info-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Update Set">
+                                                <a href = '<?php echo base_url(); ?>report/create_set_avail/<?php echo $s['ed_id'];?>' class="btn btn-info-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Update Set">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                             </div>
@@ -85,7 +85,7 @@
                                         <td><?php echo $s['cat']; ?></td>
                                         <td><?php echo $s['subcat']; ?></td>
                                         <td>
-                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More"  style="white-space: normal!important;text-align: left">
+                                            <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More"  style="white-space: normal!important;text-align: left">
                                                  <?php echo $s['et_desc']; ?>
                                             </a>                                           
                                         </td>

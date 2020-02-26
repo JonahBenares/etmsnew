@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row">                
             <div class="col-lg-12">
-                <form action="<?php echo base_url(); ?>index.php/report/insert_damage_form" method="POST">
+                <form action="<?php echo base_url(); ?>report/insert_damage_form" method="POST">
                 <?php 
                 foreach($head AS $h){  
                     $x = 1;

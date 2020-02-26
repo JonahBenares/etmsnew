@@ -57,14 +57,14 @@
                                     <td><?php echo $i['remarks']; ?></td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="<?php echo base_url(); ?>index.php/report/acf_report/<?php echo $i['return_id']?>" class="btn btn-warning-alt text-white pull-right btn-sm">
+                                            <a href="<?php echo base_url(); ?>report/acf_report/<?php echo $i['return_id']?>" class="btn btn-warning-alt text-white pull-right btn-sm">
                                                 <span class="fa fa-print"></span> ACF
                                             </a>
-                                            <a href="<?php echo base_url(); ?>index.php/report/ars_report/<?php echo $i['return_id']?>" class="btn btn-success-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Print Return Slip">
+                                            <a href="<?php echo base_url(); ?>report/ars_report/<?php echo $i['return_id']?>" class="btn btn-success-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Print Return Slip">
                                                 <i class="fa fa-print"></i>
                                             </a>
                                             <span data-toggle="tooltip" data-placement="top" title="View Items">
-                                                <a href="<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $i['return_id']?>" class="btn btn-info-alt item btn-sm" style="border-radius: 0px 2px 2px 0px" >
+                                                <a href="<?php echo base_url(); ?>report/report_sub/<?php echo $i['return_id']?>" class="btn btn-info-alt item btn-sm" style="border-radius: 0px 2px 2px 0px" >
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </span>

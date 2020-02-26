@@ -16,7 +16,7 @@
  <!-- MAIN CONTENT-->
 <div class="page-wrapper">
     <div class="container-fluid">
-        <form action = '<?php echo base_url(); ?>index.php/repair/unsaved' method = "POST">
+        <form action = '<?php echo base_url(); ?>repair/unsaved' method = "POST">
             <?php
                 foreach($rep AS $d){  
                     $z = 1;
@@ -34,7 +34,7 @@
             <input type = "submit" class="btn btn-warning btn-sm text-white" id="back" value = "Back">
         </form>
         
-        <form method = "POST" action = "<?php echo base_url(); ?>index.php/repair/insert_repair">
+        <form method = "POST" action = "<?php echo base_url(); ?>repair/insert_repair">
             <!-- LOOP HERE -->
             <?php 
 
@@ -167,7 +167,7 @@
             <div class="row">
                <!--  <div style="position: fixed; z-index: 3;bottom:0px;width: 100%"> -->
                     <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $z;?>">
-                    <!-- <a href="<?php echo base_url(); ?>index.php/repair/repair_form" class="btn btn-success btn-block  btn-md"> Save</a> -->
+                    <!-- <a href="<?php echo base_url(); ?>repair/repair_form" class="btn btn-success btn-block  btn-md"> Save</a> -->
                     <input type="submit" name="submit" class="btn btn-success btn-block  btn-md" value = "Save">
 
                <!--  </div> -->

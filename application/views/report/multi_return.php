@@ -30,7 +30,7 @@
                         </h4>
                     </div>
                     <div class="card-body"> 
-                        <form action = "<?php echo base_url(); ?>index.php/report/insert_multireturn" method = "POST">
+                        <form action = "<?php echo base_url(); ?>report/insert_multireturn" method = "POST">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group m-b-10">

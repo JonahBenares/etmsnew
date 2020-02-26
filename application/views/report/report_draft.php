@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method = "POST" action="<?php echo base_url();?>index.php/report/cancel_draft">
+                <form method = "POST" action="<?php echo base_url();?>report/cancel_draft">
                     <div class="form-group">
                         <label for="" class="control-label mb-1">Cancel Reason:</label>
                         <textarea name="reason" type="text" class="form-control bor-radius5"></textarea>
@@ -34,7 +34,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method='POST' action="<?php echo base_url(); ?>index.php/report/search_report_draft/">
+            <form method='POST' action="<?php echo base_url(); ?>report/search_report_draft/">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6">
@@ -182,18 +182,18 @@
                                     <span class="fa fa-filter"></span> Filter
                                 </button>
                                 <?php if(!empty($filt)){ ?>
-                                <a href = "<?php echo base_url(); ?>index.php/report/export_equipment_draft/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
+                                <a href = "<?php echo base_url(); ?>report/export_equipment_draft/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
 
-                                <a href = "<?php echo base_url(); ?>index.php/report/report_print_draft/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-print"></span> Print</a>
+                                <a href = "<?php echo base_url(); ?>report/report_print_draft/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-print"></span> Print</a>
                                 <?php }else { ?>
-                                <a href = "<?php echo base_url(); ?>index.php/report/export_equipment_draft" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
+                                <a href = "<?php echo base_url(); ?>report/export_equipment_draft" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
                                 
-                                <a href = "<?php echo base_url(); ?>index.php/report/report_print_draft" target="_blank" class="btn btn-sm btn-info-alt"><span class="fa fa-print"></span> Print</a>
+                                <a href = "<?php echo base_url(); ?>report/report_print_draft" target="_blank" class="btn btn-sm btn-info-alt"><span class="fa fa-print"></span> Print</a>
                                 <?php } ?>
                             </div>                           
                         </h4>
                         <?php if(!empty($filt)){  //if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!=''){ ?>     
-                        <div class='sufee-alert alert with-close alert-success fade show m-l-30 m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filt ?>, <a href='<?php echo base_url(); ?>index.php/report/report_draft' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a></div>                    
+                        <div class='sufee-alert alert with-close alert-success fade show m-l-30 m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filt ?>, <a href='<?php echo base_url(); ?>report/report_draft' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a></div>                    
                         <?php } ?>
                         <table class="table table-borderless table-striped table-earning table-hover" id="myTable_peret">
                             <thead>
@@ -217,7 +217,7 @@
                                     <td><?php echo $m['cat']; ?></td>
                                     <td><?php echo $m['subcat']; ?></td>
                                     <td>
-                                        <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $m['et_id'];?>" class=""  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
+                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $m['et_id'];?>" class=""  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
                                             <?php echo $m['et_desc']; ?>
                                         </a> 
                                     </td>
@@ -227,11 +227,11 @@
                                     <td>                                            
                                         <div class="btn-group">
                                             <?php if($_SESSION['usertype'] == 1){ ?>
-                                            <a class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode_draft/<?php echo $m['et_id'];?>">
+                                            <a class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>report/edit_encode_draft/<?php echo $m['et_id'];?>">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <?php } ?>
-                                            <a href = "<?php echo base_url(); ?>index.php/report/encode_report/<?php echo $m['et_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                            <a href = "<?php echo base_url(); ?>report/encode_report/<?php echo $m['et_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                                 <i class="fa fa-print"></i>
                                             </a>
                                             <?php if($_SESSION['usertype'] == 1){ ?>

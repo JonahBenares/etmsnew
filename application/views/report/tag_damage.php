@@ -10,7 +10,7 @@
                         <!-- <a onclick="history.go(-1);" class="btn btn-default"><span class="fa fa-arrow-left"></span></a> -->
                         <strong>DAMAGE</strong> Equipment / Tools
                     </div>
-                    <form action="<?php echo base_url(); ?>index.php/report/insert_damage" method="POST">
+                    <form action="<?php echo base_url(); ?>report/insert_damage" method="POST">
                         <div class="card-body card-block">
                            <!--  <div class="row">
                                 <div class="col-lg-6 col-md-6">

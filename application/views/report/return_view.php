@@ -8,7 +8,7 @@
                     <div class="card-header bg-success-alt cheader-bor text-white">
                         <strong>RETURN</strong> Equipment / Tools
                     </div>
-                    <form action="<?php echo base_url(); ?>index.php/report/insert_return" method="POST">
+                    <form action="<?php echo base_url(); ?>report/insert_return" method="POST">
                         <div class="card-body card-block">
                             <div class="row">
                                 <div class="col-lg-3 col-md-3">

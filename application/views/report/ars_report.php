@@ -136,7 +136,7 @@
                     <td colspan="5" align="center">
                         <a href="" id="printBtn" onclick="iprint()" class="btn btn-success-alt m-t-50 p-l-100 p-r-100">Print</a>
                         <?php if($test==0 || $lost==1){ ?>
-                        <a id="printBtn" href="<?php echo base_url(); ?>index.php/report/acf_report/<?php echo $id;?>" target="_blank" class="btn btn-info m-t-50 animated headShake">Print Clearance</a></td>
+                        <a id="printBtn" href="<?php echo base_url(); ?>report/acf_report/<?php echo $id;?>" target="_blank" class="btn btn-info m-t-50 animated headShake">Print Clearance</a></td>
                         <?php } ?>
                 </tr>
             </table> 
