@@ -2720,6 +2720,7 @@ class Report extends CI_Controller {
         $ret_id =$this->super_model->select_column_where("return_head", "accountability_id", "accountability_id", $id);
         $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
         if($count==0){
+            $replacement='';
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
                 foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
@@ -2730,7 +2731,7 @@ class Report extends CI_Controller {
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
                         if($rep_et==$s->et_id){
-                            $replacement = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                            $replacement.= $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
                         }
                     }
                     $data['sub'][] = array(
@@ -2760,6 +2761,7 @@ class Report extends CI_Controller {
                 }
             }
         }else {
+            $replacement='';
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
                 foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
@@ -2769,8 +2771,8 @@ class Report extends CI_Controller {
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
-                        if($rep_et==$s->et_id){
-                            $replacement = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                        if($lo->ed_id==$s->ed_id){
+                            $replacement.= $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
                         }
                     }
                     $data['sub'][] = array(
@@ -3009,6 +3011,7 @@ class Report extends CI_Controller {
         }
 
         if($count==0){
+            $replacement='';
             foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0'") AS $sub){
                 foreach($this->super_model->select_custom_where('et_details',"et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
@@ -3020,6 +3023,12 @@ class Report extends CI_Controller {
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
+                    foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
+                        $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
+                        if($lo->ed_id==$s->ed_id){
+                            $replacement.= $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                        }
+                    }
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
@@ -3039,10 +3048,12 @@ class Report extends CI_Controller {
                         'date_issued'=>'',
                         'date_returned'=>'',
                         'remarks'=>'',
+                        'replacement'=>$replacement,
                     );
                 }
             }
         }else {
+            $replacement='';
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
                 foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
@@ -3054,6 +3065,12 @@ class Report extends CI_Controller {
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
+                    foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
+                        $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
+                        if($lo->ed_id==$s->ed_id){
+                            $replacement.= $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                        }
+                    }
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
@@ -3073,6 +3090,7 @@ class Report extends CI_Controller {
                         'date_issued'=>'',
                         'date_returned'=>'',
                         'remarks'=>'',
+                        'replacement'=>$replacement,
                     );
                 }
             }
@@ -3134,7 +3152,8 @@ class Report extends CI_Controller {
                             'lost'=>$lost,
                             'date_issued'=>$date_issued,
                             'date_returned'=>$date_returned,
-                            'remarks'=>$remarks
+                            'remarks'=>$remarks,
+                            'replacement'=>'',
                         );
                     }
 
@@ -3177,6 +3196,7 @@ class Report extends CI_Controller {
                                 'date_issued'=>'',
                                 'date_returned'=>'',
                                 'remarks'=>$remarks,
+                                'replacement'=>'',
                             );
                         }
                     }
@@ -3220,6 +3240,7 @@ class Report extends CI_Controller {
                                 'date_issued'=>'',
                                 'date_returned'=>'',
                                 'remarks'=>$remarks,
+                                'replacement'=>'',
                             );
                         }
                     }

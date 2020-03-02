@@ -56,6 +56,8 @@
                             <td class="main-tab" align="center"><?php echo $det['unit_price'];?></td>
                             <?php if(!empty($det['accountabilitys'])){ ?>
                                 <td class="main-tab" align="center"><?php echo (!empty($det['remarks'])) ? $det['remarks']." - Turn over to ".$det['accountabilitys'] : $det['remarks']." Turn over to ".$det['accountabilitys']?></td>
+                            <?php } else if(!empty($det['replacement'])){ ?>
+                                <td class="main-tab" align="center"><?php echo (!empty($det['replacement']) && $det['lost']==0) ? "Replacement for lost item ".$det['replacement'] : ''; ?></td>
                             <?php }else{ ?>
                                 <td class="main-tab" align="center"><?php echo $det['remarks'];?></td>
                             <?php }?>
