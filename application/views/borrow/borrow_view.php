@@ -79,7 +79,7 @@
                         <tr>
                             <td id="dngr" class="bg-danger" align="center"><input type = "hidden" name = "ets_id[]" value = "<?php echo $r['et_id'];?>"><input type="checkbox" name="e_id[]" class="multi" value ="<?php echo $r['ed_id'];?>"></td>
                             <td class="main-tab" align="center">
-                                <input type="text" name = 'ret_qty<?php echo $x;?>' class="form-control">
+                                <input type="text" name = 'ret_qty<?php echo $x;?>' class="form-control" value = "1" style = "pointer-events: none;">
                             </td>
                             <td class="main-tab" align="center">
                                 <input type="text " class="form-control" value = "<?php echo $r['borrowed_qty'];?>">
@@ -139,8 +139,8 @@
                 <br>
                 <center>
                     <input type='submit' class="btn btn-primary-alt" id='' value='Save & Print'>
-                    <input type="hidden" id="" name="returned_by" value = "<?php echo $borrowed_by;?>"> 
-                    <input type="hidden" id="" name="emp" value = "<?php echo $employees;?>"> 
+                    <input type="hidden" id="" name="returned_by" value = "<?php echo (!empty($borrowed_by)) ? $borrowed_by : '';?>"> 
+                    <input type="hidden" id="" name="emp" value = "<?php echo (!empty($employees)) ? $employees : '';?>"> 
                     <input type="hidden" id="user_id" name="user_id" value = "<?php echo $_SESSION['user_id'];?>"> 
                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                 </center>

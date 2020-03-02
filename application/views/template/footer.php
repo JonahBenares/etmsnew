@@ -149,6 +149,24 @@
             if(conf)
             window.location=anchor.attr("href");
         }
+
+        function confirmationSave(anchor){
+            var conf = confirm('Are you sure you want to save this record?');
+            if(conf)
+            window.location=anchor.attr("href");
+        }
+
+        function confirmationRepair(anchor){
+            var conf = confirm('Are you sure you want to tag this as repair?');
+            if(conf)
+            window.location=anchor.attr("href");
+        }
+
+        function confirmationReturn(anchor){
+            var conf = confirm('Are you sure you want to return this item/s?');
+            if(conf)
+            window.location=anchor.attr("href");
+        }
         // 
     </script>
     <script>

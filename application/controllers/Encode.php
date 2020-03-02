@@ -367,7 +367,6 @@ class Encode extends CI_Controller {
             
                 if($this->super_model->insert_into("et_details", $data)){
                     $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
-                    $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
                     $ret_one=$assetdetails[0];
                     $ret_two=(!empty($assetdetails[1])) ? $assetdetails[1] : '';
                     $ret_three=(!empty($assetdetails[2])) ? $assetdetails[2] : '';

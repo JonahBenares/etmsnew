@@ -395,5 +395,32 @@ $('.noted').keyup(function(){
         });
     });
 
+function saveReplace(){
+
+    var repdata = $("#Replaceform").serialize();
+    var itemid = document.getElementById('item_id').value;
+    var assign = document.getElementById('assign').value;
+    var loc= document.getElementById("baseurl").value;
+    var redirect = loc+'index.php/report/insert_replace';
+    /*if(assign==""){
+        alert('Please fill out Employee.');
+    }
+    else */if(itemid==""){
+        alert('Please fill out Item.');
+    }else {
+         $.ajax({
+                type: "POST",
+                url: redirect,
+                data: repdata,
+                success: function(output){
+                    /*window.close();
+                    window.opener.location.href=loc+'index.php/receive/add_receive_first/'+output; */      
+                    //alert(output);
+                }
+          });
+    }
+     
+}
+
 
 

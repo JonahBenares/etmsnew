@@ -49,7 +49,7 @@
                     <div class="card-body">
                         <h4 class="card-title">Location
                             <span data-toggle="modal" data-target="#mediumModal">
-                                <a href="javascript:void(0)" class="btn btn-primary-alt bor-radius pull-right btn-sm" data-toggle="tooltip" data-placement="left" title="Add New Employee">
+                                <a href="javascript:void(0)" class="btn btn-primary-alt bor-radius pull-right btn-sm" data-toggle="tooltip" data-placement="left" title="Add New Location">
                                     <span class="fa fa-plus" ></span>
                                 </a>
                             </span>

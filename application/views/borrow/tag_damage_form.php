@@ -121,7 +121,7 @@
                     ?>
                     <div class="card-footer">
                         <center> 
-                            <input type = "submit" class="btn btn-success-alt btn-block" value="Save">  
+                            <input type = "submit" class="btn btn-success-alt btn-block" value="Save" onclick="confirmationSave(this);return false;">  
                             <input type="hidden" id="id" name="id" class="form-control" value = "<?php echo $id;?>">    
                             <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $counter;?>">
                             <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">

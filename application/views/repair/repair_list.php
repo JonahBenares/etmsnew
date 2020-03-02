@@ -57,7 +57,7 @@
                                 </tbody>
                             </table>
                             <?php if($_SESSION['usertype'] == 1){ ?> 
-                            <input type = "submit" class="btn btn-info-alt btn-block  btn-md" value = "Repair">
+                            <input type = "submit" class="btn btn-info-alt btn-block  btn-md" value = "Repair" onclick="confirmationRepair(this);return false;">
                             <?php } ?>
                             <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $x;?>">
                             <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">

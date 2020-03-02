@@ -191,13 +191,17 @@
                                     }else if($i['borrowed']==1){
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
                                     }else if($i['damaged']==1){
-                                        $status = '<span sclass="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
                                     }else if($i['lost']==1){
                                         $status = '<span  class="badge badge-pill bg-dark-alt uppercase">Lost Item / '.$i['employee']."</span>";
                                     }
                                     ?>
                                 <tr>
-                                    <td><?php echo $i['item']; ?></td>
+                                    <td>
+                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $i['et_id'];?>" class=""  data-toggle="tooltip" data-placement="left" title="View" style="word-wrap: break-word;">
+                                            <?php echo $i['item']; ?>
+                                        </a>
+                                    </td>
                                     <td align="center"><?php echo $i['qty']; ?></td>
                                     <td align="center"><?php echo $i['unit_price']; ?></td>
                                     <td><?php echo $i['category']; ?></td>

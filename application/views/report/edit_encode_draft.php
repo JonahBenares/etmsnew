@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
-                                        <input name="date_issued[]" readonly="" class="form-control form-alt  cc-cvc" type="date" value="<?php echo $d['date_issued'];?>">
+                                        <input name="date_issued[]"  class="form-control form-alt  cc-cvc" type="date" value="<?php echo $d['date_issued'];?>">
                                         <label for="" class="control-label mb-1">Date Issued:</label>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if(!empty($d['brand'])){ ?>
-                                        <input id="" name="brand[]" readonly="" value = "<?php echo $d['brand'];?>" type="text" class="form-control form-alt cc-exp" >
+                                        <input id="" name="brand[]"  value = "<?php echo $d['brand'];?>" type="text" class="form-control form-alt cc-exp" >
                                         <?php }else { ?>
                                         <input id="" name="brand[]" type="text" class="form-control form-alt cc-exp" >
                                         <?php } ?>
@@ -99,7 +99,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if(!empty($d['model'])){ ?>
-                                        <input id="" name="model[]" readonly="" value = "<?php echo $d['model'];?>" class="form-control form-alt cc-cvc" type="text">
+                                        <input id="" name="model[]"  value = "<?php echo $d['model'];?>" class="form-control form-alt cc-cvc" type="text">
                                         <?php } else {?>
                                         <input id="" name="model[]" class="form-control form-alt cc-cvc" type="text">
                                         <?php } ?>
@@ -111,7 +111,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if(!empty($d['type'])){ ?>
-                                        <input id="" name="type[]" readonly="" value = "<?php echo $d['type'];?>" type="text" class="form-control form-alt cc-exp" >
+                                        <input id="" name="type[]"  value = "<?php echo $d['type'];?>" type="text" class="form-control form-alt cc-exp" >
                                         <?php }else { ?>
                                         <input id="" name="type[]" type="text" class="form-control form-alt cc-exp" > 
                                         <?php }?>
@@ -121,7 +121,7 @@
                                 <div class="col-3">
                                     <div class="form-group m-b-10">
                                         <?php if($d['price']!='0.00'){ ?>
-                                        <input id="" name="price[]" readonly="" value = "<?php if($d['price'] == '0.00'){ echo ''; } else { echo $d['price']; }?>" class="form-control form-alt cc-cvc" type="text" autocomplete="off">
+                                        <input id="" name="price[]"  value = "<?php if($d['price'] == '0.00'){ echo ''; } else { echo $d['price']; }?>" class="form-control form-alt cc-cvc" type="text" autocomplete="off">
                                         <?php } else { ?>
                                         <input id="" name="price[]" class="form-control form-alt cc-cvc" type="text" autocomplete="off">
                                         <?php } ?>
@@ -131,7 +131,7 @@
                                 <div class="col-3">
                                     <div class="form-group m-b-10">
                                         <?php if($d['currency']!=0){ ?>
-                                        <select name="cur[]" style = "pointer-events: none" class="form-control form-alt cc-cvc">
+                                        <select name="cur[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Currency--</option>
                                             <?php foreach($currency AS $c){ ?>
                                             <option value = "<?php echo $c->currency_id; ?>" <?php echo (($d['currency'] == $c->currency_id) ? ' selected' : '');?>><?php echo $c->currency_name;?></option>
@@ -153,7 +153,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if($d['placement']!=0){ ?>
-                                        <select name="placement[]" style = "pointer-events: none" class="form-control form-alt cc-cvc">
+                                        <select name="placement[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Placement--</option>
                                             <?php foreach($placement AS $ca){ ?>
                                             <option value = "<?php echo $ca->placement_id; ?>" <?php echo (($d['placement'] == $ca->placement_id) ? ' selected' : '');?>><?php echo $ca->placement_name;?></option>
@@ -173,7 +173,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if($d['company']!=0){ ?>
-                                        <select name="company[]" style = "pointer-events: none" class="form-control form-alt cc-cvc">
+                                        <select name="company[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Company--</option>
                                             <?php foreach($company AS $c){ ?>
                                             <option value = "<?php echo $c->company_id; ?>" <?php echo (($d['company'] == $c->company_id) ? ' selected' : '');?>><?php echo $c->company_name;?></option>
@@ -195,7 +195,7 @@
                                 <div class = "col-6">
                                     <div class="form-group m-b-10">
                                         <?php if($d['rack_id']!=0){ ?>
-                                        <select name="rack[]" style = "pointer-events: none" class="form-control form-alt cc-cvc">
+                                        <select name="rack[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Rack--</option>
                                             <?php foreach($rack AS $c){ ?>
                                             <option value = "<?php echo $c->rack_id; ?>" <?php echo (($d['rack_id'] == $c->rack_id) ? ' selected' : '');?>><?php echo $c->rack_name;?></option>
@@ -215,7 +215,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if(!empty($d['acquired_by'])){ ?>
-                                        <input name="acquired_by[]" readonly="" value = "<?php echo $d['acquired_by'];?>" type="text" class="form-control form-alt cc-exp">
+                                        <input name="acquired_by[]"  value = "<?php echo $d['acquired_by'];?>" type="text" class="form-control form-alt cc-exp">
                                         <?php } else { ?>
                                         <input name="acquired_by[]" type="text" class="form-control form-alt cc-exp">
                                         <?php } ?>
@@ -227,7 +227,7 @@
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
                                         <?php if($d['physical']!=''){ ?>
-                                        <textarea type="text" name="condition[]" style = "pointer-events: none" class="form-control form-alt cc-cvc" ><?php echo $d['physical'];?></textarea> 
+                                        <textarea type="text" name="condition[]" class="form-control form-alt cc-cvc" ><?php echo $d['physical'];?></textarea> 
                                         <?php } else { ?>
                                         <textarea type="text" name="condition[]" class="form-control form-alt cc-cvc"></textarea>
                                         <?php } ?>
@@ -478,7 +478,8 @@
                     <?php }  ?>
                     <div class="btn-group btn-block" style="border-radius: 10px 10px 10px 10px">
                         <input type="hidden" name="count" id = "count" value = "<?php echo $counter;?>">
-                        <input type = "submit" class="btn btn-success-alt btn-md bor-radius10 btn-block  " name ="saved" value="Submit" style="border-radius: 10px 10px 10px 10px">  
+                        <input type ="submit" class="btn btn-info-alt btn-md btn-block" name ="draft" value="Submit Draft" style="border-radius: 10px 0px 0px 10px" onclick="confirmationSave(this);return false;"> 
+                        <input type ="submit" class="btn btn-success-alt btn-md btn-block m-0" name ="saved" value="Submit" style="border-radius: 0px 10px 10px 0px" onclick="confirmationSave(this);return false;">   
                         <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                         <input type="hidden" name="et_id" value = "<?php echo $id;?>">
                         <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         

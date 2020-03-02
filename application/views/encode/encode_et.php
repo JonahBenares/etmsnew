@@ -104,7 +104,7 @@
                                         </div>
                                     </div>                                   
                                 </div>
-                                <input type = "submit" id = "save" style="" class="btn btn-primary-alt btn-md btn-block" value="Next"> 
+                                <input type = "submit" id = "save" style="" class="btn btn-primary-alt btn-md btn-block" value="Next" onclick="confirmationSave(this);return false;"> 
                                 <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                                 <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                             </form>

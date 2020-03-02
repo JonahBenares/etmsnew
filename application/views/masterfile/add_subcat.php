@@ -15,8 +15,9 @@
                                 <label for="" class="control-label mb-1">Location:</label>
                                 <select id="" name="location" class="form-control bor-radius5" required="">
                                     <option value = "">--Select Location--</option>
-                                    <option value = "BCD">Bacolod</option>  
-                                    <option value = "BS">Bago</option>  
+                                    <?php foreach($location AS $l){ ?>
+                                    <option value = "<?php echo $l->location_prefix; ?>"><?php echo $l->location_name; ?></option>
+                                    <?php } ?>
                                 </select>
                                 <label for="" class="control-label mb-1">Sub Category Prefix:</label>
                                 <input id="" name="prefix" type="text" class="form-control bor-radius5">

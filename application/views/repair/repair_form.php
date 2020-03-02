@@ -168,7 +168,7 @@
                <!--  <div style="position: fixed; z-index: 3;bottom:0px;width: 100%"> -->
                     <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $z;?>">
                     <!-- <a href="<?php echo base_url(); ?>repair/repair_form" class="btn btn-success btn-block  btn-md"> Save</a> -->
-                    <input type="submit" name="submit" class="btn btn-success btn-block  btn-md" value = "Save">
+                    <input type="submit" name="submit" class="btn btn-success btn-block  btn-md" value = "Save" onclick="confirmationSave(this);return false;">
 
                <!--  </div> -->
             </div>

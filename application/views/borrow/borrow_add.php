@@ -58,7 +58,7 @@
                         </div>
                         <div class="col-lg-1"><label for="" class="control-label pull-right">Qty:</label></div>
                         <div class="col-lg-2">                        
-                            <input name="qty" type="text" id ='qty' class="form-control" placeholder="">
+                            <input name="qty" type="text" id ='qty' class="form-control" placeholder="" style = "pointer-events: none">
                         </div>
                         <div class="col-lg-2">
                             <a onclick='add_item()' class="btn btn-success-alt bor-radius text-white">Add Item</a>
@@ -128,7 +128,7 @@
                 </table> 
                 <br>
                 <center>
-                    <input type='button' class="btn btn-primary-alt" id='print' onclick='saveBorrow()' value='Save & Print'>
+                    <input type='button' class="btn btn-primary-alt" id='print' onclick='saveBorrow()' value='Save & Print' onclick="confirmationSave(this);return false;">
                      <input type="hidden" id="user_id" name="user_id" value = "<?php echo $_SESSION['user_id'];?>"> 
                     <input type='hidden' name='bh_id' id='bh_id' value = "<?php echo $id;?>">
                     <input type='hidden' name='item_id' id='item_id'>

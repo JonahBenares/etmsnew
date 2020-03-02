@@ -1920,50 +1920,74 @@ class Report extends CI_Controller {
                         }
                     }
 
-                
-                $data = array(
-                    'et_id'=>$this->input->post('et_id'),
-                    'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
-                    'date_issued'=>$this->input->post('date_issued['.$x.']'),
-                    'serial_no'=>$this->input->post('sn['.$x.']'),
-                    'brand'=>$this->input->post('brand['.$x.']'),
-                    'model'=>$this->input->post('model['.$x.']'),
-                    'type'=>$this->input->post('type['.$x.']'),
-                    'unit_price'=>$this->input->post('price['.$x.']'),
-                    'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
-                    'remarks'=>$this->input->post('remarks['.$x.']'),
-                    'currency_id'=>$this->input->post('cur['.$x.']'),
-                    'physical_condition'=>$this->input->post('condition['.$x.']'),
-                    'placement_id'=>$this->input->post('placement['.$x.']'),
-                    'company_id'=>$this->input->post('company['.$x.']'),
-                    'rack_id'=>$this->input->post('rack['.$x.']'),
-                );
-
-                if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
-                    $data_up = array(
-                        'save_temp'=>0,
+                if($this->input->post('saved') == 'Submit'){
+                    $data = array(
+                        'et_id'=>$this->input->post('et_id'),
+                        'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                        'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                        'serial_no'=>$this->input->post('sn['.$x.']'),
+                        'brand'=>$this->input->post('brand['.$x.']'),
+                        'model'=>$this->input->post('model['.$x.']'),
+                        'type'=>$this->input->post('type['.$x.']'),
+                        'unit_price'=>$this->input->post('price['.$x.']'),
+                        'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                        'remarks'=>$this->input->post('remarks['.$x.']'),
+                        'currency_id'=>$this->input->post('cur['.$x.']'),
+                        'physical_condition'=>$this->input->post('condition['.$x.']'),
+                        'placement_id'=>$this->input->post('placement['.$x.']'),
+                        'company_id'=>$this->input->post('company['.$x.']'),
+                        'rack_id'=>$this->input->post('rack['.$x.']'),
                     );
-                    $this->super_model->update_where("et_head", $data_up, "et_id", $id);
 
-                    if($this->input->post('saved') == 'Submit'){
-                        $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
-                        $subcat_prefix1=$assetdetails[0];
-                        $subcat_prefix2=$assetdetails[1];
-                        $location=$assetdetails[2];
-                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                        $series = $assetdetails[3];
-                        $asset_data= array(
-                            'subcat_prefix'=>$subcat_prefix,
-                            'location'=>$location,
-                            'series'=>$series
+                    if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
+                        $data_up = array(
+                            'save_temp'=>0,
                         );
-                        $this->super_model->insert_into("asset_series", $asset_data);
+                        $this->super_model->update_where("et_head", $data_up, "et_id", $id);
 
+                        
+                            $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                            $subcat_prefix1=$assetdetails[0];
+                            $subcat_prefix2=$assetdetails[1];
+                            $location=$assetdetails[2];
+                            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                            $series = $assetdetails[3];
+                            $asset_data= array(
+                                'subcat_prefix'=>$subcat_prefix,
+                                'location'=>$location,
+                                'series'=>$series
+                            );
+                            $this->super_model->insert_into("asset_series", $asset_data);
+
+                            echo "<script>alert('Equipment/Tool successfully Updated!'); 
+                            window.location ='".base_url()."report/report_main'; </script>";
+                    }    
+                }else {
+                    $data = array(
+                        'et_id'=>$this->input->post('et_id'),
+                        'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                        'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                        'serial_no'=>$this->input->post('sn['.$x.']'),
+                        'brand'=>$this->input->post('brand['.$x.']'),
+                        'model'=>$this->input->post('model['.$x.']'),
+                        'type'=>$this->input->post('type['.$x.']'),
+                        'unit_price'=>$this->input->post('price['.$x.']'),
+                        'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                        'remarks'=>$this->input->post('remarks['.$x.']'),
+                        'currency_id'=>$this->input->post('cur['.$x.']'),
+                        'physical_condition'=>$this->input->post('condition['.$x.']'),
+                        'placement_id'=>$this->input->post('placement['.$x.']'),
+                        'company_id'=>$this->input->post('company['.$x.']'),
+                        'rack_id'=>$this->input->post('rack['.$x.']'),
+                    );
+
+                    if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
+                        $data_up = array(
+                            'save_temp'=>1,
+                        );
+                        $this->super_model->update_where("et_head", $data_up, "et_id", $id);
                         echo "<script>alert('Equipment/Tool successfully Updated!'); 
-                        window.location ='".base_url()."report/report_main'; </script>";
-                    }else {
-                        echo "<script>alert('Equipment/Tool successfully Updated!'); 
-                        window.location ='".base_url()."report/report_main'; </script>";
+                        window.location ='".base_url()."report/report_draft'; </script>";
                     }
                 }    
             }
@@ -2703,6 +2727,12 @@ class Report extends CI_Controller {
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
+                    foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
+                        $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
+                        if($rep_et==$s->et_id){
+                            $replacement = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                        }
+                    }
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
@@ -2725,6 +2755,7 @@ class Report extends CI_Controller {
                         'remarks'=>'',
                         'damaged'=>'',
                         'incident_description'=>'',
+                        'replacement'=>$replacement,
                     );
                 }
             }
@@ -2736,6 +2767,12 @@ class Report extends CI_Controller {
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
+                    foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
+                        $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
+                        if($rep_et==$s->et_id){
+                            $replacement = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                        }
+                    }
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
@@ -2758,6 +2795,7 @@ class Report extends CI_Controller {
                         'remarks'=>'',
                         'damaged'=>'',
                         'incident_description'=>'',
+                        'replacement'=>$replacement,
                     );
                 }
             }
@@ -2815,6 +2853,7 @@ class Report extends CI_Controller {
                             'remarks'=>$remarks,
                             'damaged'=>'',
                             'incident_description'=>'',
+                            'replacement'=>'',
                         );
                     }
                 
@@ -2859,6 +2898,7 @@ class Report extends CI_Controller {
                                 'remarks_all'=>'',
                                 'damaged'=>$damaged,
                                 'incident_description'=>$dam->incident_description,
+                                'replacement'=>'',
                             );
                         }
                     }
@@ -2905,6 +2945,7 @@ class Report extends CI_Controller {
                                 'remarks_all'=>$remarks_all,
                                 'damaged'=>'',
                                 'incident_description'=>'',
+                                'replacement'=>'',
                             );
                         }
                     }
@@ -3472,8 +3513,10 @@ class Report extends CI_Controller {
                 $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
+                $ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
+                    'ed_id'=>$ed_id,
                     'cat'=>$category,
                     'subcat'=>$subcat,
                     'department'=>$et->department,

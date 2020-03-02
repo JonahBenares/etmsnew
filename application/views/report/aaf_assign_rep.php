@@ -131,7 +131,7 @@
                 <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
                 <br>
                 <center>
-                    <input type='button' class="btn btn-info-alt" id='print' onclick='saveAssign()' value='Save & Print'>
+                    <input type='button' class="btn btn-info-alt" id='print' onclick='saveAssign()' value='Save & Print' onclick="confirmationSave(this);return false;">
                 </center>
                 <input type="hidden" id="user_id" name="user_id" value = "<?php echo $_SESSION['user_id'];?>"> 
                 <input type='hidden' name='item_id' id='item_id'>
