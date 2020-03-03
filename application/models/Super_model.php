@@ -52,6 +52,8 @@ class super_model extends CI_Model
         return $query->result();
     }
 
+    
+
     public function select_column_where($table, $column, $whr_clm, $whr_val)
     {
         $this->db->select($column);

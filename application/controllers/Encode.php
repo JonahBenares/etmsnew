@@ -232,8 +232,9 @@ class Encode extends CI_Controller {
            // for($y=0;$y<$count;$y++){
                 if(!empty($_FILES['pic1']['name'][$x])){
                      $img1= basename($_FILES['pic1']['name'][$x]);
-                     $img1=explode('.',$img1);
-                     $ext1=$img1[1];
+                     $ext1= pathinfo($img1, PATHINFO_EXTENSION);
+                     //$img1=explode('.',$img1);
+                     //$ext1=$img1[1];
                     
                     if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
                         $error_ext++;
@@ -248,8 +249,9 @@ class Encode extends CI_Controller {
             
                 if(!empty($_FILES['pic2']['name'][$x])){
                      $img2= basename($_FILES['pic2']['name'][$x]);
-                     $img2=explode('.',$img2);
-                     $ext2=$img2[1];
+                     /*$img2=explode('.',$img2);
+                     $ext2=$img2[1];*/
+                     $ext2= pathinfo($img2, PATHINFO_EXTENSION);
                      
                     if($ext2=='php' || ($ext2!='png' && $ext2 != 'jpg' && $ext2!='jpeg')){
                         $error_ext++;
@@ -263,8 +265,9 @@ class Encode extends CI_Controller {
 
                 if(!empty($_FILES['pic3']['name'][$x])){
                      $img3= basename($_FILES['pic3']['name'][$x]);
-                     $img3=explode('.',$img3);
-                     $ext3=$img3[1];
+                    /* $img3=explode('.',$img3);
+                     $ext3=$img3[1];*/
+                     $ext3= pathinfo($img3, PATHINFO_EXTENSION);
                     
                     if($ext3=='php' || ($ext3!='png' && $ext3 != 'jpg' && $ext3!='jpeg')){
                         $error_ext++;

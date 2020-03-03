@@ -4191,9 +4191,9 @@ class Report extends CI_Controller {
         $ret_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
         
         $ret_pref=explode("-", $ret_prefix);
-        $ret_one=$ret_pref[0];
+        $ret_one=(!empty($ret_pref[0])) ? $ret_pref[0] : '';
         $ret_two=(!empty($ret_pref[1])) ? $ret_pref[1] : '';
-        $ret_three=$ret_pref[2];
+        $ret_three=(!empty($ret_pref[2])) ? $ret_pref[2] : '';
         $ret_four = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
         if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
             $atf_pref1=$ret_pref[0];
@@ -4789,10 +4789,10 @@ class Report extends CI_Controller {
             $date_format = date("Y-m");
             $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             $dam_pref=explode("-", $damage_no);
-            $one1=$dam_pref[0];
-            $two1=$dam_pref[1];
+            $one1=(!empty($dam_pref[0])) ? $dam_pref[0] : '';
+            $two1=(!empty($dam_pref[1])) ? $dam_pref[1] : '';
             $three1=(!empty($dam_pref[2])) ? $dam_pref[2] : '';
-            $four1 = $dam_pref[3];
+            $four1 = (!empty($dam_pref[3])) ? $dam_pref[3] : '';
             $five1 = (!empty($dam_pref[4])) ? $dam_pref[4] : '';
             if(!empty($one1) && !empty($two1) && !empty($three1) && !empty($four1) && !empty($five1)){
                 $dam_prefix1=$dam_pref[0];
@@ -5046,6 +5046,22 @@ class Report extends CI_Controller {
                     'status'=> $status, 
                 );
             }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
+                $data['child2'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
+                $data['child3'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
             $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->submitted_by);
@@ -5100,6 +5116,24 @@ class Report extends CI_Controller {
                     'status'=> $status, 
                 );
             }
+
+              foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
+                $data['child2'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
+                $data['child3'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
             $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->submitted_by);
