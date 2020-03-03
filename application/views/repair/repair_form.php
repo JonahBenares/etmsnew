@@ -46,7 +46,7 @@
             ?>
             <div class="row">                
                 <div class="col-lg-12">
-                    <div class="card">
+                    <!-- <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="card bor-radius20 shadow encode_css_success">
                         <div class=" card-body ">
                             <table class="table">
