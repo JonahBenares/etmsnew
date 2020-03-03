@@ -64,10 +64,12 @@
                                 <span class="hide-menu"></span>Masterfile
                             </a>
                             <div class="panel">
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/categ_list">Category</a>
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/emp_inclusion_list">Office</a>
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/employee_list">Employees</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/loc_list">Location</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/categ_list">Category</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/employee_list">Employees</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/emp_inclusion_list">Office</a>
+                              
+                              
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/placement_list">Placement</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/rack_list">Rack</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/company_list">Company</a>

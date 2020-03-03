@@ -121,10 +121,10 @@ class Masterfile extends CI_Controller {
 
     public function employee_suggest(){
         $employee=$this->input->post('employee');
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$employee%'");
+        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$employee%' AND type='1'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$employee%'") AS $acct){ 
+            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$employee%' AND type='1'") AS $acct){ 
                     ?>
                    <li onClick="selectEmp('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>')"><?php echo $acct->employee_name; ?></li>
                 <?php 
@@ -139,6 +139,7 @@ class Masterfile extends CI_Controller {
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_rows_where("employee_inclusion","parent_id",$id);
         $data['employee'] = $this->super_model->select_all_order_by('employees', 'employee_name', 'ASC');
+        //$data['employee'] = $this->super_model->select_row_where_order_by("employees", "type", "1", "employee_name", "ASC");
         if($row!=0){
             foreach($this->super_model->select_row_where("employee_inclusion","parent_id",$id) AS $multi){
                 $employee_name =$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$multi->child_id'");

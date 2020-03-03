@@ -74,7 +74,7 @@
                                 </div>     
                                 <div class="col-lg-6">
                                     <div class="form-group m-b-10">
-                                        <input name="sn[]" type="text" class="form-control form-alt  cc-exp" >
+                                        <input name="sn[]" type="text" class="form-control form-alt  cc-exp" required>
                                         <label for="" class="control-label mb-1">Serial Number:</label>
                                     </div>
                                 </div>
