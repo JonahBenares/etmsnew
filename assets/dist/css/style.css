@@ -22179,6 +22179,7 @@ div.dataTables_length label select, div#employeeTable_filter label input{
         border:1px solid #d7d7d7!important;
         position: absolute!important;
         z-index: 3!important;
+        height: 120px;
         background: #fff!important;
         overflow-y: scroll!important;
 
@@ -22284,6 +22285,7 @@ ul#name-item{
     border:1px solid #d7d7d7;
     position: absolute;
     z-index: 3;
+    height: 120px;
     background: #fff;
     overflow-y: scroll;
     color: #333333;
@@ -22362,3 +22364,4 @@ a.rep_names:hover{
 }
 
 /*#76787a*/
+

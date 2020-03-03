@@ -6803,6 +6803,13 @@ class Report extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+     public function lost_item(){  
+        $this->load->view('template/header'); 
+        $this->load->view('template/navbar'); 
+        $this->load->view('report/lost_item');
+        $this->load->view('template/footer');
+    }
+
     public function lost_list(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar');

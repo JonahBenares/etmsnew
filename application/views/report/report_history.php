@@ -153,7 +153,7 @@
                                             <?php } ?>
 
                                             <?php if(!empty($s['replacement'])){ ?>
-                                                <a href="#" data-toggle="popover"  data-placement="bottom" data-trigger="hover"><?php echo (!empty($s['replacement']) && $s['lost']!=1) ? "Replacement for lost item ".$s['replacement'] : ''; ?></a>
+                                                <a href="#" data-toggle="popover"  data-placement="bottom" data-trigger="hover"><?php echo (!empty($s['replacement']) && $s['lost']==0) ? "Replacement for lost item ".$s['replacement'] : ''; ?></a>
                                             <?php } ?>
 
                                         <?php } ?>

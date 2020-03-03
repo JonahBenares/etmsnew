@@ -37,11 +37,11 @@
                         <table class="table dataTable table-striped">
                             <thead>
                                 <tr>
-                                    <th>Return Date</th>
-                                    <th>ARS #</th>
-                                    <th>Quantity</th>
-                                    <th>Received By</th>
-                                    <th>Remarks</th>
+                                    <th width="15%">Return Date</th>
+                                    <th width="20%">ARS #</th>
+                                    <th width="10%">Quantity</th>
+                                    <th width="15%">Received By</th>
+                                    <th width="30%">Remarks</th>
                                     <th width="10%" class="text-center"><span class="fa fa-bars"></span></th>
                                 </tr>
                             </thead>
@@ -50,53 +50,57 @@
                                     foreach($info AS $i){ 
                                 ?>
                                 <tr>                                    
-                                    <td><?php echo $i['return_date']; ?></td>
-                                    <td><?php echo $i['ars_no']; ?></td>
-                                    <td><?php echo $i['quantity']; ?></td>
-                                    <td><?php echo $i['receive_by']; ?></td>
-                                    <td><?php echo $i['remarks']; ?></td>
+                                    <td style="padding: 0px" colspan="5">
+                                        <button class="accordion1" style="padding: 0px 0px">
+                                            <p class="m-b-0" style="color:#44474e">
+                                                <table style="background: none" width="100%">
+                                                    <tr style="background: none">
+                                                        <td width="15%"><?php echo $i['ars_no']; ?></td>
+                                                        <td width="20%"><?php echo $i['return_date']; ?></td>
+                                                        <td width="10%"><?php echo $i['quantity']; ?></td>
+                                                        <td width="15%"><?php echo $i['receive_by']; ?></td>
+                                                        <td width="30%"><?php echo $i['remarks']; ?></td>
+                                                    </tr>
+                                                </table>
+                                            </p>
+                                        </button>
+                                        <div class="panel1">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <td width="60%">Item Desc:</td>
+                                                        <td width="30%">S/N</td>
+                                                        <td width="10%">Cost</td>
+                                                    </tr>
+                                                </thead>
+                                                <?php 
+                                                    foreach($details AS $det){ 
+                                                        switch($det){
+                                                            case($i['return_id'] == $det['return_id']):
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $det['item'];?></td>
+                                                    <td><?php echo $det['serial'];?></td>
+                                                    <td><?php echo $det['price'];?></td>
+                                                </tr>
+                                                <?php 
+                                                        break;
+                                                        default: 
+                                                        } 
+                                                    } 
+                                                ?>
+                                            </table>
+                                        </div>
+                                    </td>                                    
+                                    
                                     <td>
                                         <div class="btn-group">
-                                            <a href="<?php echo base_url(); ?>report/acf_report/<?php echo $i['return_id']?>" class="btn btn-warning-alt text-white pull-right btn-sm">
+                                            <a href="<?php echo base_url(); ?>report/acf_report/<?php echo $i['return_id']?>" class="btn btn-warning-alt text-white pull-right btn-xs">
                                                 <span class="fa fa-print"></span> ACF
                                             </a>
-                                            <a href="<?php echo base_url(); ?>report/ars_report/<?php echo $i['return_id']?>" class="btn btn-success-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Print Return Slip">
+                                            <a href="<?php echo base_url(); ?>report/ars_report/<?php echo $i['return_id']?>" class="btn btn-success-alt item btn-xs" data-toggle="tooltip" data-placement="top" title="Print Return Slip">
                                                 <i class="fa fa-print"></i>
-                                            </a>
-                                            <span data-toggle="tooltip" data-placement="top" title="View Items">
-                                                <a href="<?php echo base_url(); ?>report/report_sub/<?php echo $i['return_id']?>" class="btn btn-info-alt item btn-sm" style="border-radius: 0px 2px 2px 0px" >
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-                                            </span>
-                                            <div class="mess-dropdown mess-sd js-dropdown">
-                                                <div class="mess__title" style="padding: 5px">
-                                                    <table class="table table-hover table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <td>Item Desc:</td>
-                                                                <td>S/N</td>
-                                                                <td>Cost</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <?php 
-                                                            foreach($details AS $det){ 
-                                                                switch($det){
-                                                                    case($i['return_id'] == $det['return_id']):
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $det['item'];?></td>
-                                                            <td><?php echo $det['serial'];?></td>
-                                                            <td><?php echo $det['price'];?></td>
-                                                        </tr>
-                                                        <?php 
-                                                                break;
-                                                                default: 
-                                                                } 
-                                                            } 
-                                                        ?>
-                                                    </table>
-                                                </div>
-                                            </div>                                               
+                                            </a>                                               
                                         </div>                                           
                                     </td>
                                 </tr>
@@ -125,3 +129,4 @@ $(document).ready(function(){
     $('[data-toggle="popover"]').popover();   
 });
 </script>
+

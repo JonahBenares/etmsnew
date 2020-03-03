@@ -130,11 +130,11 @@
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['accountability'];?><br></td>
-                </tr>
+                    <td style="border-bottom: 1px solid #999"><p><?php echo $dam['accountability'];?></p><br></td>
+                </tr>                
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
@@ -146,11 +146,7 @@
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
@@ -162,11 +158,7 @@
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
@@ -178,11 +170,7 @@
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
