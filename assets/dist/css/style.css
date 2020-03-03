@@ -22229,6 +22229,10 @@ div.dataTables_length label select, div#employeeTable_filter label input{
   box-shadow: 0px 3px 6px 1px #00000024, 0px 2px 4px 0px #00000026;
 }
 
+.shadow-sn{
+  box-shadow: 0px 3px 5px 1px #00000008, 0px 2px 3px 0px #0000001f;
+}
+
 .bg-white{
   background-color: #fff;
   color: #23262e;
@@ -22248,27 +22252,27 @@ input.bg-white{
   font-weight: 505;
 }
 .bg-primary-alt{
-  background-image: linear-gradient(45deg, #ff6b30, #f7be65);
+  background-image: linear-gradient(45deg, #ff6b30, #f7be65)!important;
   color: #fff;
 }
 .bg-danger-alt{
-  background-image: linear-gradient(45deg, #da1219, #ff49bf);
+  background-image: linear-gradient(45deg, #da1219, #ff49bf)!important;
   color: #fff;
 }
 .bg-info-alt{
-  background-image: linear-gradient(45deg, #005aff, #00fff3);
+  background-image: linear-gradient(45deg, #005aff, #00fff3)!important;
   color: #fff;
 }
 .bg-warning-alt{
-  background-image: linear-gradient(45deg, #ff9900, #ffe358);
+  background-image: linear-gradient(45deg, #ff9900, #ffe358)!important;
   color: #fff;
 }
 .bg-success-alt{
-  background-image: linear-gradient(45deg, #0a9343, #ece922);
+  background-image: linear-gradient(45deg, #0a9343, #ece922)!important;
   color: #fff;
 }
 .bg-dark-alt{
-  background-image: linear-gradient(45deg, #424242 , #757575 );
+  background-image: linear-gradient(45deg, #424242 , #757575 )!important;
   color: #fff;
 }
 .cheader-bor{
