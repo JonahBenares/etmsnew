@@ -6996,6 +6996,8 @@ class Report extends CI_Controller {
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
         $this->load->view('template/navbar');   
+
+        $history=array();
         foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $cur){
             $data['item'] =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $cur->et_id);
             $data['brand'] =$this->super_model->select_column_where("et_details", "brand", "ed_id", $cur->ed_id);
@@ -7015,6 +7017,24 @@ class Report extends CI_Controller {
                 $data['ids'] =$head->accountability_id;
                 $ids =$head->accountability_id;
             }
+
+            $data['history'][] = array(
+                "id"=>$ids,
+                "employee"=>$employee,
+                "trdate"=>$date_issued,
+                "date_desc"=>"Date Issued",
+                "return_date"=>"",
+                "method"=>"Current",
+                "received_by"=>"",
+                "returned_by"=>"",
+                "jo_no"=>"",
+                "qty"=>$qty,
+                "repair_price"=>0,
+                "supplier"=>"",
+                "remarks"=>"",
+                "replacement"=>""
+            );
+
             $data['current'][] = array(
                 "id"=>$ids,
                 "employee"=>$employee,
@@ -7025,18 +7045,33 @@ class Report extends CI_Controller {
 
         $row_return=$this->super_model->count_rows_where("return_details", "ed_id",$id);
         if($row_return!=0){
-            /*foreach($this->super_model->custom_query("SELECT rh.accountability_id, rh.return_date, rh.received_by, rd.et_id FROM return_head rh INNER JOIN return_details rd ON rd.return_id = rh.return_id WHERE rd.ed_id = '$id' GROUP BY rd.return_id") AS $ret){*/
+           
             foreach($this->super_model->select_row_where('return_details', 'ed_id', $id) AS $d){
-           /* foreach($this->super_model->select_all('return_head') AS $ret){*/
-                /*foreach($this->super_model->select_row_where('return_details', 'return_id', $ret->return_id) AS $d){
-                    $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $d->et_id);
-                }*/
+         
                 $row_return=$this->super_model->count_rows_where("return_details", "return_id",$d->return_id);
                 if($row_return!=0){
                     foreach($this->super_model->select_row_where('return_head', 'return_id', $d->return_id) AS $ret){
                         $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->accountability_id);
                         $received =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->received_by);
                     }
+
+                     $data['history'][]  = array(
+                        "id"=>$ret->return_id,
+                        "employee"=>$employee,
+                        "trdate"=>$ret->return_date,
+                        "date_desc"=>"Return Date",
+                        "return_date"=>"",
+                        "method"=>"Returned",
+                        "received_by"=>$received,
+                        "returned_by"=>"",
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>$ret->return_remarks,
+                        "replacement"=>""
+                    );
+
                     $data['head'][] = array(
                         "return_id"=>$ret->return_id,
                         "employee"=>$employee,
@@ -7064,6 +7099,24 @@ class Report extends CI_Controller {
                         $borrowed_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->borrowed_by);
                         $borrowed_date =$ret->borrowed_date;
                     }
+
+                     $data['history'][] = array(
+                        "id"=>$ret->bh_id,
+                        "employee"=>$borrowed_by,
+                        "trdate"=>$borrowed_date,
+                        "date_desc"=>"Borrow Date",
+                        "return_date"=>$d->returned_date,
+                        "method"=>"Borrowed",
+                        "received_by"=>"",
+                        "returned_by"=>$returned_by,
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>"",
+                        "replacement"=>""
+                    );
+
                         $data['borrow'][] = array(
                             "bh_id"=>$ret->bh_id,
                             "borrowed_by"=>$borrowed_by,
@@ -7093,6 +7146,23 @@ class Report extends CI_Controller {
                         $borrowed_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->borrowed_by);
                         $borrowed_date =$ret->borrowed_date;
                     }*/
+                      $data['history'][] = array(
+                        "id"=>$d->repair_id,
+                        "employee"=>"",
+                        "trdate"=>$d->repair_date,
+                        "date_desc"=>"Repair Date",
+                        "return_date"=>"",
+                        "method"=>"Repaired",
+                        "received_by"=>$receive_by,
+                        "returned_by"=>"",
+                        "jo_no"=>$d->jo_no,
+                        "qty"=>1,
+                        "repair_price"=>$d->repair_price,
+                        "supplier"=>$d->supplier,
+                         "remarks"=>"",
+                        "replacement"=>""
+                    );
+
                         $data['repair'][] = array(
                             "repair_id"=>$d->repair_id,
                             "receive_by"=>$receive_by,
@@ -7122,6 +7192,23 @@ class Report extends CI_Controller {
             $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
             $ed = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep_id);
             $replacement =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $ed);
+
+            $data['history'][]  = array(
+                        "id"=>$l->lost_id,
+                        "employee"=>$accountable,
+                        "trdate"=>$l->lost_date,
+                        "date_desc"=>"Lost Date",
+                        "return_date"=>"",
+                        "method"=>"Lost",
+                        "received_by"=>"",
+                        "returned_by"=>"",
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>$l->remarks,
+                        "replacement"=>$replacement
+                    );
 
             if($row_lost!=0){
                 $data['losts'][] = array(

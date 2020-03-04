@@ -38,7 +38,7 @@
                                 ?>
                                 <tr >
                                     <td>
-                                        <a href="<?php echo base_url(); ?>report/history_view/<?php echo $det['ed_id']; ?>" target="_blank" class="" data-toggle="tooltip" data-placement="right" title="View"  style="white-space: normal!important;text-align: left">
+                                        <a href="<?php echo base_url(); ?>report/history_view2/<?php echo $det['ed_id']; ?>" target="_blank" class="" data-toggle="tooltip" data-placement="right" title="View"  style="white-space: normal!important;text-align: left">
                                                 <?php echo $i['item']; ?>
                                         </a>                                            
                                     </td>

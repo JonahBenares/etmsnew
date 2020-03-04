@@ -96,7 +96,7 @@
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main_avail">Available</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_set_avail">Available Set</a>
                              <!--  <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep">Inventory E/T</a> -->
-                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main_hist">History</a>
+                            
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/returned_list">Returned</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/lost_list">Lost</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>repair/repair_list">Damaged</a>                              
@@ -110,7 +110,9 @@
                             </a>
                             <div class="panel">
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep">Per Sub Category</a>
+
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep_itm">Per Item</a>
+                                <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/report_main_hist">Item History</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/inv_rep_overall">Overall Item Report</a>
                               <!-- <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/physical_list">Physical Condition</a> -->
                             </div>

@@ -67,89 +67,138 @@
 
         <ul class="timeline">
 
-            <li>
-            <div class="direction-r">
-            <div class="flag-wrapper">
-            <span class="hexa"></span>
-            <span class="flag">Currrent</span>
-            <span class="time-wrapper"><span class="time bg-info-alt">Feb 2015</span></span>
-            </div>
-            <div class="desc shadow-sn border-info">
-                <p class="font-bold">Employee Name:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Return Date:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Received By:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Qty:</p>
-                <p class="m-b-10">lorem ipsum</p>
-            </div>
-            </div>
-            </li>
+        <?php 
+        function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
+            $sort_col = array();
+            foreach ($arr as $key=> $row) {
+                $sort_col[$key] = $row[$col];
+            }
 
-            <li>
-            <div class="direction-l">
-            <div class="flag-wrapper">
-            <span class="hexa"></span>
-            <span class="flag">Returned</span>
-            <span class="time-wrapper"><span class="time bg-success-alt">Dec 2014</span></span>
-            </div>
-            <div class="desc shadow-sn border-success">
-                <p class="font-bold">Employee Name:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Return Date:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Received By:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Qty:</p>
-                <p class="m-b-10">lorem ipsum</p>
-            </div>
-            </div>
-            </li>
+            array_multisort($sort_col, $dir, $arr);
+        }
 
 
-            <li>
-            <div class="direction-r">
-            <div class="flag-wrapper">
-            <span class="hexa"></span>
-            <span class="flag">Borrowed</span>
-            <span class="time-wrapper"><span class="time bg-warning-alt">Feb 2015</span></span>
-            </div>
-            <div class="desc shadow-sn border-warning">
-                <p class="font-bold">Employee Name:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Return Date:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Received By:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Qty:</p>
-                <p class="m-b-10">lorem ipsum</p>
-            </div>
-            </div>
-            </li>
+            array_sort_by_column($history, 'trdate');
 
-            <li>
-            <div class="direction-l">
-            <div class="flag-wrapper">
-            <span class="hexa"></span>
-            <span class="flag">Repaired</span>
-            <span class="time-wrapper"><span class="time bg-danger-alt">Dec 2014</span></span>
-            </div>
-            <div class="desc shadow-sn border-danger">
-                <p class="font-bold">JO No.:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Repair Price:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Supplier:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Received By :</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Repair Date:</p>
-                <p class="m-b-10">lorem ipsum</p>
-                <p class="font-bold">Qty:</p>
-                <p class="m-b-10">lorem ipsum</p>
-            </div>
-            </div>
+       
+        /*foreach($history AS $his){
+            echo $his['trdate']."<br>";
+        }*/
+
+       
+
+        $direction = array('direction-r', 'direction-l');
+        //$bg_arr = array('bg-info-alt', 'bg-success-alt', 'bg-warning-alt', 'bg-danger-alt','bg-dark-alt');
+        //$border_arr = array('border-info', 'border-success', 'border-warning', 'border-danger','border-dark');
+        $count_dir=0;
+        //$count_bg=0;
+        
+       foreach($history AS $his){
+            
+            if($count_dir==2){
+                $count_dir=0;
+            }
+
+            if($count_dir<2){
+                $dir = $direction[$count_dir];
+                $count_dir++;
+            } 
+
+
+            if($his['method']=='Current'){
+                $bg = 'bg-info-alt';
+                $border = "border-info";
+            } else if($his['method'] == 'Repaired'){
+                $bg = 'bg-danger-alt';
+                $border = "border-danger";
+            } else if($his['method'] == 'Borrowed'){
+                $bg = 'bg-warning-alt';
+                $border = "border-warning";
+            } else if($his['method'] == 'Returned'){
+                $bg = 'bg-success-alt';
+                $border = "border-success";
+            } else if($his['method'] == 'Lost'){
+                $bg = 'bg-dark-alt';
+                $border = "border-dark";
+            }
+           /* if($count_bg==5){
+                $count_bg=0;
+            }
+           
+           
+
+            if($count_bg<5){
+                $bg = $bg_arr[$count_bg];
+                $border = $border_arr[$count_bg];
+                $count_bg++;
+            } 
+*/
+           
+           ?>
+                <li>
+                <div class="<?php echo $dir; ?>">
+                <div class="flag-wrapper">
+                <span class="hexa"></span>
+                <span class="flag"><?php echo $his['method']; ?></span>
+                <span class="time-wrapper"><span class="time <?php echo $bg; ?>"><?php echo (!empty($his['trdate']) ? date('M Y', strtotime($his['trdate'])) : ""); ?></span></span>
+                </div>
+                <div class="desc shadow-sn <?php echo $border; ?>">
+                  <?php if($his['method'] == 'Current') {  ?>
+                    <p class="font-bold">Employee Name: </p>
+                    <p class="m-b-10"><?php echo $his['employee']; ?></p>
+                    <p class="font-bold">Date Issued:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('M Y', strtotime($his['trdate'])) : ""); ?></p>
+                <?php } else if($his['method'] == 'Returned'){  ?>
+                    <p class="font-bold">Employee Name:</p>
+                    <p class="m-b-10"><?php echo $his['employee']; ?></p>
+                    <p class="font-bold">Return Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('M Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">Received By:</p>
+                    <p class="m-b-10"><?php echo $his['received_by']; ?></p>
+                    <p class="font-bold">Remarks:</p>
+                    <p class="m-b-10"><?php echo $his['remarks']; ?></p>
+                <?php } else if($his['method'] == 'Borrowed'){ ?>
+                    <p class="font-bold">Employee Name:</p>
+                    <p class="m-b-10"><?php echo $his['employee']; ?></p>
+                    <p class="font-bold">Borrow Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('M Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">Returned By:</p>
+                    <p class="m-b-10"><?php echo $his['returned_by']; ?></p>
+                    <p class="font-bold">Return Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['returned_date']) ? date('M Y', strtotime($his['returned_date'])) : ""); ?></p>
+                <?php } else if($his['method'] == 'Repaired'){ ?>
+                    <p class="font-bold">Repair Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('M Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">JO No.:</p>
+                    <p class="m-b-10"><?php echo $his['jo_no']; ?></p>
+                    <p class="font-bold">Repair Price:</p>
+                    <p class="m-b-10"><?php echo number_format($his['repair_price'],2); ?></p>
+                    <p class="font-bold">Supplier:</p>
+                    <p class="m-b-10"><?php echo $his['supplier']; ?></p>
+                    <p class="font-bold">Received By :</p>
+                    <p class="m-b-10"><?php echo $his['received_by']; ?></p>
+                <?php }  else if($his['method'] == 'Lost'){ ?>
+                    <p class="font-bold">Date Lost:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('M Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">Replacement Item:</p>
+                    <p class="m-b-10"><?php echo $his['replacement']; ?></p>
+                    <p class="font-bold">Accountable Person:</p>
+                    <p class="m-b-10"><?php echo $his['employee']; ?></p>
+                    <p class="font-bold">Remarks:</p>
+                    <p class="m-b-10"><?php echo $his['remarks']; ?></p>
+                <?php } ?>
+                </div>
+                </div>
+                </li>
+
+        
+       <?php 
+        } ?>
+            <!-- 
+
+          
+
+          
             </li>
 
             <li>
@@ -172,7 +221,7 @@
                 <p class="m-b-10">lorem ipsum</p>
             </div>
             </div>
-            </li>
+            </li> -->
         </ul>
 
 
