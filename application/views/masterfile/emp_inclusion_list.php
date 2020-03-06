@@ -104,7 +104,7 @@
                                                <a class="btn btn-success-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Add Employee" onClick="viewEmp(<?php echo $emp['id'];?>)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
-                                                <a href="<?php echo base_url(); ?>masterfile/delete_office/<?php echo $emp['id'];?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
+                                               <a href="<?php echo base_url(); ?>masterfile/delete_office/<?php echo $emp['id'];?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
                                                     <i class="fa fa-trash"></i>
                                                 </a>
                                             </div>

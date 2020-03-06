@@ -42,111 +42,111 @@
                 <?php } ?> 
             </div>
             <div class="col-lg-9 col-md-12 offset-lg-3 p-l-40">
-                <div class="card bor-radius5 shadow-sv animated fadeInUp" > 
-                    <div class="card-header cheader-bor <?php if($damage == '1'){ ?> bg-danger-alt <?php } else { ?> bg-primary-alt <?php }?>">
-                    </div>
-                    <?php if(!empty($details)){ foreach($details AS $det){ ?>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="row">
-                                    <label>Acquisition Date:
-                                        <p class="font-medium font-13"><?php echo $det['acquisition_date'];?></p>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label>Date Issued:
-                                        <p class="font-medium font-13"><?php echo $det['date_issued'];?></p>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label>Asset Control #:
-                                        <p class="font-medium font-13"><?php echo $det['asset_control_no'];?></p>
-                                    </label>
-                                </div>  
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="row">
-                                    <label>Brand:
-                                        <p class="font-medium font-13"><?php echo $det['brand'];?></p>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label>Model:
-                                        <p class="font-medium font-13"><?php echo $det['model'];?></p>
-                                    </label>
-                                </div>
-                            
-                                <div class="row">
-                                    <label>Type:
-                                        <p class="font-medium font-13"><?php echo $det['type'];?></p>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-lg-4"> 
-                                <div class="row">
-                                    <label>Serial Number:
-                                        <p class="font-medium font-13"><?php echo $det['serial_no'];?></p>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label>Unit Price:
-                                        <p class="font-medium font-13"><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }?></p>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label>Supplier:
-                                        <p class="font-medium font-13"><?php echo $det['acquired_by'];?></p>
-                                    </label>
-                                </div>                                    
-                            </div>
+                <?php if(!empty($details)){ foreach($details AS $det){ ?>
+                    <div class="card bor-radius5 shadow-sv animated fadeInUp" > 
+                        <div class="card-header cheader-bor <?php if($damage == '1'){ ?> bg-danger-alt <?php } else { ?> bg-primary-alt <?php }?>">
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="row">
-                                    <label>Remarks:
-                                        <p class="font-medium font-13"><?php echo $det['remarks'];?></p>
-                                    </label>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="row">
+                                        <label>Acquisition Date:
+                                            <p class="font-medium font-13"><?php echo $det['acquisition_date'];?></p>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <label>Date Issued:
+                                            <p class="font-medium font-13"><?php echo $det['date_issued'];?></p>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <label>Asset Control #:
+                                            <p class="font-medium font-13"><?php echo $det['asset_control_no'];?></p>
+                                        </label>
+                                    </div>  
                                 </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-lg-4 float-col">
-                                <label>Picture 1:</label>
-                               
-                                <div class="thumbnail">
-                                    <img id="" class="pictures" src="<?php echo (empty($det['picture1']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture1']); ?>" alt="your image" />
-                                </div>
-                                <!-- <div id="img-check-none1-<?php echo $x?>" class="alert alert-danger">
-                                  <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
-                                </div> -->
-                                <!-- <span id="img1-check" class='img-check-note'></span> -->
-                            </div> 
-                            <div class="col-lg-4 float-col">
-                                <label for="pic1">Picture 2:</label>
+                                <div class="col-lg-4">
+                                    <div class="row">
+                                        <label>Brand:
+                                            <p class="font-medium font-13"><?php echo $det['brand'];?></p>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <label>Model:
+                                            <p class="font-medium font-13"><?php echo $det['model'];?></p>
+                                        </label>
+                                    </div>
                                 
-                                <div class="thumbnail">
-                                    <img id="" class="pictures" src="<?php echo (empty($det['picture2']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture2']); ?>" alt="your image" />
+                                    <div class="row">
+                                        <label>Type:
+                                            <p class="font-medium font-13"><?php echo $det['type'];?></p>
+                                        </label>
+                                    </div>
                                 </div>
-                                <!-- <div id="img-check-none2-<?php echo $x;?>" class="alert alert-danger">
-                                  <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
-                                </div> -->
+                                <div class="col-lg-4"> 
+                                    <div class="row">
+                                        <label>Serial Number:
+                                            <p class="font-medium font-13"><?php echo $det['serial_no'];?></p>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <label>Unit Price:
+                                            <p class="font-medium font-13"><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }?></p>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <label>Supplier:
+                                            <p class="font-medium font-13"><?php echo $det['acquired_by'];?></p>
+                                        </label>
+                                    </div>                                    
+                                </div>
                             </div>
-                            <div class="col-lg-4 float-col">
-                                <label for="pic1">Picture 3:</label>
-                                
-                                <div class="thumbnail">
-                                    <img id="" class="pictures" src="<?php echo (empty($det['picture3']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture3']); ?>" alt="your image" />
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <label>Remarks:
+                                            <p class="font-medium font-13"><?php echo $det['remarks'];?></p>
+                                        </label>
+                                    </div>
                                 </div>
-                                <!-- <div id="img-check-none3-<?php echo $x;?>" class="alert alert-danger">
-                                  <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
-                                </div> -->
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-lg-4 float-col">
+                                    <label>Picture 1:</label>
+                                   
+                                    <div class="thumbnail">
+                                        <img id="" class="pictures" src="<?php echo (empty($det['picture1']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture1']); ?>" alt="your image" />
+                                    </div>
+                                    <!-- <div id="img-check-none1-<?php echo $x?>" class="alert alert-danger">
+                                      <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
+                                    </div> -->
+                                    <!-- <span id="img1-check" class='img-check-note'></span> -->
+                                </div> 
+                                <div class="col-lg-4 float-col">
+                                    <label for="pic1">Picture 2:</label>
+                                    
+                                    <div class="thumbnail">
+                                        <img id="" class="pictures" src="<?php echo (empty($det['picture2']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture2']); ?>" alt="your image" />
+                                    </div>
+                                    <!-- <div id="img-check-none2-<?php echo $x;?>" class="alert alert-danger">
+                                      <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
+                                    </div> -->
+                                </div>
+                                <div class="col-lg-4 float-col">
+                                    <label for="pic1">Picture 3:</label>
+                                    
+                                    <div class="thumbnail">
+                                        <img id="" class="pictures" src="<?php echo (empty($det['picture3']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture3']); ?>" alt="your image" />
+                                    </div>
+                                    <!-- <div id="img-check-none3-<?php echo $x;?>" class="alert alert-danger">
+                                      <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
+                                    </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <?php } } ?>
-                </div>
+                <?php } } ?>
             </div>                
         </div>
     </div>

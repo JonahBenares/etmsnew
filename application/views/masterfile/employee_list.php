@@ -108,9 +108,9 @@
                                                     <a href="<?php echo base_url(); ?>masterfile/employee_update/<?php echo $emp['id']?>" class="btn btn-info-alt btn-xs" data-toggle="tooltip" data-placement="top" title="Update">
                                                         <i class="fa fa-pencil-square-o"></i>
                                                     </a>
-                                                    <a href="<?php echo base_url(); ?>masterfile/delete_employee/<?php echo $emp['id'];?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt btn-xs" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
+                                                   <!--<a href="<?php echo base_url(); ?>masterfile/delete_employee/<?php echo $emp['id'];?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt btn-xs" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
                                                         <i class="fa fa-trash"></i>
-                                                    </a>
+                                                    </a>-->
                                                 </div>
                                             </center>
                                         </td>

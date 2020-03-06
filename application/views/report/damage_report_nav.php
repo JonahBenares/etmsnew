@@ -86,11 +86,11 @@
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['accountability'];?><br></td>
+                    <td style="border-bottom: 1px solid #999"><p><?php echo $dam['accountability'];?></p></td>
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td ><br></td>
                 </tr>
             </table>
             <br>
@@ -102,11 +102,7 @@
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
@@ -118,11 +114,7 @@
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
@@ -134,11 +126,7 @@
                 </tr>
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td><br></td>
                 </tr>
             </table>
             <br>
@@ -173,7 +161,7 @@
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
                         <?php if($dam['typec'] == 2){ ?>
-                            <?php foreach($child as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
+                            <?php foreach($child2 as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
                              <!-- <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
                         <?php } else { ?>
                             <input class="select" type="" name="" value="<?php echo $checked_by;?>" style = "pointer-events:none;">
@@ -182,7 +170,7 @@
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
                         <?php if($dam['typen'] == 2){ ?>
-                            <?php foreach($child as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
+                            <?php foreach($child3 as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
                              <!-- <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
                         <?php } else { ?>
                             <input class="select" type="" name="" value="<?php echo $noted_by;?>" style = "pointer-events:none;">

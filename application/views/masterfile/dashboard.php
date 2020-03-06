@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Dashboard</h4>
+                <h4 class="text-themecolor"><?php echo "Welcome, ". $this->session->userdata['fullname']; ?>!</h4>
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8">
+           <!--  <div class="col-lg-8">
                 <div class="card oh">
                     <div class="card-body">
                         <div class="d-flex m-b-30 align-items-center no-block">
@@ -43,8 +43,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
+            </div> -->
+           <!--  <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Today's Schedule</h5>
@@ -89,10 +89,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
-        <div class="row">
-            <!-- column -->
+      <!--   <div class="row">
+            
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -181,8 +181,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+        </div> -->
+        <!-- <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
@@ -207,44 +207,44 @@
                             <div class="bg-dark"><i class="fa fa-bell-o"></i></div> New Version just arrived. <span class="text-muted">27 May</span></li>
                     </ul>
                 </div>
-            </div>
-            <div class="col-md-6">
+            </div> -->
+          <!--   <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Messages (5 New)</h5>
                         <div class="message-box">
                             <div class="message-widget message-scroll">
-                                <!-- Message -->
+                               
                                 <a href="javascript:void(0)">
                                     <div class="user-img"> <img src="<?php echo base_url(); ?>assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
                                     <div class="mail-contnet">
                                         <h5>Pavan kumar</h5> <span class="mail-desc">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been.</span> <span class="time">9:30 AM</span> </div>
                                 </a>
-                                <!-- Message -->
+                                
                                 <a href="javascript:void(0)">
                                     <div class="user-img"> <img src="<?php echo base_url(); ?>assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
                                     <div class="mail-contnet">
                                         <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span> </div>
                                 </a>
-                                <!-- Message -->
+                               
                                 <a href="javascript:void(0)">
                                     <div class="user-img"> <span class="round">A</span> <span class="profile-status away pull-right"></span> </div>
                                     <div class="mail-contnet">
                                         <h5>Arijit Sinh</h5> <span class="mail-desc">Simply dummy text of the printing and typesetting industry.</span> <span class="time">9:08 AM</span> </div>
                                 </a>
-                                <!-- Message -->
+                               
                                 <a href="javascript:void(0)">
                                     <div class="user-img"> <img src="<?php echo base_url(); ?>assets/images/users/4.jpg" alt="user" class="img-circle"> <span class="profile-status offline pull-right"></span> </div>
                                     <div class="mail-contnet">
                                         <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span> </div>
                                 </a>
-                                <!-- Message -->
+                             
                                 <a href="javascript:void(0)">
                                     <div class="user-img"> <img src="<?php echo base_url(); ?>assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
                                     <div class="mail-contnet">
                                         <h5>Pavan kumar</h5> <span class="mail-desc">Welcome to the Elite Admin</span> <span class="time">9:30 AM</span> </div>
                                 </a>
-                                <!-- Message -->
+                                
                                 <a href="javascript:void(0)">
                                     <div class="user-img"> <img src="<?php echo base_url(); ?>assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy pull-right"></span> </div>
                                     <div class="mail-contnet">
@@ -252,7 +252,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

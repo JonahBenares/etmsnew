@@ -2266,6 +2266,7 @@ class Report extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+
     public function row_avail(){
 
          $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0' AND lost ='0'",'et_id');
@@ -4191,9 +4192,9 @@ class Report extends CI_Controller {
         $ret_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
         
         $ret_pref=explode("-", $ret_prefix);
-        $ret_one=$ret_pref[0];
+        $ret_one=(!empty($ret_pref[0])) ? $ret_pref[0] : '';
         $ret_two=(!empty($ret_pref[1])) ? $ret_pref[1] : '';
-        $ret_three=$ret_pref[2];
+        $ret_three=(!empty($ret_pref[2])) ? $ret_pref[2] : '';
         $ret_four = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
         if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
             $atf_pref1=$ret_pref[0];
@@ -4789,10 +4790,10 @@ class Report extends CI_Controller {
             $date_format = date("Y-m");
             $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             $dam_pref=explode("-", $damage_no);
-            $one1=$dam_pref[0];
-            $two1=$dam_pref[1];
+            $one1=(!empty($dam_pref[0])) ? $dam_pref[0] : '';
+            $two1=(!empty($dam_pref[1])) ? $dam_pref[1] : '';
             $three1=(!empty($dam_pref[2])) ? $dam_pref[2] : '';
-            $four1 = $dam_pref[3];
+            $four1 = (!empty($dam_pref[3])) ? $dam_pref[3] : '';
             $five1 = (!empty($dam_pref[4])) ? $dam_pref[4] : '';
             if(!empty($one1) && !empty($two1) && !empty($three1) && !empty($four1) && !empty($five1)){
                 $dam_prefix1=$dam_pref[0];
@@ -5046,6 +5047,22 @@ class Report extends CI_Controller {
                     'status'=> $status, 
                 );
             }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
+                $data['child2'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
+                $data['child3'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
             $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->submitted_by);
@@ -5100,6 +5117,24 @@ class Report extends CI_Controller {
                     'status'=> $status, 
                 );
             }
+
+              foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
+                $data['child2'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
+                $data['child3'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
             $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->submitted_by);
@@ -6824,6 +6859,13 @@ class Report extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+     public function lost_item(){  
+        $this->load->view('template/header'); 
+        $this->load->view('template/navbar'); 
+        $this->load->view('report/lost_item');
+        $this->load->view('template/footer');
+    }
+
     public function lost_list(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar');
@@ -6949,5 +6991,239 @@ class Report extends CI_Controller {
             'employee_id'=>$assign,
         );
         $this->super_model->update_where("lost_items", $rep_data, "lost_id", $lost_id);
+    }
+     public function history_view2(){  
+        $id=$this->uri->segment(3);
+        $this->load->view('template/header');
+        $this->load->view('template/navbar');   
+
+        $history=array();
+        foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $cur){
+            $data['item'] =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $cur->et_id);
+            $data['brand'] =$this->super_model->select_column_where("et_details", "brand", "ed_id", $cur->ed_id);
+            $data['model'] =$this->super_model->select_column_where("et_details", "model", "ed_id", $cur->ed_id);
+            $data['sn'] =$this->super_model->select_column_where("et_details", "serial_no", "ed_id", $cur->ed_id);
+            $data['damage'] =$this->super_model->select_column_where("et_details", "damage", "ed_id", $cur->ed_id);
+            $data['borrowed'] =$this->super_model->select_column_where("et_details", "borrowed", "ed_id", $cur->ed_id);
+            $data['changeloc'] =$this->super_model->select_column_where("et_details", "change_location", "ed_id", $cur->ed_id);
+            $data['lost'] =$this->super_model->select_column_where("et_details", "lost", "ed_id", $cur->ed_id);
+            $location_id=$this->super_model->select_column_where("et_details", "location_id", "ed_id", $cur->ed_id);
+            $data['location'] =$this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
+            $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
+            foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
+                //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);
+                $qty=1;
+                $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
+                $data['ids'] =$head->accountability_id;
+                $ids =$head->accountability_id;
+            }
+
+            $data['history'][] = array(
+                "id"=>$ids,
+                "employee"=>$employee,
+                "trdate"=>$date_issued,
+                "date_desc"=>"Date Issued",
+                "return_date"=>"",
+                "method"=>"Current",
+                "received_by"=>"",
+                "returned_by"=>"",
+                "jo_no"=>"",
+                "qty"=>$qty,
+                "repair_price"=>0,
+                "supplier"=>"",
+                "remarks"=>"",
+                "replacement"=>""
+            );
+
+            $data['current'][] = array(
+                "id"=>$ids,
+                "employee"=>$employee,
+                "date_issued"=>$date_issued,
+                "qty"=>$qty
+            );
+        }
+
+        $row_return=$this->super_model->count_rows_where("return_details", "ed_id",$id);
+        if($row_return!=0){
+           
+            foreach($this->super_model->select_row_where('return_details', 'ed_id', $id) AS $d){
+         
+                $row_return=$this->super_model->count_rows_where("return_details", "return_id",$d->return_id);
+                if($row_return!=0){
+                    foreach($this->super_model->select_row_where('return_head', 'return_id', $d->return_id) AS $ret){
+                        $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->accountability_id);
+                        $received =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->received_by);
+                    }
+
+                     $data['history'][]  = array(
+                        "id"=>$ret->return_id,
+                        "employee"=>$employee,
+                        "trdate"=>$ret->return_date,
+                        "date_desc"=>"Return Date",
+                        "return_date"=>"",
+                        "method"=>"Returned",
+                        "received_by"=>$received,
+                        "returned_by"=>"",
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>$ret->return_remarks,
+                        "replacement"=>""
+                    );
+
+                    $data['head'][] = array(
+                        "return_id"=>$ret->return_id,
+                        "employee"=>$employee,
+                        "received"=>$received,
+                        "return_date"=>$ret->return_date,
+                        "qty"=>1,
+                    );
+                }else {
+                    $data['head']=array();
+                }
+            //}
+            }
+            
+        } else {
+            $data['head']=array();
+        }
+
+        $row_borrow=$this->super_model->count_rows_where("borrow_details", "ed_id",$id);
+        if($row_borrow!=0){
+            foreach($this->super_model->select_row_where('borrow_details', 'ed_id', $id) AS $d){
+                $returned_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->returned_by);
+                $row_borrow=$this->super_model->count_rows_where("borrow_details", "bh_id",$d->bh_id);
+                if($row_borrow!=0){
+                    foreach($this->super_model->select_row_where('borrow_head', 'bh_id', $d->bh_id) AS $ret){
+                        $borrowed_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->borrowed_by);
+                        $borrowed_date =$ret->borrowed_date;
+                    }
+
+                     $data['history'][] = array(
+                        "id"=>$ret->bh_id,
+                        "employee"=>$borrowed_by,
+                        "trdate"=>$borrowed_date,
+                        "date_desc"=>"Borrow Date",
+                        "return_date"=>$d->returned_date,
+                        "method"=>"Borrowed",
+                        "received_by"=>"",
+                        "returned_by"=>$returned_by,
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>"",
+                        "replacement"=>""
+                    );
+
+                        $data['borrow'][] = array(
+                            "bh_id"=>$ret->bh_id,
+                            "borrowed_by"=>$borrowed_by,
+                            "return_date"=>$d->returned_date,
+                            "borrowed_date"=>$borrowed_date,
+                            "returned_by"=>$returned_by,
+                            "qty"=>1,
+                        );
+                    
+                }else {
+                    $data['borrow']=array();
+                }
+            //}
+            }
+            
+        } else {
+            $data['borrow']=array();
+        }
+
+        $row_repair=$this->super_model->count_rows_where("repair_details", "ed_id",$id);
+        if($row_repair!=0){
+            foreach($this->super_model->select_row_where('repair_details', 'ed_id', $id) AS $d){
+                $receive_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->received_by);
+                $row_repair=$this->super_model->count_rows_where("repair_details", "ed_id",$d->ed_id);
+                if($row_repair!=0){
+                    /*foreach($this->super_model->select_row_where('et_details', 'ed_id', $d->ed_id) AS $ret){
+                        $borrowed_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->borrowed_by);
+                        $borrowed_date =$ret->borrowed_date;
+                    }*/
+                      $data['history'][] = array(
+                        "id"=>$d->repair_id,
+                        "employee"=>"",
+                        "trdate"=>$d->repair_date,
+                        "date_desc"=>"Repair Date",
+                        "return_date"=>"",
+                        "method"=>"Repaired",
+                        "received_by"=>$receive_by,
+                        "returned_by"=>"",
+                        "jo_no"=>$d->jo_no,
+                        "qty"=>1,
+                        "repair_price"=>$d->repair_price,
+                        "supplier"=>$d->supplier,
+                         "remarks"=>"",
+                        "replacement"=>""
+                    );
+
+                        $data['repair'][] = array(
+                            "repair_id"=>$d->repair_id,
+                            "receive_by"=>$receive_by,
+                            "jo_no"=>$d->jo_no,
+                            "supplier"=>$d->supplier,
+                            "repair_price"=>$d->repair_price,
+                            "repair_date"=>$d->repair_date,
+                            "qty"=>1,
+                        );
+                    
+                }else {
+                    $data['repair']=array();
+                }
+            //}
+            }
+            
+        } else {
+            $data['repair']=array();
+        }
+
+        $row_lost=$this->super_model->count_rows_where("lost_items", "ed_id",$id);
+        foreach($this->super_model->select_row_where('lost_items', 'ed_id', $id) AS $l){
+            $accountable =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $l->employee_id);
+            $rep_id =$this->super_model->select_column_where("lost_items", "replacement", "ed_id", $l->ed_id);
+            $etid =$this->super_model->select_column_where("et_details", "et_id", "ed_id", $l->ed_id);
+            $et_id =$this->super_model->select_column_where("et_head", "et_id", "et_id", $etid);
+            $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+            $ed = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep_id);
+            $replacement =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $ed);
+
+            $data['history'][]  = array(
+                        "id"=>$l->lost_id,
+                        "employee"=>$accountable,
+                        "trdate"=>$l->lost_date,
+                        "date_desc"=>"Lost Date",
+                        "return_date"=>"",
+                        "method"=>"Lost",
+                        "received_by"=>"",
+                        "returned_by"=>"",
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>$l->remarks,
+                        "replacement"=>$replacement
+                    );
+
+            if($row_lost!=0){
+                $data['losts'][] = array(
+                    "employee"=>$accountable,
+                    "item"=>$item,
+                    "replacement"=>$replacement,
+                    "remarks"=>$l->remarks,
+                    "lost_date"=>$l->lost_date,
+                );
+            } else {
+                $data['losts']=array();
+            }
+        }
+
+        $this->load->view('report/history_view2',$data);
+        $this->load->view('template/footer');
     }
 }
