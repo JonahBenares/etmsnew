@@ -2335,6 +2335,7 @@ class Report extends CI_Controller {
     }
 
     public function report_print_avail(){
+        $this->load->view('template/header');
         $data['report']=array();
         foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0 AND cancelled=0') AS $et){
             $data['user_id'] = $_SESSION['fullname'];
@@ -2650,7 +2651,6 @@ class Report extends CI_Controller {
 
     public function set_print_avail_all(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
         $qty=1;
         foreach($this->super_model->select_custom_where("et_head","accountability_id='0' AND cancelled='0'") AS $a){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
