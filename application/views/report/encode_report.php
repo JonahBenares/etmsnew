@@ -159,6 +159,8 @@
                 </table> 
             </div>
             <br>
+            <br>
+            <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
             <center>
                 <div class="btn-group" id="btn-group-print">
                     <a href="<?php echo base_url(); ?>encode/encode_et" class="btn btn-warning-alt text-white" id="back"><span class="fa fa-plus"></span> Add New</a>
