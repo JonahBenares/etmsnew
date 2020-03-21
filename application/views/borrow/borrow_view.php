@@ -79,10 +79,10 @@
                         <tr>
                             <td id="dngr" class="bg-danger" align="center"><input type = "hidden" name = "ets_id[]" value = "<?php echo $r['et_id'];?>"><input type="checkbox" name="e_id[]" class="multi" value ="<?php echo $r['ed_id'];?>"></td>
                             <td class="main-tab" align="center">
-                                <input type="text" name = 'ret_qty<?php echo $x;?>' class="form-control" value = "1" style = "pointer-events: none;">
+                                <input type="text" name = 'ret_qty<?php echo $x;?>' class="form-control">
                             </td>
                             <td class="main-tab" align="center">
-                                <input type="text " class="form-control" value = "<?php echo $r['borrowed_qty'];?>">
+                                <input type="text " class="form-control" value = "<?php echo $r['borrowed_qty'];?>" style = "pointer-events: none;">
                             </td>
                             <td class="main-tab" align="center"><input type = "hidden" name = "et_id<?php echo $x;?>" value = "<?php echo $r['et_id'];?>"><input type = "hidden" name = "ed_id<?php echo $x;?>" value = "<?php echo $r['ed_id'];?>"><?php echo $r['item'];?></td>
                             <td class="main-tab" align="center"><?php echo $r['brand']?></td>
