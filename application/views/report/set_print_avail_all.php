@@ -45,7 +45,7 @@
         }
     }
     body{
-        padding: 20px 100px
+        padding: 20px 100px 
     }
 </style>
 <!-- <body style="padding-top:20px">
