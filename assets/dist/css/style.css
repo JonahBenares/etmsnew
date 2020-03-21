@@ -22373,3 +22373,43 @@ a.rep_names:hover{
     display: none;
   }
 }
+
+
+ #card-over {
+    position: absolute; /* Sit on top of the page content */
+    /*background-image: url("../../../assets/images/logo3fade.png");*/
+     background-size: 50%;
+   background-position: center;
+   background-repeat: no-repeat;
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.0); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    border-radius: 20px!important
+  }
+.card-hist{
+  height: 350px;
+  width: 600px;
+  border-radius: 20px!important;
+  text-align: left;
+  background-image: url("../../../assets/images/2.jpg");
+  background-size: cover;
+  background-position: 100%;
+  box-shadow: 1px 5px 6px 0px #c5c5c5
+}
+
+.img-item{
+  width:200px; 
+  height: 200px; 
+  background: #fff;
+  position: absolute;
+  top:50px;
+  left:-100px;
+  border-radius: 20px;
+  box-shadow:1px 3px 7px 0px #c5c5c5;
+}

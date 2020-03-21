@@ -7012,6 +7012,7 @@ class Report extends CI_Controller {
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
             foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
                 //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);
+                $picture1 =$this->super_model->select_column_where("et_details", "picture1", "et_id", $head->et_id);
                 $qty=1;
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
                 $data['ids'] =$head->accountability_id;
@@ -7022,6 +7023,7 @@ class Report extends CI_Controller {
                 "id"=>$ids,
                 "employee"=>$employee,
                 "trdate"=>$date_issued,
+                "picture"=>$picture1,
                 "date_desc"=>"Date Issued",
                 "return_date"=>"",
                 "method"=>"Current",
