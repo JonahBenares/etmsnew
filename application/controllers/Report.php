@@ -4787,7 +4787,7 @@ class Report extends CI_Controller {
                 $location1 = 'NA';
             }
 
-            $date_format = date("Y-m");
+            $date_format = date("Y-m",strtotime($date));
             $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             $dam_pref=explode("-", $damage_no);
             $one1=(!empty($dam_pref[0])) ? $dam_pref[0] : '';
