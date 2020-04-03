@@ -4359,7 +4359,8 @@ class Report extends CI_Controller {
         }
 
         $date_format = date("Y-m",strtotime($date));
-        $prefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
+        $subcat_prefix=$location."-".$date_format;
+        /*$prefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
         //secho $prefix;
         $assetdetails=explode("-", $prefix);
         $one=$assetdetails[0];
@@ -4385,7 +4386,7 @@ class Report extends CI_Controller {
             $subcat_prefix3=$assetdetails[2];
             $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
             $series = $assetdetails[3];
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("returned_series","prefix = '$subcat_prefix'");
         if($rows==0){

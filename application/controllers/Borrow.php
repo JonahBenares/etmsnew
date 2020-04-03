@@ -305,10 +305,12 @@ class Borrow extends CI_Controller {
         $data['user_id'] = $this->super_model->select_column_where("users", "username", "user_id", $user); 
         /*$data['bh_id']=$this->uri->segment(3);*/
         $borrowed_by=$this->uri->segment(3);
+        $bh_id=$this->uri->segment(4);
         $data['borrowed_by']=$this->uri->segment(3);
         $sql="";
         if($borrowed_by!='null'){
             $sql.= " borrowed_by = '$borrowed_by' AND";
+            $sql.= " bh_id = '$bh_id' AND";
         }
 
         $query=substr($sql,0,-3);
@@ -349,7 +351,7 @@ class Borrow extends CI_Controller {
     }
 
     public function generateReturn(){
-       /* $bh_id = $this->input->post('bh_id');*/
+        $bh_id = $this->input->post('bh_id');
         if(!empty($this->input->post('return_id'))){
             $return_id = $this->input->post('return_id');
         } else {
@@ -358,7 +360,7 @@ class Borrow extends CI_Controller {
 
        ?>
        <script>
-        window.location.href ='<?php echo base_url(); ?>borrow/borrow_view/<?php echo $return_id; ?>'</script> <?php
+        window.location.href ='<?php echo base_url(); ?>borrow/borrow_view/<?php echo $return_id; ?>/<?php echo $bh_id; ?>'</script> <?php
     }
 
 
@@ -368,9 +370,10 @@ class Borrow extends CI_Controller {
         if($rows!=0){
              echo "<ul id='name-item'>";
             foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$return%'") AS $itm){
-                foreach($this->super_model->custom_query("SELECT * FROM borrow_head LEFT JOIN borrow_details ON borrow_details.bh_id = borrow_head.bh_id WHERE borrow_head.borrowed_by = '$itm->employee_id' AND borrow_details.returned = '0' GROUP BY borrow_head.borrowed_by") AS $he){
+                foreach($this->super_model->custom_query("SELECT * FROM borrow_head LEFT JOIN borrow_details ON borrow_details.bh_id = borrow_head.bh_id WHERE borrow_head.borrowed_by = '$itm->employee_id' AND borrow_details.returned = '0' GROUP BY borrow_details.bh_id") AS $he){
+                    $item = $this->super_model->select_column_where("et_head","et_desc","et_id",$he->et_id);
             ?>
-                   <li onClick="selectReturn('<?php echo $itm->employee_id; ?>','<?php echo $he->borrow_series; ?>','<?php echo $he->borrowed_date; ?>','<?php echo $itm->employee_name; ?>')"><?php echo $itm->employee_name; ?></li>
+                   <li onClick="selectReturn('<?php echo $itm->employee_id; ?>','<?php echo $he->borrow_series; ?>','<?php echo $he->borrowed_date; ?>','<?php echo $itm->employee_name; ?>','<?php echo $he->bh_id; ?>')"><?php echo $itm->employee_name." - ".$item; ?></li>
             <?php 
                 }
             }

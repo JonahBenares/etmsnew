@@ -60,12 +60,13 @@ function selectBorrow(id, val) {
     $("#suggestion-borrow").hide();
 }
 
-function selectReturn(employee_id,series,date,val) {
+function selectReturn(employee_id,series,date,val,bh_id) {
     $("#return_id").val(employee_id);
     $("#rec_by").val(val);
     $("#series").val(series);
     $("#date").val(date);
     $("#return").val(val);
+    $("#bh_id").val(bh_id);
     $("#suggestion-return").hide();
 }
 
