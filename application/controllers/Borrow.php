@@ -85,7 +85,8 @@ class Borrow extends CI_Controller {
 
         $date = $this->input->post('date');
         $date_format = date("Y-m",strtotime($date));
-        $bor_prefix= $this->super_model->select_column_custom_where("borrow_head", "borrow_series", "borrowed_date LIKE '$date_format%'");
+        $borrow_pref=$location."-".$date_format;
+        /*$bor_prefix= $this->super_model->select_column_custom_where("borrow_head", "borrow_series", "borrowed_date LIKE '$date_format%'");
         
         $borpref=explode("-", $bor_prefix);
         $bor_one=$borpref[0];
@@ -104,7 +105,7 @@ class Borrow extends CI_Controller {
             $borrow_pref2=$borpref[1];
             $borrow_pref3=$borpref[2];
             $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref3;
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("borrow_series","borrow_prefix = '$borrow_pref'");
         if($rows==0){
@@ -592,7 +593,8 @@ class Borrow extends CI_Controller {
                 }
             }
             $date_format = date("Y-m",strtotime($date));
-            $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
+            $dam_pref=$location1."-".$date_format;
+            /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             
             $damagepref=explode("-", $damage_no);
             $dam_one=$damagepref[0];
@@ -611,7 +613,7 @@ class Borrow extends CI_Controller {
                 $dam_pref2=$damagepref[1];
                 $dam_pref3=$damagepref[2];
                 $dam_pref=$dam_pref1."-".$dam_pref2."-".$dam_pref3;
-            }
+            }*/
 
             $rows=$this->super_model->count_custom_where("damage_series","damage_prefix = '$dam_pref'");
             if($rows==0){
@@ -675,7 +677,8 @@ class Borrow extends CI_Controller {
         }
 
         $atf_format = date("Y");
-        $retpref= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
+        $ret_pref=$location1."-".$atf_format;
+        /*$retpref= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
         $retp=explode("-", $retpref);
         $ret_one=$retp[0];
         $ret_two=$retp[1];
@@ -690,7 +693,7 @@ class Borrow extends CI_Controller {
             $ret_pref1=$retp[0];
             $ret_pref2=$retp[1];
             $ret_pref=$ret_pref1."-".$ret_pref2;
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$ret_pref'");
         if($rows==0){
@@ -727,7 +730,8 @@ class Borrow extends CI_Controller {
 
 
         $date_format = date("Y-m",strtotime($date));
-        $arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
+        $ars_pref=$location1."-".$date_format;
+        /*$arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
 
         $arspref=explode("-", $arsprefix);
         $ars_one=$arspref[0];
@@ -746,7 +750,7 @@ class Borrow extends CI_Controller {
             $ars_pref2=$arspref[1];
             $ars_pref3=$arspref[2];
             $ars_pref=$ars_pref1."-".$ars_pref2."-".$ars_pref3;
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("returned_series","prefix = '$ars_pref'");
         if($rows==0){
