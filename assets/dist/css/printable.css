@@ -1,6 +1,6 @@
-body,p,h5{font-size: 12px!important}
+p,h5{font-size: 12px!important}
 @media print{
-    .hid, .left-sidebar, .topbar, #btn-group-print{
+    .hid, .left-sidebar, .topbar, #btn-group-print, #printBtn{
         display: none
     }
     .page-wrapper,body{
@@ -9,7 +9,9 @@ body,p,h5{font-size: 12px!important}
     .fixed-layout .page-wrapper {
         padding-top: 0px;
     }
+    .page-wrapper{font-size: 14px!important}
  }
+ .page-wrapper{font-size: 14px!important}
 .table-main{
     border:2px solid black;
     border-bottom:0px solid black;
@@ -50,7 +52,7 @@ p, .main-tab, h5, label.nomarg{
     #print, #printhide{
         display: none;
     }
-    body,p,h5{font-size: 12px!important;}
+    p,h5{font-size: 12px!important;}
 }
 .cancel{
     background-image: url('../../../assets/images/cancel.png')!important;

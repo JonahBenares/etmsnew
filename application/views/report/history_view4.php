@@ -2,7 +2,7 @@
 <script src="<?php echo base_url(); ?>assets/dist/js/encode.js"></script>
 <link  href="<?php echo base_url(); ?>assets/dist/css/history.css" rel="stylesheet">
 
-<div class="m-t-70">
+<div class="page-wrapper">
     <div class="container-fluid p-b-0" >
         <div class="row page-titles">
             <div class="col-md-3 align-self-center"></div>

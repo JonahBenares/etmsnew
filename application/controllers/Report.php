@@ -2533,7 +2533,6 @@ class Report extends CI_Controller {
 
     public function set_print_avail_all(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
         $qty=1;
         foreach($this->super_model->select_custom_where("et_head","accountability_id='0' AND cancelled='0'") AS $a){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
@@ -4677,6 +4676,7 @@ class Report extends CI_Controller {
             $date_format = date("Y-m",strtotime($date));
             $dam_prefix = $location1."-".$date_format;
             /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
+            $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             $dam_pref=explode("-", $damage_no);
             $one1=(!empty($dam_pref[0])) ? $dam_pref[0] : '';
             $two1=(!empty($dam_pref[1])) ? $dam_pref[1] : '';
@@ -6908,6 +6908,7 @@ class Report extends CI_Controller {
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
             foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
                 //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);
+                $picture1 =$this->super_model->select_column_where("et_details", "picture1", "et_id", $head->et_id);
                 $qty=1;
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
                 $data['ids'] =$head->accountability_id;
@@ -6918,6 +6919,7 @@ class Report extends CI_Controller {
                 "id"=>$ids,
                 "employee"=>$employee,
                 "trdate"=>$date_issued,
+                "picture"=>$picture1,
                 "date_desc"=>"Date Issued",
                 "return_date"=>"",
                 "method"=>"Current",
