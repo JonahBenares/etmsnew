@@ -372,7 +372,7 @@ class Borrow extends CI_Controller {
             foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$return%'") AS $itm){
                 foreach($this->super_model->custom_query("SELECT * FROM borrow_head LEFT JOIN borrow_details ON borrow_details.bh_id = borrow_head.bh_id WHERE borrow_head.borrowed_by = '$itm->employee_id' AND borrow_details.returned = '0' GROUP BY borrow_details.bh_id") AS $he){
                     $item='';
-                    foreach($this->super_model->select_row_where("borrow_details","bh_id",$he->bh_id) AS $i){
+                    foreach($this->super_model->select_custom_where("borrow_details","bh_id='$he->bh_id' AND returned='0'") AS $i){
                         $item .= $this->super_model->select_column_where("et_head","et_desc","et_id",$i->et_id)."<b>,</b> ";
                     }
             ?>
