@@ -4392,7 +4392,7 @@ class Report extends CI_Controller {
         if($rows==0){
             $ars_no= $location."-".$date_format."-1001";
         } else {
-            $series = $this->super_model->get_max("returned_series", "series","prefix = '$subcat_prefix'");
+            $series = $this->super_model->get_max_where("returned_series", "series","prefix = '$subcat_prefix'");
             $next=$series+1;
             $ars_no = $location."-".$date_format."-".$next;
         }
@@ -4423,13 +4423,14 @@ class Report extends CI_Controller {
             $location = 'NA';
         }
         $date_format = date("Y-m",strtotime($date));
-        $prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
+        //$prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
         //secho $prefix;
+        $prefix=$location."-".$date_format;
         $rows=$this->super_model->count_custom_where("damage_info","etdr_no = '$prefix'");
         if($rows==0){
             $etdr_no= $location."-".$date_format."-1001";
         } else {
-            $series = $this->super_model->get_max("damage_series", "series","damge_prefix = '$prefix'");
+            $series = $this->super_model->get_max_where("damage_series", "series","damge_prefix = '$prefix'");
             $next=$series+1;
             $etdr_no = $location."-".$date_format."-".$next;
         }
