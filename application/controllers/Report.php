@@ -958,7 +958,7 @@ class Report extends CI_Controller {
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         if($row!=0){
-            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0'") AS $et){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0' GROUP BY eh.et_id") AS $et){
             //foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0'",'et_id') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
