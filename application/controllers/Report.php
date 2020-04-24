@@ -6287,7 +6287,7 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $et->qty);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $unit);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $et->date_issued);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $employee);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $accountability);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $status);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $et->department);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$num, $placement);
