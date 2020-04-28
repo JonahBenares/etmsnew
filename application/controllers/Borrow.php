@@ -9,6 +9,7 @@ class Borrow extends CI_Controller {
         $this->load->library('session');
         date_default_timezone_set("Asia/Manila");
         $this->load->model('super_model');
+        $this->dropdown['delete_item']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id");
         function arrayToObject($array){
             if(!is_array($array)) { return $array; }
             $object = new stdClass();
@@ -27,7 +28,7 @@ class Borrow extends CI_Controller {
 
     public function borrow_list(){  
     	$this->load->view('template/header');
-    	$this->load->view('template/navbar');
+    	$this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_rows("borrow_head");
         if($row!=0){
             foreach($this->super_model->select_all_order_by('borrow_head', 'borrowed_date', 'ASC') AS $all){
@@ -281,7 +282,7 @@ class Borrow extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         foreach($this->super_model->select_row_where("borrow_head","bh_id",$id) AS $borrow){
             $data['name'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $borrow->borrowed_by);
             $employee_name = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $borrow->borrowed_by);
@@ -300,7 +301,7 @@ class Borrow extends CI_Controller {
 
     public function borrow_view(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $user = $_SESSION['user_id'];
         $data['user_id'] = $this->super_model->select_column_where("users", "username", "user_id", $user); 
         /*$data['bh_id']=$this->uri->segment(3);*/
@@ -509,7 +510,7 @@ class Borrow extends CI_Controller {
 
     public function tag_damage_form(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '66'); 
@@ -811,7 +812,7 @@ class Borrow extends CI_Controller {
 
     public function tag_damage_print(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         foreach($this->super_model->select_all('et_head') AS $head){ 
                 $data['head'][] =  array(
                     'et_id'=>$head->et_id,  

@@ -10,6 +10,7 @@ class Report extends CI_Controller {
         $this->load->library('session');
         date_default_timezone_set("Asia/Manila");
         $this->load->model('super_model');
+        $this->dropdown['delete_item']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id");
         function arrayToObject($array){
             if(!is_array($array)) { return $array; }
             $object = new stdClass();
@@ -47,7 +48,7 @@ class Report extends CI_Controller {
 
     public function inv_rep(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['subcat1']=$this->super_model->select_all_order_by("subcategory","subcat_name","ASC");
         $subcat=$this->uri->segment(3);
         $data['subcatid']=$subcat;
@@ -96,7 +97,7 @@ class Report extends CI_Controller {
 
     public function inv_rep_itm(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
         $row=$this->super_model->count_rows("et_head");
         if($row!=0){
@@ -137,7 +138,7 @@ class Report extends CI_Controller {
 
     public function inv_rep_overall(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_rows("et_head");
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
@@ -177,7 +178,7 @@ class Report extends CI_Controller {
 
     public function search_inv_overall(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
 
         if(!empty($this->input->post('from'))){
             $data['from'] = $this->input->post('from');
@@ -767,7 +768,7 @@ class Report extends CI_Controller {
 
     public function inv_rep_det(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $subcat=$this->uri->segment(3);
         $row = $this->super_model->count_rows_where("et_head","subcat_id",$subcat);
         $data['subcat_name'] = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat);                     
@@ -802,7 +803,7 @@ class Report extends CI_Controller {
 
     public function inv_report_itm(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $item=$this->uri->segment(3);
         $set=$this->uri->segment(4);
         $data['item']=$this->super_model->select_column_where("et_head", "et_desc", "et_id", $item);
@@ -855,7 +856,7 @@ class Report extends CI_Controller {
 
     public function search_inv_itm(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
         if(!empty($this->input->post('item'))){
             $data['item'] = $this->input->post('item');
@@ -946,7 +947,7 @@ class Report extends CI_Controller {
 
     public function report_main(){  
     	$this->load->view('template/header');
-    	$this->load->view('template/navbar');
+    	$this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
         $row_avail = $this->row_avail();
         $data['available_set_qty']= $this->row_set_avail();
@@ -1025,7 +1026,7 @@ class Report extends CI_Controller {
 
     public function report_draft(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0 AND save_temp=1 AND cancelled=0");
         $row_avail = $this->row_avail();
         $data['available_set_qty']= $this->row_set_avail();
@@ -1087,7 +1088,7 @@ class Report extends CI_Controller {
 
     public function returned_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_rows("return_head");
         $row_avail = $this->row_avail();
         $data['available_set_qty']= $this->row_set_avail();
@@ -1126,7 +1127,7 @@ class Report extends CI_Controller {
 
     public function encode_report(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
@@ -1594,7 +1595,7 @@ class Report extends CI_Controller {
 
     public function edit_encode(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);  
         $data['edid']=$this->uri->segment(4);
@@ -1675,7 +1676,7 @@ class Report extends CI_Controller {
 
     public function edit_encode_draft(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);  
         $data['edid']=$this->uri->segment(4);
@@ -1987,7 +1988,7 @@ class Report extends CI_Controller {
 
     public function report_main_hist(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
@@ -2022,7 +2023,7 @@ class Report extends CI_Controller {
     public function history_view(){  
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
-        $this->load->view('template/navbar');   
+        $this->load->view('template/navbar',$this->dropdown);   
         foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $cur){
             $data['item'] =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $cur->et_id);
             $data['brand'] =$this->super_model->select_column_where("et_details", "brand", "ed_id", $cur->ed_id);
@@ -2176,7 +2177,7 @@ class Report extends CI_Controller {
 
     public function report_main_avail(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
 
         $row_avail = $this->row_avail();
@@ -2296,7 +2297,7 @@ class Report extends CI_Controller {
 
     public function report_set_avail(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_custom_where("et_head", "accountability_id=0 AND cancelled=0");
 
         $row_set_avail = $this->row_set_avail();
@@ -2359,7 +2360,7 @@ class Report extends CI_Controller {
     }*/
     public function set_print_avail1(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_custom_where("et_head","accountability_id='0' AND cancelled='0'");
@@ -2452,7 +2453,7 @@ class Report extends CI_Controller {
 
     public function set_print_avail(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $qty=1;
@@ -2488,7 +2489,7 @@ class Report extends CI_Controller {
 
     public function set_print_account(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $empid=$this->uri->segment(4);
@@ -2566,7 +2567,7 @@ class Report extends CI_Controller {
 
     public function report_main_emp(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
@@ -2596,7 +2597,7 @@ class Report extends CI_Controller {
 
     public function report_history(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -2843,7 +2844,7 @@ class Report extends CI_Controller {
 
     public function print_history(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -3176,7 +3177,7 @@ class Report extends CI_Controller {
 
     public function search_employee(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
 
         $sql="SELECT * FROM employees WHERE location_id!='0' AND";
         $filter = " ";
@@ -3213,7 +3214,7 @@ class Report extends CI_Controller {
 
    public function search_report(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $url=$this->uri->segment(2);
         if(!empty($this->input->post('from'))){
             $data['from'] = $this->input->post('from');
@@ -3456,7 +3457,7 @@ class Report extends CI_Controller {
 
     public function search_report_draft(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $url=$this->uri->segment(2);
         if(!empty($this->input->post('from'))){
             $data['from'] = $this->input->post('from');
@@ -3697,7 +3698,7 @@ class Report extends CI_Controller {
 
     public function report_sub(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -3739,7 +3740,7 @@ class Report extends CI_Controller {
 
     public function create_set(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['ed_id']=$this->uri->segment(4);
@@ -3850,7 +3851,7 @@ class Report extends CI_Controller {
 
     public function create_set_avail(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['ed_id']=$this->uri->segment(3);
         $ed_id=$this->uri->segment(3);
         $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
@@ -3957,7 +3958,7 @@ class Report extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_rows("et_head");
         if($row!=0){
             foreach($this->super_model->select_row_where('et_head', 'et_id', $id) AS $view){
@@ -4271,7 +4272,7 @@ class Report extends CI_Controller {
 
      public function assign_view(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');       
+        $this->load->view('template/navbar',$this->dropdown);       
         $this->load->view('report/assign_view');
         $this->load->view('template/footer');
     }
@@ -4450,7 +4451,7 @@ class Report extends CI_Controller {
 
     public function return_report(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $id=$this->uri->segment(3); 
         $data['fullname'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $row=$this->super_model->count_rows_where("return_head",'accountability_id',$id);
@@ -4921,7 +4922,7 @@ class Report extends CI_Controller {
 
     public function damage_report(){  
         $this->load->view('template/header');
-        // $this->load->view('template/navbar');
+        // $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $damage_id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('damage_info', 'damage_id', $damage_id) AS $dam){
@@ -4991,7 +4992,7 @@ class Report extends CI_Controller {
 
     public function damage_report_nav(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $damage_id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('damage_info', 'damage_id', $damage_id) AS $dam){
@@ -5073,7 +5074,7 @@ class Report extends CI_Controller {
 
     public function aaf_assign_rep(){  
         $this->load->view('template/header'); 
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $data['employee'] = $this->super_model->select_all_order_by("employees","employee_name","ASC"); 
         $data['user_id'] = $_SESSION['fullname'];
         $this->load->view('report/aaf_assign_rep',$data);
@@ -5235,7 +5236,7 @@ class Report extends CI_Controller {
 
     public function ars_report(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
@@ -5333,7 +5334,7 @@ class Report extends CI_Controller {
 
     public function transfer_report(){ 
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $id=$this->uri->segment(3); 
         $data['fullname'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         foreach($this->super_model->select_row_where("transfer_head", "accountability_id", $id) AS $info){
@@ -5512,7 +5513,7 @@ class Report extends CI_Controller {
 
     public function seaaf_report(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -5576,7 +5577,7 @@ class Report extends CI_Controller {
 
     public function acf_report(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
@@ -5667,7 +5668,7 @@ class Report extends CI_Controller {
 
     public function multi_transfer(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $id=$this->uri->segment(3); 
         $data['id']=$this->uri->segment(3); 
         $data['fullname'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -5821,7 +5822,7 @@ class Report extends CI_Controller {
 
     public function multi_return(){
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $id=$this->uri->segment(3); 
         $data['id']=$this->uri->segment(3); 
         $data['fullname'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -6752,21 +6753,21 @@ class Report extends CI_Controller {
 
     public function damage_report_blank(){  
         $this->load->view('template/header'); 
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $this->load->view('report/damage_report_blank');
         $this->load->view('template/footer');
     }
 
      public function lost_item(){  
         $this->load->view('template/header'); 
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $this->load->view('report/lost_item');
         $this->load->view('template/footer');
     }
 
     public function lost_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $row_avail = $this->row_avail();
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
@@ -6805,7 +6806,7 @@ class Report extends CI_Controller {
 
     public function replace_item(){  
         $this->load->view('template/header'); 
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $empid = $this->uri->segment(3);
         $lost_id = $this->uri->segment(4);
         $data['empid'] = $this->uri->segment(3);
@@ -6893,7 +6894,7 @@ class Report extends CI_Controller {
      public function history_view2(){  
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
-        $this->load->view('template/navbar');   
+        $this->load->view('template/navbar',$this->dropdown);   
 
         $history=array();
         foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $cur){
