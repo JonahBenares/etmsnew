@@ -196,5 +196,9 @@ class Repair extends CI_Controller {
         echo "<script>window.location = '".base_url()."repair/repair_list';</script>";
     }
 
+    public function get_name($col, $table, $whr_clm, $whr_val){
+        $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
+        return $column;
+    }
 }
 ?>

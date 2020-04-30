@@ -6404,7 +6404,7 @@ class Report extends CI_Controller {
                 $num++;
             }
         }
-        $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->applyFromArray($styleArray);
+      /*  $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->applyFromArray($styleArray);
         $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
@@ -6417,7 +6417,7 @@ class Report extends CI_Controller {
         ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="Equipment Tools.xlsx"');
-        readfile($exportfilename);
+        readfile($exportfilename);*/
     }
 
     public function export_equipment_draft(){
