@@ -7163,4 +7163,9 @@ class Report extends CI_Controller {
         $this->load->view('report/history_view2',$data);
         $this->load->view('template/footer');
     }
+
+    public function get_name($col, $table, $whr_clm, $whr_val){
+        $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
+        return $column;
+    }
 }

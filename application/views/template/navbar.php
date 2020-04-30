@@ -1,3 +1,4 @@
+<?php $CI=&get_instance(); ?>
 <style type="text/css">
     .select2-container--default .select2-selection--single .select2-selection__rendered {
         color: #444;
@@ -29,7 +30,7 @@
                                 <select id="edid_no" name="edid_no" class="form-control select2" style="width:500px">
                                     <option value =''>--Select Item to Delete--</option>
                                     <?php foreach($delete_item AS $del){ ?>
-                                        <option value="<?php echo $del->ed_id; ?>,<?php echo $del->et_id; ?>"><?php echo $del->ed_id." - ".$del->et_desc." - ".$del->serial_no; ?></option>
+                                        <option value="<?php echo $del->ed_id; ?>,<?php echo $del->et_id; ?>"><?php echo $del->ed_id." - ".$del->et_desc.", " . $del->brand.", " . $del->serial_no. " - ".$CI->get_name("employee_name", "employees", "employee_id", $del->accountability_id) ; ?></option>
                                     <?php } ?>
                                 </select>
                                 </td>
