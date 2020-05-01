@@ -200,6 +200,5 @@ class Repair extends CI_Controller {
         $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
         return $column;
     }
-
 }
 ?>
