@@ -1,9 +1,48 @@
-
+<?php $CI=&get_instance(); ?>
+<style type="text/css">
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #444;
+        line-height: 28px;
+        width: 466px;
+    }
+</style>
 <body class="skin-default-dark fixed-layout">
     <div class="preloader">
         <div class="loader">
             <div class="loader__figure"></div>
             <p class="loader__label">EQUIPMENTS AND TOOLS MANAGEMENT SYSTEM</p>
+        </div>
+    </div>
+    <div class="modal fade" id="deletItem" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="largeModalLabel"><span class="fa fa-close"></span>  Delete Item</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+                <form method='POST' action="<?php echo base_url(); ?>masterfile/delete_item">
+                    <div class="modal-body">
+                        <table width="100%">
+                            <tr>
+                                <td><p>ID Number:</p>
+                                <select id="edid_no" name="edid_no" class="form-control select2" style="width:500px">
+                                    <option value =''>--Select Item to Delete--</option>
+                                    <?php foreach($delete_item AS $del){ ?>
+                                        <option value="<?php echo $del->ed_id; ?>,<?php echo $del->et_id; ?>"><?php echo $del->ed_id." - ".$del->et_desc.", " . $del->brand.", " . $del->serial_no. " - ".$CI->get_name("employee_name", "employees", "employee_id", $del->accountability_id) ; ?></option>
+                                    <?php } ?>
+                                </select>
+                                </td>
+                            </tr>                                                       
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-danger-alt btn-sm btn-block bor-radius" value='Delete'>
+                    </div>
+                    <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
+                </form>
+            </div>
         </div>
     </div>
     <div id="main-wrapper">
@@ -30,6 +69,9 @@
                             </form>
                         </li>
                     </ul>
+                    <button type="button" class="btn btn-sm btn-danger " data-toggle="modal" data-target="#deletItem">
+                        <span class="fa fa-close"></span> Delete Item
+                    </button>
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo base_url(); ?>assets/images/users/1.jpg" alt="user" class="img-circle" width="30"></a>

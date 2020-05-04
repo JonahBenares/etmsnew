@@ -9,6 +9,7 @@ class Encode extends CI_Controller {
         $this->load->library('session');
         date_default_timezone_set("Asia/Manila");
         $this->load->model('super_model');
+        $this->dropdown['delete_item']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id");
         function arrayToObject($array){
             if(!is_array($array)) { return $array; }
             $object = new stdClass();
@@ -27,7 +28,7 @@ class Encode extends CI_Controller {
 
     public function encode_et(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         /*$data['department'] = $this->super_model->select_all_order_by('department', 'department_name', 'ASC');*/
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $data['unit'] = $this->super_model->select_all_order_by('unit', 'unit_name', 'ASC');
@@ -39,7 +40,7 @@ class Encode extends CI_Controller {
 
     public function encode_next(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar'); 
+        $this->load->view('template/navbar',$this->dropdown); 
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);   
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
@@ -153,7 +154,7 @@ class Encode extends CI_Controller {
 
     public function encode_report(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
@@ -450,6 +451,11 @@ class Encode extends CI_Controller {
         }
         echo '<option value="'. $asset_no .'">'. $asset_no .'</option>';
         //}
+    }
+
+    public function get_name($col, $table, $whr_clm, $whr_val){
+        $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
+        return $column;
     }
 
 }

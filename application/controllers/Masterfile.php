@@ -8,6 +8,7 @@ class Masterfile extends CI_Controller {
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('session');
 		$this->load->model('super_model');
+        $this->dropdown['delete_item']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id");
 	/**
 	 * Index Page for this controller.
 	 *
@@ -48,7 +49,7 @@ class Masterfile extends CI_Controller {
     public function dashboard()
     {
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $this->load->view('masterfile/dashboard');
         $this->load->view('template/footer');
     }
@@ -94,7 +95,7 @@ class Masterfile extends CI_Controller {
 
 	public function employee_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $row=$this->super_model->count_rows("employees");
         if($row!=0){
@@ -244,7 +245,7 @@ class Masterfile extends CI_Controller {
 
     public function employee_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
@@ -362,7 +363,7 @@ class Masterfile extends CI_Controller {
 
     public function physical_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['physical'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $this->load->view('masterfile/physical_list',$data);
         $this->load->view('template/footer');
@@ -387,7 +388,7 @@ class Masterfile extends CI_Controller {
 
     public function physical_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['physical'] = $this->super_model->select_row_where('physical_condition', 'physical_id', $id);
@@ -422,7 +423,7 @@ class Masterfile extends CI_Controller {
 
     public function loc_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $this->load->view('masterfile/loc_list',$data);
         $this->load->view('template/footer');
@@ -449,7 +450,7 @@ class Masterfile extends CI_Controller {
 
     public function loc_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['location'] = $this->super_model->select_row_where('location', 'location_id', $id);
@@ -485,7 +486,7 @@ class Masterfile extends CI_Controller {
 
     public function placement_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $this->load->view('masterfile/placement_list',$data);
         $this->load->view('template/footer');
@@ -510,7 +511,7 @@ class Masterfile extends CI_Controller {
 
     public function placement_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['placement'] = $this->super_model->select_row_where('placement', 'placement_id', $id);
@@ -545,7 +546,7 @@ class Masterfile extends CI_Controller {
 
     public function rack_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         $this->load->view('masterfile/rack_list',$data);
         $this->load->view('template/footer');
@@ -570,7 +571,7 @@ class Masterfile extends CI_Controller {
 
     public function rack_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['rack'] = $this->super_model->select_row_where('rack', 'rack_id', $id);
@@ -605,7 +606,7 @@ class Masterfile extends CI_Controller {
 
     public function uom_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['unit'] = $this->super_model->select_all_order_by('unit', 'unit_name', 'ASC');
         $this->load->view('masterfile/uom_list',$data);
         $this->load->view('template/footer');
@@ -630,7 +631,7 @@ class Masterfile extends CI_Controller {
 
     public function uom_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['unit'] = $this->super_model->select_row_where('unit', 'unit_id', $id);
@@ -665,7 +666,7 @@ class Masterfile extends CI_Controller {
 
     public function currency_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
         $this->load->view('masterfile/currency_list',$data);
         $this->load->view('template/footer');
@@ -690,7 +691,7 @@ class Masterfile extends CI_Controller {
 
     public function currency_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['currency'] = $this->super_model->select_row_where('currency', 'currency_id', $id);
@@ -725,7 +726,7 @@ class Masterfile extends CI_Controller {
 
     public function company_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $this->load->view('masterfile/company_list',$data);
         $this->load->view('template/footer');
@@ -750,7 +751,7 @@ class Masterfile extends CI_Controller {
 
     public function company_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['company'] = $this->super_model->select_row_where('company', 'company_id', $id);
@@ -840,7 +841,7 @@ class Masterfile extends CI_Controller {
 
     public function categ_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['category'] = $this->super_model->select_all('category'); 
         foreach($this->super_model->select_all('subcategory') AS $s){
             $data['subcat'][]=array(
@@ -876,7 +877,7 @@ class Masterfile extends CI_Controller {
 
     public function categ_update(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['category'] = $this->super_model->select_row_where('category', 'category_id', $id);
@@ -897,7 +898,7 @@ class Masterfile extends CI_Controller {
 
     public function emp_inclusion_list(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $row=$this->super_model->count_rows("employees");
         if($row!=0){
@@ -1015,5 +1016,57 @@ class Masterfile extends CI_Controller {
                     window.location ='".base_url()."masterfile/emp_inclusion_list'; </script>";
             }
         }
+    }
+
+    public function delete_item(){
+        $multid = $this->input->post('edid_no');
+        $multi=explode(',',$multid);
+        $edid=$multi[0];
+        $etid=$multi[1];
+        foreach($this->super_model->select_row_where("et_details","ed_id",$edid) AS $et){ 
+            $count_et=$this->super_model->count_rows_where("et_details","et_id",$et->et_id);
+            $qty=$this->super_model->select_column_where("et_head","qty","et_id",$etid);
+            $newqty=$qty-1;
+            if($count_et>1){ 
+                $data = array(
+                    'qty'=>$newqty
+                );
+                $this->super_model->update_where('et_head', $data, 'et_id', $et->et_id);
+                $this->super_model->delete_where('et_details', 'ed_id', $edid);
+            }else {
+                $this->super_model->delete_where('et_head', 'et_id', $et->et_id);
+                $this->super_model->delete_where('et_details', 'ed_id', $edid);
+            }
+        }
+
+        foreach($this->super_model->select_row_where("return_details","ed_id",$edid) AS $ret){
+            $count_return=$this->super_model->count_rows_where("return_details","return_id",$ret->return_id);
+            if($count_return>1){ 
+                $this->super_model->delete_where('return_details', 'ed_id', $edid);
+            }else {
+                $this->super_model->delete_where('return_head', 'return_id', $ret->return_id);
+                $this->super_model->delete_where('return_details', 'ed_id', $edid);
+            }
+        }
+
+        foreach($this->super_model->select_row_where("borrow_details","ed_id",$edid) AS $bh){
+            $count_borrow=$this->super_model->count_rows_where("borrow_details","bh_id",$bh->bh_id);
+            if($count_borrow>1){ 
+                $this->super_model->delete_where('borrow_details', 'ed_id', $edid);
+            }else {
+                $this->super_model->delete_where('borrow_head', 'bh_id', $bh->bh_id);
+                $this->super_model->delete_where('borrow_details', 'ed_id', $edid);
+            }
+        }
+        $this->super_model->delete_where('damage_info', 'ed_id', $edid);
+        $this->super_model->delete_where('lost_items', 'ed_id', $edid);
+        $this->super_model->delete_where('repair_details', 'ed_id', $edid);
+        echo "<script type='text/javascript'>alert('Successfully Deleted!');</script>";
+        echo "<script>location.replace(document.referrer);</script>";
+    }
+
+    public function get_name($col, $table, $whr_clm, $whr_val){
+        $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
+        return $column;
     }
 }

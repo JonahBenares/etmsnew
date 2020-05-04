@@ -3,6 +3,11 @@
         </footer> -->
     </div>
     <script src="<?php echo base_url(); ?>assets/dist/js/jquery.min.js"></script>
+    <link href="<?php echo base_url(); ?>assets/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="<?php echo base_url(); ?>assets/dist/js/select2.min.js"></script> 
+    <script>
+        $('.select2').select2();
+    </script> 
     <script src="<?php echo base_url(); ?>assets/dist/js/jquery.dataTables.min.js"></script>
     <!-- <script src="<?php echo base_url(); ?>assets/node_modules/jquery/jquery-3.2.1.min.js"></script> -->
     <script src="<?php echo base_url(); ?>assets/node_modules/popper/popper.min.js"></script>

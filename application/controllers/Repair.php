@@ -9,6 +9,7 @@ class Repair extends CI_Controller {
         $this->load->library('session');
         date_default_timezone_set("Asia/Manila");
         $this->load->model('super_model');
+        $this->dropdown['delete_item']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id");
         function arrayToObject($array){
             if(!is_array($array)) { return $array; }
             $object = new stdClass();
@@ -27,7 +28,7 @@ class Repair extends CI_Controller {
 
     public function repair_list(){  
     	$this->load->view('template/header');
-    	$this->load->view('template/navbar');
+    	$this->load->view('template/navbar',$this->dropdown);
         $row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
         foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0' AND et_id = '$check->et_id'");           
@@ -71,7 +72,7 @@ class Repair extends CI_Controller {
 
     public function repair_form(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         foreach($this->super_model->select_all("repair_details") AS $det){
             if($det->saved == 0 AND $det->unsaved==1){
                 $data['rep'][]=array(
@@ -195,5 +196,9 @@ class Repair extends CI_Controller {
         echo "<script>window.location = '".base_url()."repair/repair_list';</script>";
     }
 
+    public function get_name($col, $table, $whr_clm, $whr_val){
+        $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
+        return $column;
+    }
 }
 ?>

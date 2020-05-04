@@ -53,6 +53,7 @@
                     </tr>    
                 </table>
                  <input type="hidden" name="return_id" id="return_id">
+                 <input type="hidden" name="bh_id" id="bh_id">
             </div>
         </form>
         <form method = "POST" action="<?php echo base_url(); ?>borrow/insert_return">

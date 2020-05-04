@@ -9,6 +9,7 @@ class Borrow extends CI_Controller {
         $this->load->library('session');
         date_default_timezone_set("Asia/Manila");
         $this->load->model('super_model');
+        $this->dropdown['delete_item']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id");
         function arrayToObject($array){
             if(!is_array($array)) { return $array; }
             $object = new stdClass();
@@ -27,7 +28,7 @@ class Borrow extends CI_Controller {
 
     public function borrow_list(){  
     	$this->load->view('template/header');
-    	$this->load->view('template/navbar');
+    	$this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_rows("borrow_head");
         if($row!=0){
             foreach($this->super_model->select_all_order_by('borrow_head', 'borrowed_date', 'ASC') AS $all){
@@ -85,7 +86,8 @@ class Borrow extends CI_Controller {
 
         $date = $this->input->post('date');
         $date_format = date("Y-m",strtotime($date));
-        $bor_prefix= $this->super_model->select_column_custom_where("borrow_head", "borrow_series", "borrowed_date LIKE '$date_format%'");
+        $borrow_pref=$location."-".$date_format;
+        /*$bor_prefix= $this->super_model->select_column_custom_where("borrow_head", "borrow_series", "borrowed_date LIKE '$date_format%'");
         
         $borpref=explode("-", $bor_prefix);
         $bor_one=$borpref[0];
@@ -104,7 +106,7 @@ class Borrow extends CI_Controller {
             $borrow_pref2=$borpref[1];
             $borrow_pref3=$borpref[2];
             $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref3;
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("borrow_series","borrow_prefix = '$borrow_pref'");
         if($rows==0){
@@ -280,7 +282,7 @@ class Borrow extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         foreach($this->super_model->select_row_where("borrow_head","bh_id",$id) AS $borrow){
             $data['name'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $borrow->borrowed_by);
             $employee_name = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $borrow->borrowed_by);
@@ -299,15 +301,17 @@ class Borrow extends CI_Controller {
 
     public function borrow_view(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $user = $_SESSION['user_id'];
         $data['user_id'] = $this->super_model->select_column_where("users", "username", "user_id", $user); 
         /*$data['bh_id']=$this->uri->segment(3);*/
         $borrowed_by=$this->uri->segment(3);
+        $bh_id=$this->uri->segment(4);
         $data['borrowed_by']=$this->uri->segment(3);
         $sql="";
         if($borrowed_by!='null'){
             $sql.= " borrowed_by = '$borrowed_by' AND";
+            $sql.= " bh_id = '$bh_id' AND";
         }
 
         $query=substr($sql,0,-3);
@@ -348,7 +352,7 @@ class Borrow extends CI_Controller {
     }
 
     public function generateReturn(){
-       /* $bh_id = $this->input->post('bh_id');*/
+        $bh_id = $this->input->post('bh_id');
         if(!empty($this->input->post('return_id'))){
             $return_id = $this->input->post('return_id');
         } else {
@@ -357,7 +361,7 @@ class Borrow extends CI_Controller {
 
        ?>
        <script>
-        window.location.href ='<?php echo base_url(); ?>borrow/borrow_view/<?php echo $return_id; ?>'</script> <?php
+        window.location.href ='<?php echo base_url(); ?>borrow/borrow_view/<?php echo $return_id; ?>/<?php echo $bh_id; ?>'</script> <?php
     }
 
 
@@ -367,9 +371,13 @@ class Borrow extends CI_Controller {
         if($rows!=0){
              echo "<ul id='name-item'>";
             foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$return%'") AS $itm){
-                foreach($this->super_model->custom_query("SELECT * FROM borrow_head LEFT JOIN borrow_details ON borrow_details.bh_id = borrow_head.bh_id WHERE borrow_head.borrowed_by = '$itm->employee_id' AND borrow_details.returned = '0' GROUP BY borrow_head.borrowed_by") AS $he){
+                foreach($this->super_model->custom_query("SELECT * FROM borrow_head LEFT JOIN borrow_details ON borrow_details.bh_id = borrow_head.bh_id WHERE borrow_head.borrowed_by = '$itm->employee_id' AND borrow_details.returned = '0' GROUP BY borrow_details.bh_id") AS $he){
+                    $item='';
+                    foreach($this->super_model->select_custom_where("borrow_details","bh_id='$he->bh_id' AND returned='0'") AS $i){
+                        $item .= $this->super_model->select_column_where("et_head","et_desc","et_id",$i->et_id)."<b>,</b> ";
+                    }
             ?>
-                   <li onClick="selectReturn('<?php echo $itm->employee_id; ?>','<?php echo $he->borrow_series; ?>','<?php echo $he->borrowed_date; ?>','<?php echo $itm->employee_name; ?>')"><?php echo $itm->employee_name; ?></li>
+                   <li onClick="selectReturn('<?php echo $itm->employee_id; ?>','<?php echo $he->borrow_series; ?>','<?php echo $he->borrowed_date; ?>','<?php echo $itm->employee_name; ?>','<?php echo $he->bh_id; ?>')"><?php echo $itm->employee_name." - ".$item; ?></li>
             <?php 
                 }
             }
@@ -502,7 +510,7 @@ class Borrow extends CI_Controller {
 
     public function tag_damage_form(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '66'); 
@@ -592,7 +600,8 @@ class Borrow extends CI_Controller {
                 }
             }
             $date_format = date("Y-m",strtotime($date));
-            $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
+            $dam_pref=$location1."-".$date_format;
+            /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             
             $damagepref=explode("-", $damage_no);
             $dam_one=$damagepref[0];
@@ -611,7 +620,7 @@ class Borrow extends CI_Controller {
                 $dam_pref2=$damagepref[1];
                 $dam_pref3=$damagepref[2];
                 $dam_pref=$dam_pref1."-".$dam_pref2."-".$dam_pref3;
-            }
+            }*/
 
             $rows=$this->super_model->count_custom_where("damage_series","damage_prefix = '$dam_pref'");
             if($rows==0){
@@ -675,7 +684,8 @@ class Borrow extends CI_Controller {
         }
 
         $atf_format = date("Y");
-        $retpref= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
+        $ret_pref=$location1."-".$atf_format;
+        /*$retpref= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
         $retp=explode("-", $retpref);
         $ret_one=$retp[0];
         $ret_two=$retp[1];
@@ -690,7 +700,7 @@ class Borrow extends CI_Controller {
             $ret_pref1=$retp[0];
             $ret_pref2=$retp[1];
             $ret_pref=$ret_pref1."-".$ret_pref2;
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$ret_pref'");
         if($rows==0){
@@ -727,7 +737,8 @@ class Borrow extends CI_Controller {
 
 
         $date_format = date("Y-m",strtotime($date));
-        $arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
+        $ars_pref=$location1."-".$date_format;
+        /*$arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
 
         $arspref=explode("-", $arsprefix);
         $ars_one=$arspref[0];
@@ -746,7 +757,7 @@ class Borrow extends CI_Controller {
             $ars_pref2=$arspref[1];
             $ars_pref3=$arspref[2];
             $ars_pref=$ars_pref1."-".$ars_pref2."-".$ars_pref3;
-        }
+        }*/
 
         $rows=$this->super_model->count_custom_where("returned_series","prefix = '$ars_pref'");
         if($rows==0){
@@ -801,7 +812,7 @@ class Borrow extends CI_Controller {
 
     public function tag_damage_print(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar');
+        $this->load->view('template/navbar',$this->dropdown);
         foreach($this->super_model->select_all('et_head') AS $head){ 
                 $data['head'][] =  array(
                     'et_id'=>$head->et_id,  
@@ -824,5 +835,8 @@ class Borrow extends CI_Controller {
         $this->load->view('template/footer');
     }
 
-    
+    public function get_name($col, $table, $whr_clm, $whr_val){
+        $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
+        return $column;
+    }
 }

@@ -28,7 +28,7 @@
                                 </div>
                                 <form action="<?php echo base_url(); ?>masterfile/update_placement" method="POST">
                                     <div class="card-body card-block">
-                                        <label for="" class="control-label mb-1">Physical Condition:</label>
+                                        <label for="" class="control-label mb-1">Placement Name:</label>
                                         <?php foreach($placement AS $dep){ ?>  
                                         <input id="" name="placement" type="text" value = "<?php echo $dep->placement_name;?>"  class="form-control bor-radius5" placeholder="">
                                     </div>
