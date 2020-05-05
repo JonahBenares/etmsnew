@@ -6423,15 +6423,9 @@ class Report extends CI_Controller {
                 $num++;
             }
         }
-
-        $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:V2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
-
         $objPHPExcel->getActiveSheet()->getStyle('A2:X2')->applyFromArray($styleArray);
         $objPHPExcel->getActiveSheet()->getStyle('A2:X2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:X2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
-
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         if (file_exists($exportfilename))

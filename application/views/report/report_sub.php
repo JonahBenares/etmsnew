@@ -135,6 +135,7 @@
                             </thead>
                             <tbody>
                                 <?php
+                                    if(!empty($sub)){ 
                                     usort($sub, function($a, $b) {
                                         return $a['set_id'] - $b['set_id'];
                                     });
@@ -178,6 +179,7 @@
                                 <?php $x++; } ?>
                                 <input type="hidden" name = "count" id = "count" value = "<?php echo $x?>">
                                 <input type="hidden" name = "id" id = "id" value = "<?php echo $id?>">
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
