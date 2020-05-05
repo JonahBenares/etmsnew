@@ -23,11 +23,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-<<<<<<< HEAD
-$config['base_url'] = 'http://192.168.0.119/etmsnew';
-=======
+
 $config['base_url'] = 'http://localhost/etmsnew';
->>>>>>> d8ea6493c6bae58dffa7c4f259aa7c3091f7bd73
+
 
 /*
 |--------------------------------------------------------------------------
