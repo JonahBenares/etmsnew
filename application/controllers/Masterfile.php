@@ -1032,7 +1032,7 @@ class Masterfile extends CI_Controller {
                 $series = $emp[1];
             }
             $count=$this->super_model->count_custom_where("employee_series","aaf_prefix='$aaf_prefix' AND series='$series'");
-            if($count!=0){
+            if($count==0){
                 $emp_data= array(
                     'aaf_prefix'=>$aaf_prefix,
                     'series'=>$series
