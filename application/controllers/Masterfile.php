@@ -999,6 +999,50 @@ class Masterfile extends CI_Controller {
         }
     }
 
+    public function office_update(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
+        $data['employee'] = $this->super_model->select_row_where('employees', 'employee_id', $id);
+        $this->load->view('masterfile/office_update',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_office(){
+        $data = array(
+            'employee_name'=>$this->input->post('office'),
+            'location_id'=>$this->input->post('location'),
+            'aaf_no'=>$this->input->post('aaf_no'),
+        );
+        $employee_id = $this->input->post('employee_id');
+        if($this->super_model->update_where('employees', $data, 'employee_id', $employee_id)){
+            $emp=explode("-", $this->input->post('aaf_no'));
+            $one=$emp[0];
+            $two=$emp[1];
+            $three = (!empty($emp[2])) ? $emp[2] : '';
+            if(!empty($one) && !empty($two) && !empty($three)){ 
+                $aaf_prefix1=$emp[0];
+                $aaf_prefix2=$emp[1];
+                $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
+                $series = $emp[2];
+            }else {
+                $aaf_prefix=$emp[0];
+                $series = $emp[1];
+            }
+            $count=$this->super_model->count_custom_where("employee_series","aaf_prefix='$aaf_prefix' AND series='$series'");
+            if($count!=0){
+                $emp_data= array(
+                    'aaf_prefix'=>$aaf_prefix,
+                    'series'=>$series
+                );
+                $this->super_model->insert_into("employee_series", $emp_data);
+            }
+            echo "<script>alert('Successfully Updated!'); window.location ='".base_url()."masterfile/emp_inclusion_list'; </script>";
+        }
+    }
+
     public function delete_office(){
         $id=$this->uri->segment(3);
         /*$eid=$this->uri->segment(4);
