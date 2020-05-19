@@ -34,6 +34,18 @@
             });
         });
 
+        $(document).ready(function(){
+            $('#myTable_avail_set').DataTable({
+                "order": [[ 1, "asc" ]]
+            });
+        });
+
+        $(document).ready(function(){
+            $('#myTable_avail_set_emp').DataTable({
+                "order": [[ 1, "asc" ]]
+            });
+        });
+
         var acc = document.getElementsByClassName("accordion1");
         var i;
 
@@ -156,9 +168,16 @@
         }
 
         function confirmationSave(anchor){
-            var conf = confirm('Are you sure you want to save this record?');
-            if(conf)
-            window.location=anchor.attr("href");
+            var conf = confirm('Are you sure you want to save this record?'); 
+            if(conf==true){
+                document.getElementById('alt').innerHTML='<b>Please wait, Saving Data...</b>';
+                $("#draft").hide();
+                $("#saved").hide();
+                window.location=anchor.attr("href");
+            }else {
+                $("#draft").show();
+                $("#saved").show();
+            }
         }
 
         function confirmationRepair(anchor){
@@ -213,6 +232,21 @@
                     $('#save').hide();
                 }else{
                     $('#save').show();
+                }
+            });
+        });
+
+        $( document ).ready(function() {
+            $("#sn_nos").keyup(function(){
+                var serial = document.getElementById("sn_nos").value;
+                if(serial!=''){
+                    $("#draft").show();
+                    $("#saved").show();
+                    $("#alt").hide();
+                }else {
+                    $("#alt").show();
+                    $("#draft").hide();
+                    $("#saved").hide();
                 }
             });
         });

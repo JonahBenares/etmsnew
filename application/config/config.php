@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['base_url'] = 'http://localhost/etmsnew';
+$config['base_url'] = 'http://192.168.0.112/etmsnew';
 
 
 /*

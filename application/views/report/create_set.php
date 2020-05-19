@@ -43,9 +43,10 @@
                                 </div> 
                                 <input type="hidden" name="set_id" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_id; } } ?>">
                             </div>
-                            <table class="table dataTable table-striped">
+                            <table class="table dataTable table-striped"  id = "myTable_avail_set_emp">
                                 <thead>
                                     <tr>
+                                        <th width="0%" align="center" hidden></th>
                                         <th width="0%" align="center"><center><input type="checkbox" onClick="toggle_multi(this)" class=""></center></th>
                                         <th>Category</th>
                                         <th>Sub Category</th>
@@ -85,9 +86,14 @@
                                         <td><?php echo $s['cat']; ?></td>
                                         <td><?php echo $s['subcat']; ?></td>
                                         <td>
-                                            <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More"  style="white-space: normal!important;text-align: left">
+                                            <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More"  style="white-space: normal!important;text-align: left;padding-left: 0;padding-top: 0px">
                                                  <?php echo $s['et_desc']; ?>
-                                            </a>                                           
+                                            </a><br>  
+                                            <?php 
+                                                echo (!empty($s['brand'])) ? "<a class='btn btn-xs btn-secondary-alt' style='font-size:10px'> ".$s['brand']."</a>" : '';
+                                                echo (!empty($s['model'])) ? "<a class='btn btn-xs btn-info-alt' style='font-size:10px'>".$s['model']."<a/>" : '';
+                                                echo (!empty($s['serial_no'])) ? "<a class='btn btn-xs btn-success-alt' style='font-size:10px'>".$s['serial_no']."</a>" : '';
+                                            ?>                                           
                                         </td>
                                         <td><?php echo $s['unit']; ?></td>
                                         <td ><?php echo $s['qty']; ?></td>

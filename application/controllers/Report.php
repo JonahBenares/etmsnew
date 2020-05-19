@@ -3756,6 +3756,9 @@ class Report extends CI_Controller {
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
+                $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $sub->et_id);
+                $model =$this->super_model->select_column_where("et_details", "model", "et_id", $sub->et_id);
+                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $rows = $this->super_model->count_rows_where("et_details","ed_id",$edid);
@@ -3770,6 +3773,9 @@ class Report extends CI_Controller {
                         'unit'=>$unit,
                         'department'=>$sub->department,
                         'et_desc'=>$sub->et_desc,
+                        'brand'=>$brand,
+                        'model'=>$model,
+                        'serial_no'=>$serial_no,
                         'qty'=>$sub->qty,
                         'employee_id'=>$sub->accountability_id,
                         'accountability'=>$accountability
@@ -3865,6 +3871,9 @@ class Report extends CI_Controller {
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
+                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $sub->et_id);
+                $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $sub->et_id);
+                $model =$this->super_model->select_column_where("et_details", "model", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $rows = $this->super_model->count_custom_where("et_details","ed_id='$edid' AND damage='0'");
@@ -3879,6 +3888,9 @@ class Report extends CI_Controller {
                         'unit'=>$unit,
                         'department'=>$sub->department,
                         'et_desc'=>$sub->et_desc,
+                        'brand'=>$brand,
+                        'model'=>$model,
+                        'serial_no'=>$serial_no,
                         'qty'=>$sub->qty,
                         'accountability'=>$accountability
                     );
