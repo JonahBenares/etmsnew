@@ -223,7 +223,7 @@ function selectAssign(emp_id,emp,dept,position,aaf_no, children,type) {
     $("#suggestion-assign").hide();
 }
 
-function selectItem(id,setid,edid,val,acn,date,type,serial,brand,model,qty,unit,price,total) {
+function selectItem(id,setid,edid,val,acn,date,type,serial,brand,model,qty,unit,price,total,currency) {
     $("#item_id").val(id);
     $("#ed_id").val(edid);
     $("#set_id").val(setid);
@@ -238,6 +238,7 @@ function selectItem(id,setid,edid,val,acn,date,type,serial,brand,model,qty,unit,
     $("#qty").val(qty);
     $("#unit").val(unit);
     $("#price").val(price);
+    $("#currency").val(currency);
     $("#total").val(total);
     $("#suggestion-item").hide();
 }
@@ -264,6 +265,7 @@ function add_item(){
     var qty =$('#qty').val();
     var unit =$('#unit').val();
     var price =$('#price').val();
+    var currency =$('#currency').val();
     var total =$('#total').val();
     var i = item.replace(/&/gi,"and");
     var i = i.replace(/#/gi,"");
@@ -277,7 +279,7 @@ function add_item(){
         $.ajax({
             type: "POST",
             url:redirect,
-            data: "itemid="+itemid+"&setid="+setid+"&edid="+edid+"&item="+item+"&count="+count+"&acn="+acn+"&acq_date="+acq_date+"&type="+type+"&serial="+serial+"&model="+model+"&brand="+brand+"&qty="+qty+"&unit="+unit+"&price="+price+"&total="+total,
+            data: "itemid="+itemid+"&setid="+setid+"&edid="+edid+"&item="+item+"&count="+count+"&acn="+acn+"&acq_date="+acq_date+"&type="+type+"&serial="+serial+"&model="+model+"&brand="+brand+"&qty="+qty+"&unit="+unit+"&price="+price+"&total="+total+"&currency="+currency,
             success: function(html){
                 //alert(html);
                 $('#item_body').append(html);

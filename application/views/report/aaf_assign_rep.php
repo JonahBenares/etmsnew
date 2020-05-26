@@ -146,6 +146,7 @@
                 <input type='hidden' name='qty' id='qty'>
                 <input type='hidden' name='unit' id='unit'>
                 <input type='hidden' name='price' id='price'>
+                <input type='hidden' name='currency' id='currency'>
                 <input type='hidden' name='total' id='total'>
                 <input type="hidden" name="assign_id" id="assign_id">
                 <input type='hidden' name='counter' id='counter'>
