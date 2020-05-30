@@ -379,12 +379,12 @@ class Encode extends CI_Controller {
                         $subcat_prefix1=$assetdetails[0];
                         $subcat_prefix2=$assetdetails[1];
                         $location=$assetdetails[2];
-                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$location;
+                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
                         $series = $assetdetails[3];
                     }else {
                         $subcat_prefix1=$assetdetails[0];
                         $location=$assetdetails[1];
-                        $subcat_prefix=$subcat_prefix1."-".$location;
+                        $subcat_prefix=$subcat_prefix1;
                         $series = $assetdetails[2];
                     }
                     /*$subcat_prefix1=$assetdetails[0];
