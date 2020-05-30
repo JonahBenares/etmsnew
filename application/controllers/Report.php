@@ -1135,9 +1135,12 @@ class Report extends CI_Controller {
             $data['employee_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $et->accountability_id); 
             $data['save_temp']=$et->save_temp;
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
-                $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
-                );
+                $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
             }
             $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
             $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $et->accountability_id);
@@ -5260,9 +5263,12 @@ class Report extends CI_Controller {
             $data['test'] = $this->super_model->select_column_where("et_head", "accountability_id", "accountability_id", $ret->accountability_id);
             $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $ret->accountability_id); 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$ret->accountability_id) AS $em){
-                $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
-                );
+                $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
             }
             $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->accountability_id);
             $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $ret->accountability_id);
@@ -5539,9 +5545,12 @@ class Report extends CI_Controller {
         $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
         if($row!=0){
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$id) AS $em){
-                $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
-                );
+                $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
             }
             foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0' ORDER BY et_desc ASC") AS $aaf){
                 $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
