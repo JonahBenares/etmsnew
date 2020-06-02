@@ -4659,6 +4659,7 @@ class Report extends CI_Controller {
         for($x=1;$x<=$count;$x++){
             $id = $this->input->post('id');
             $date = $this->input->post('date'.$x);
+            $date_rec = $this->input->post('recdate'.$x);
             $edid = $this->input->post('ed_id'.$x);
             $activity = $this->input->post('activity'.$x);
             $checked_by = $this->input->post('checked_id'.$x);
@@ -4691,7 +4692,7 @@ class Report extends CI_Controller {
                 $location1 = 'NA';
             }
 
-            $date_format = date("Y-m",strtotime($date));
+            $date_format = date("Y-m",strtotime($date_rec));
             $dam_prefix = $location1."-".$date_format;
             /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
@@ -4753,6 +4754,7 @@ class Report extends CI_Controller {
             $data_damage = array(
                 'et_id'=>$et_id,
                 'incident_date'=>$date,
+                'receive_date'=>$date_rec,
                 'activity'=>$activity,
                 'etdr_no'=>$etdr_no,
                 'ed_id'=>$edid,
@@ -4833,7 +4835,7 @@ class Report extends CI_Controller {
         $this->super_model->insert_into("atf_series", $atf_data);
 
 
-        $date_format = date("Y-m",strtotime($date));
+        $date_format = date("Y-m",strtotime($date_rec));
         $sub_prefix=$location1."-".$date_format;
         /*$arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
         $pref=explode("-", $arsprefix);
@@ -4950,10 +4952,13 @@ class Report extends CI_Controller {
             $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->submitted_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
-                $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status1==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
@@ -4993,6 +4998,7 @@ class Report extends CI_Controller {
                 'typec'=> $typec,
                 'typen'=> $typen,
                 'date_incident'=>$dam->incident_date,
+                'receive_date'=>$dam->receive_date,
                 'activity'=>$dam->activity,
                 'location'=>$dam->damage_location,
                 'accountability'=>$dam->accountability,
@@ -5020,26 +5026,35 @@ class Report extends CI_Controller {
             $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->submitted_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
-                $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status1==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
 
-              foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
-                $data['child2'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $cb->child_id);
+                if($status1==0){
+                    $data['child2'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
-                $data['child3'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $nb->child_id);
+                if($status1==0){
+                    $data['child3'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
 
             
@@ -5065,6 +5080,7 @@ class Report extends CI_Controller {
                 'typec'=> $typec,
                 'typen'=> $typen,
                 'date_incident'=>$dam->incident_date,
+                'receive_date'=>$dam->receive_date,
                 'activity'=>$dam->activity,
                 'location'=>$dam->damage_location,
                 'accountability'=>$dam->accountability,

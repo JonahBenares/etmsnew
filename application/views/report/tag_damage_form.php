@@ -23,9 +23,13 @@
                                         <div class="col-lg-1">
                                             <center><a href=""  class="btn btn-danger btn-block btn-lg m-t-10"><?php echo $x;?></a></center>
                                         </div>
-                                        <div class="col-11">
+                                        <div class="col-6">
+                                            <label for="" class="control-label mb-1">Receive Date:</label>
+                                            <input id="recdate" name="recdate<?php echo $x;?>" type="date" onChange="chooseEtdr();" class="form-control bor-radius5 cc-exp" required>
+                                        </div>
+                                        <div class="col-5">
                                             <label for="" class="control-label mb-1">Date of Incident:</label>
-                                            <input id="date" name="date<?php echo $x;?>" type="date" onChange="chooseEtdr();" class="form-control bor-radius5 cc-exp" required>
+                                            <input id="date" name="date<?php echo $x;?>" type="date" class="form-control bor-radius5 cc-exp" required>
                                         </div>
                                     </div>
                                     <div class="row">

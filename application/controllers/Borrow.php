@@ -578,6 +578,7 @@ class Borrow extends CI_Controller {
             $et_id = $this->input->post('et_id'.$x);
             $id = $this->input->post('id');
             $date = $this->input->post('date'.$x);
+            $recdate = $this->input->post('recdate'.$x);
             $edid = $this->input->post('ed_id'.$x);
             $activity = $this->input->post('activity'.$x);
             $checked_by = $this->input->post('checked_id'.$x);
@@ -599,7 +600,7 @@ class Borrow extends CI_Controller {
                     $location1 = 'NA';
                 }
             }
-            $date_format = date("Y-m",strtotime($date));
+            $date_format = date("Y-m",strtotime($recdate));
             $dam_pref=$location1."-".$date_format;
             /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             
@@ -659,6 +660,7 @@ class Borrow extends CI_Controller {
             $data_damage = array(
                 'et_id'=>$et_id,
                 'incident_date'=>$date,
+                'receive_date'=>$recdate,
                 'activity'=>$activity,
                 'etdr_no'=>$etdr_no,
                 'ed_id'=>$edid,
@@ -736,7 +738,7 @@ class Borrow extends CI_Controller {
         $this->super_model->insert_into("atf_series", $atf_data);
 
 
-        $date_format = date("Y-m",strtotime($date));
+        $date_format = date("Y-m",strtotime($recdate));
         $ars_pref=$location1."-".$date_format;
         /*$arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
 

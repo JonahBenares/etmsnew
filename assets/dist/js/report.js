@@ -349,7 +349,7 @@ function chooseArs(){
 function chooseEtdr(){
     var loc= document.getElementById("baseurl").value;
     var redirect = loc+'report/getEtdr';
-    var date = document.getElementById("date").value;
+    var date = document.getElementById("recdate").value;
     var id = document.getElementById("id").value;
     var count = document.getElementById("count").value;
     $.ajax({
