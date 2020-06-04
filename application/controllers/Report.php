@@ -5149,7 +5149,8 @@ class Report extends CI_Controller {
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
-                    $desc = str_replace(array(':', '-', '/', '*', '"',"'"), '', $itm->et_desc);
+                    //$desc = str_replace(array(':', '-', '/', '*', '"',"'"), '', $itm->et_desc);
+                    $desc = str_replace(array(':', '*', '"', "'"), '', $itm->et_desc);
             ?>
                    <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->set_id; ?>','<?php echo $det->ed_id; ?>','<?php echo $desc; ?>','<?php echo $det->asset_control_no;?>','<?php echo $det->acquisition_date; ?>','<?php echo $det->type; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $qty; ?>','<?php echo $unit; ?>','<?php echo $det->unit_price; ?>','<?php echo $total; ?>','<?php echo $currency; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->type." - ".$det->serial_no." - ".$det->model; ?></li>
             <?php 
