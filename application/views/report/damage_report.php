@@ -72,7 +72,7 @@
             ?>
             <table width="100%">
                 <tr>
-                    <td width="15%"><p class="nomarg">Recive Date</p></td>
+                    <td width="15%"><p class="nomarg">Receive Date</p></td>
                     <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['receive_date'];?></label></td>
                     <td width="20%"></td>
                     <td width="13%"><p class="nomarg pull-right">ETDR No.</p></td>
