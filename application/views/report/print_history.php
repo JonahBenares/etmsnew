@@ -45,6 +45,11 @@
                     <tr>
                     <?php 
                         if(!empty($sub)){
+                                usort($sub, function($a, $b) {
+                                    return $a['set_id'] - $b['set_id'];
+                                });
+                                $a=0;
+                                $previousId = '';
                                 foreach($sub AS $det){ 
                     ?>
                         <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
@@ -53,7 +58,11 @@
                             <td class="main-tab" align="center"><?php echo ($det['lost']!=0) ? $det['et_desc']." - <b>Lost Item</b>" : $det['et_desc'];;?></td>
                             <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                             <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['unit_price'];?></td>
+                            <?php if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
+                            <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? $det['unit_price'] : $det['set_price'];?></td>
+                            <?php } else if($det['set_id']==0){ ?>
+                            <td class="main-tab" align="center"><?php echo $det['unit_price'];?></td>   
+                            <?php } ?>
                             <?php if(!empty($det['accountabilitys'])){ ?>
                                 <td class="main-tab" align="center"><?php echo (!empty($det['remarks'])) ? $det['remarks']." - Turn over to ".$det['accountabilitys'] : $det['remarks']." Turn over to ".$det['accountabilitys']?></td>
                             <?php } else if(!empty($det['replacement'])){ ?>
@@ -62,7 +71,7 @@
                                 <td class="main-tab" align="center"><?php echo $det['remarks'];?></td>
                             <?php }?>
                         </tr>
-                        <?php } } else { ?>
+                        <?php $previousId = $det['set_id']; } } else { ?>
                         <tr>
                             <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
                         </tr>
