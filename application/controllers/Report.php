@@ -6313,7 +6313,8 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filter=substr($filter, 0, -2);
         if($filter!=''){
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.cancelled='0' AND eh.save_temp='0' AND $query GROUP BY eh.et_id") AS $et){
+            $previousId = '';
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.cancelled='0' AND eh.save_temp='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
             //foreach ($this->super_model->select_join_where("et_head", "et_details", "cancelled='0' AND save_temp=0 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -6361,6 +6362,8 @@ class Report extends CI_Controller {
                     $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
                     $total = $et->qty*$unit_price;
                 }
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et_set_id' AND save_temp='0'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -6394,10 +6397,23 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$num, $company);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$num, $rack);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $et->physical_condition);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                if($et->set_id!=0 && ($previousId !== $et->set_id)){
+                    $count_set=$count_set-1;
+                    //echo $count_set."-".$et->set_id."<br>";
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                    $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.':U'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
+                }else if($et->set_id==0){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $et->remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Y".$num)->applyFromArray($styleArray);
                 $objPHPExcel->getActiveSheet()->getStyle('J'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -6406,9 +6422,11 @@ class Report extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Y".$num,'admin');
                 $num++;
+                $previousId = $et->set_id;
             }
         }else {
             //foreach($this->super_model->select_custom_where('et_head', "cancelled ='0' AND accountability_id!='0' AND save_temp='0' ORDER BY et_desc ASC") AS $et){
+            $previousId = '';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='0' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
             //foreach ($this->super_model->select_join_where_order("et_head", "et_details", "accountability_id!='0' AND cancelled='0' AND save_temp='0'", "et_id", "set_id","DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -6459,6 +6477,7 @@ class Report extends CI_Controller {
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND set_id ='$et_set_id' AND save_temp='0'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -6499,10 +6518,22 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$num, $company);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$num, $rack);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $et->physical_condition);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                if($et->set_id!=0 && ($previousId !== $et->set_id)){
+                    $count_set=$count_set-1;
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                    $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.':U'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
+                }else if($et->set_id==0){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $et->remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Y".$num)->applyFromArray($styleArray);
                 $objPHPExcel->getActiveSheet()->getStyle('J'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -6511,6 +6542,7 @@ class Report extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Y".$num,'admin');
                 $num++;
+                $previousId = $et->set_id;
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:Y2')->applyFromArray($styleArray);
@@ -6675,6 +6707,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filter=substr($filter, 0, -2);
         if($filter!=''){
+            $previousId='';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE save_temp='1' AND cancelled='0' AND $query GROUP BY eh.et_id") AS $et){
             //foreach ($this->super_model->select_join_where("et_head", "et_details", "save_temp=1 AND cancelled=0 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -6725,6 +6758,8 @@ class Report extends CI_Controller {
                     $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
                     $total = $et->qty*$unit_price;
                 }
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND save_temp='1'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -6758,10 +6793,22 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$num, $company);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$num, $rack);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $et->physical_condition);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                if($et->set_id!=0 && ($previousId !== $et->set_id)){
+                    $count_set=$count_set-1;
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                    $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.':U'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
+                }else if($et->set_id==0){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $et->remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Y".$num)->applyFromArray($styleArray);
                 $objPHPExcel->getActiveSheet()->getStyle('J'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -6770,8 +6817,10 @@ class Report extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Y".$num,'admin');
                 $num++;
+                $previousId=$et->set_id;
             }
         }else {
+            $previousId='';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id!=0 AND save_temp=1 AND cancelled=0 GROUP BY eh.et_id") AS $et){
             //foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -6821,6 +6870,8 @@ class Report extends CI_Controller {
                     $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
                     $total = $et->qty*$unit_price;
                 }
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND set_id ='$et_set_id' AND save_temp='1'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -6854,10 +6905,22 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$num, $company);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$num, $rack);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $et->physical_condition);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                if($et->set_id!=0 && ($previousId !== $et->set_id)){
+                    $count_set=$count_set-1;
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                    $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.':U'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
+                    $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
+                }else if($et->set_id==0){
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $total.' '.$currency);
+                }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $et->remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Y".$num)->applyFromArray($styleArray);
                 $objPHPExcel->getActiveSheet()->getStyle('J'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -6866,6 +6929,7 @@ class Report extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Y".$num,'admin');
                 $num++;
+                $previousId=$et->set_id;
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:Y2')->applyFromArray($styleArray);
