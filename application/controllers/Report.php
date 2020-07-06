@@ -4668,7 +4668,8 @@ class Report extends CI_Controller {
                     'ed_id'=>$det->ed_id,
                     'model'=> $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id),
                     'brand'=> $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id),
-                    'serial' => $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id)
+                    'serial' => $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id),
+                    'acquisition_date' => $this->super_model->select_column_where("et_details", "acquisition_date", "ed_id", $det->ed_id),
                 );
             }
         }
@@ -5020,6 +5021,7 @@ class Report extends CI_Controller {
                     'model'=> $det->model,
                     'brand'=> $det->brand,
                     'serial' => $det->serial_no,
+                    'acquisition_date' => $det->acquisition_date,
                 );
             }
             $data['damage'][] =  array(
@@ -5102,6 +5104,7 @@ class Report extends CI_Controller {
                     'model'=> $det->model,
                     'brand'=> $det->brand,
                     'serial' => $det->serial_no,
+                    'acquisition_date' => $det->acquisition_date,
                 );
             }
             $data['damage'][] =  array(
@@ -7130,7 +7133,10 @@ class Report extends CI_Controller {
                 "repair_price"=>0,
                 "supplier"=>"",
                 "remarks"=>"",
-                "replacement"=>""
+                "replacement"=>"",
+                "dam_location"=>"",
+                "equip_damage"=>"",
+                "receive_date"=>"",
             );
 
             $data['current'][] = array(
@@ -7167,7 +7173,10 @@ class Report extends CI_Controller {
                         "repair_price"=>0,
                         "supplier"=>"",
                         "remarks"=>$ret->return_remarks,
-                        "replacement"=>""
+                        "replacement"=>"",
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
                     );
 
                     $data['head'][] = array(
@@ -7212,7 +7221,10 @@ class Report extends CI_Controller {
                         "repair_price"=>0,
                         "supplier"=>"",
                         "remarks"=>"",
-                        "replacement"=>""
+                        "replacement"=>"",
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
                     );
 
                         $data['borrow'][] = array(
@@ -7258,7 +7270,10 @@ class Report extends CI_Controller {
                         "repair_price"=>$d->repair_price,
                         "supplier"=>$d->supplier,
                          "remarks"=>"",
-                        "replacement"=>""
+                        "replacement"=>"",
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
                     );
 
                         $data['repair'][] = array(
@@ -7305,7 +7320,10 @@ class Report extends CI_Controller {
                         "repair_price"=>0,
                         "supplier"=>"",
                         "remarks"=>$l->remarks,
-                        "replacement"=>$replacement
+                        "replacement"=>$replacement,
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
                     );
 
             if($row_lost!=0){
@@ -7318,6 +7336,42 @@ class Report extends CI_Controller {
                 );
             } else {
                 $data['losts']=array();
+            }
+        }
+
+        $row_damaged=$this->super_model->count_rows_where("damage_info", "ed_id",$id);
+        foreach($this->super_model->select_row_where('damage_info', 'ed_id', $id) AS $di){
+            $submitted_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $di->submitted_by);
+            $data['history'][]  = array(
+                "id"=>$di->damage_id,
+                "employee"=>'',
+                "trdate"=>$di->incident_date,
+                "date_desc"=>"Damage Date",
+                "return_date"=>"",
+                "method"=>"Damaged",
+                "received_by"=>"",
+                "returned_by"=>$submitted_by,
+                "jo_no"=>"",
+                "qty"=>1,
+                "repair_price"=>0,
+                "supplier"=>"",
+                "remarks"=>$di->incident_description,
+                "replacement"=>"",
+                "dam_location"=>$di->damage_location,
+                "equip_damage"=>$di->equip_damage,
+                "receive_date"=>$di->receive_date,
+            );
+
+            if($row_damaged!=0){
+                $data['damaged'][] = array(
+                    "receive_date"=>$di->receive_date,
+                    "damage_location"=>$di->damage_location,
+                    "incident_description"=>$di->incident_description,
+                    "equip_damage"=>$di->equip_damage,
+                    "submitted_by"=>$submitted_by,
+                );
+            } else {
+                $data['damaged']=array();
             }
         }
 

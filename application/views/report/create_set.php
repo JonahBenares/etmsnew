@@ -41,7 +41,11 @@
                                     <label>Set Serial No.:</label>
                                     <input type = "text" class = "form-control bor-radius20" name = "serial" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_serial_no; } }else{ echo ''; } ; ?>">
                                 </div> 
+                                <input type="hidden" name = "id" id = "id" value = "<?php echo $id?>">
+                                <input type="hidden" name = "set_ed" id = "set_ed" value = "<?php echo $ed_id?>">
                                 <input type="hidden" name="set_id" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_id; } } ?>">
+                                <br>
+                                <input type="submit" class="btn btn-block btn-info-alt" name = "submit" id = "submit" value="<?php echo (isset($ed_id)) ? 'Update' : 'Set' ?>">
                             </div>
                             <table class="table dataTable table-striped"  id = "myTable_avail_set_emp">
                                 <thead>
@@ -102,12 +106,8 @@
                                     </tr>
                                     <?php $x++; } ?>
                                     <input type="hidden" name = "count" id = "count" value = "<?php echo $x?>">
-                                    <input type="hidden" name = "id" id = "id" value = "<?php echo $id?>">
-                                    <input type="hidden" name = "set_ed" id = "set_ed" value = "<?php echo $ed_id?>">
                                 </tbody>
                             </table>
-                            <br>
-                            <input type="submit" class="btn btn-block btn-info-alt" name = "submit" id = "submit" value="<?php echo (isset($ed_id)) ? 'Update' : 'Set' ?>">
                         </form>
                     </div>
                 </div>

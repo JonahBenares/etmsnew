@@ -62,7 +62,13 @@
                     <td width="10%"colspan="2"><p class="pull-right">Specification:</p></td>
                     <td></td>
                     <td></td>
-                </tr>     
+                </tr>  
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">Date Aquired </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <?php echo $det['acquisition_date'];?></td>
+                </tr>    
                 <tr>
                     <td></td>
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
@@ -93,7 +99,7 @@
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><p><?php echo $dam['accountability'];?></p></td>
+                    <td style="border-bottom: 1px solid #999"><?php echo $dam['accountability'];?></td>
                 </tr>
                 <tr>
                     <td width="10%"></td>

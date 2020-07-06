@@ -543,6 +543,7 @@ class Borrow extends CI_Controller {
                     $serial =$this->super_model->select_column_where("et_details", "serial_no", "ed_id", $dets->ed_id);
                     $brand =$this->super_model->select_column_where("et_details", "brand", "ed_id", $dets->ed_id);
                     $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $dets->ed_id);
+                    $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "ed_id", $dets->ed_id);
                     /*$damage =$this->super_model->select_column_where("et_details", "damage", "ed_id", $dets->ed_id);*/
                     $data['details'][]=array(
                         'ed_id'=>$dets->ed_id,
@@ -552,6 +553,7 @@ class Borrow extends CI_Controller {
                         'brand'=>$brand,
                         'model'=>$model,
                         'serial'=>$serial,
+                        'acquisition_date'=>$acquisition_date,
                         'acn'=>$acn,
                     );
                 }
