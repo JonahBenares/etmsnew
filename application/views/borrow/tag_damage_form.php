@@ -44,7 +44,7 @@
                                         </div>
                                         <div class="row">                                                 
                                             <div class="col-6">
-                                                <label for="" class="control-label mb-1">Date Aquired:</label>
+                                                <label for="" class="control-label mb-1">Date Acquired:</label>
                                                 <input id="" name="date_aquired" type="date" class="form-control bor-radius5 cc-exp" value = "<?php echo $det['acquisition_date'];?>" style = "pointer-events:none;">
                                             </div>
                                         </div>

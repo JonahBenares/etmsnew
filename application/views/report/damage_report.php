@@ -109,7 +109,7 @@
                 </tr>  
                 <tr>
                     <td></td>
-                    <td  width="5%" colspan="2"><p class="pull-right">Date Aquired </p></td>
+                    <td  width="5%" colspan="2"><p class="pull-right">Date Acquired </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $det['acquisition_date'];?></td>
                     <td width="10%"></td>
                 </tr>    

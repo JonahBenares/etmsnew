@@ -60,7 +60,7 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td><p class="pull-right">Date Aquired </p></td>
+                    <td><p class="pull-right">Date Acquired </p></td>
                     <td style="border-bottom: 1px solid #999"> : </td>
                 </tr>  
                 <tr>
