@@ -452,7 +452,7 @@
                                         <!-- <span id="img1-check" class='img-check-note'></span> -->
                                     </div> 
                                     <div class="col-lg-4 float-col">
-                                        <label for="pic1">Picture 2:</label>
+                                        <label for="pic1">Pictu id="draft"re 2:</label>
                                         <input class="form-control form-alt "  type="file" name="pic2[]" id="img2_<?php echo $x; ?>" data-trigger="<?php echo $count?>" onchange="readPic2(this, <?php echo $x; ?>);">
                                         <div class="thumbnail">
                                             <img id="pic2_<?php echo $x; ?>" class="pictures" src="<?php echo base_url() ?>assets/default/default-img.jpg" alt="your image" />
@@ -476,10 +476,11 @@
                         </div>
                     </div>
                     <?php }  ?>
+                    <center><div id='alt' style="font-weight:bold"></div></center>
                     <div class="btn-group btn-block" style="border-radius: 10px 10px 10px 10px">
                         <input type="hidden" name="count" id = "count" value = "<?php echo $counter;?>">
-                        <input type ="submit" class="btn btn-info-alt btn-md btn-block" name ="draft" value="Submit Draft" style="border-radius: 10px 0px 0px 10px" onclick="confirmationSave(this);return false;"> 
-                        <input type ="submit" class="btn btn-success-alt btn-md btn-block m-0" name ="saved" value="Submit" style="border-radius: 0px 10px 10px 0px" onclick="confirmationSave(this);return false;">   
+                        <input type ="submit" class="btn btn-info-alt btn-md btn-block" name ="draft" value="Submit Draft" style="border-radius: 10px 0px 0px 10px" onclick="confirmationSave(this);return false;" id="draft"> 
+                        <input type ="submit" class="btn btn-success-alt btn-md btn-block m-0" name ="saved" value="Submit" style="border-radius: 0px 10px 10px 0px" onclick="confirmationSave(this);return false;" id="saved">   
                         <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                         <input type="hidden" name="et_id" value = "<?php echo $id;?>">
                         <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         

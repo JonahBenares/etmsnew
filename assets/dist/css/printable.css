@@ -1,4 +1,4 @@
-p,h5{font-size: 12px!important}
+p,h5{font-size: 14px!important}
 @media print{
     .hid, .left-sidebar, .topbar, #btn-group-print, #printBtn{
         display: none
@@ -9,7 +9,7 @@ p,h5{font-size: 12px!important}
     .fixed-layout .page-wrapper {
         padding-top: 0px;
     }
-    .page-wrapper{font-size: 14px!important}
+    .page-wrapper{font-size: 16px!important}
  }
  .page-wrapper{font-size: 14px!important}
 .table-main{

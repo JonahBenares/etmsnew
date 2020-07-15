@@ -22,12 +22,19 @@
         <div class="col-lg-12" style="margin:10px 0px 10px">
             <table width="100%">
                 <tr>
-                    <td width="15%"><p class="nomarg">Date of Incident</p></td>
+                    <td width="15%"><p class="nomarg">Receive Date</p></td>
                     <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: </label></td>
                     <td width="20%"></td>
                     <td width="13%"><p class="nomarg pull-right">ETDR No.</p></td>
                     <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">:</label></td>
-                </tr>            
+                </tr>  
+                <tr>
+                    <td width="15%"><p class="nomarg">Date of Incident</p></td>
+                    <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: </label></td>
+                    <td width="20%"></td>
+                    <td width="13%"></td>
+                    <td colspan="3"></td>
+                </tr>           
             </table>
             <br>
             <table width="100%">
@@ -49,7 +56,13 @@
                     <td width="10%"colspan="2"><p class="pull-right">Specification:</p></td>
                     <td></td>
                     <td></td>
-                </tr>     
+                </tr>   
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">Date Acquired </p></td>
+                    <td style="border-bottom: 1px solid #999"> : </td>
+                </tr>  
                 <tr>
                     <td></td>
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>

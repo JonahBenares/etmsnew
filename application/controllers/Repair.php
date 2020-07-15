@@ -43,7 +43,11 @@ class Repair extends CI_Controller {
                     $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $det->et_id);
                     $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
                     $repair =$this->super_model->select_column_where("repair_details", "assessment", "ed_id", $det->ed_id);
-                    $damage_id =$this->super_model->select_column_where("damage_info", "damage_id", "et_id", $det->et_id);
+                    foreach($this->super_model->select_custom_where("damage_info","ed_id='$det->ed_id' ORDER BY ed_id DESC") AS $dam){
+                        $damage_id =$dam->damage_id;
+                        $count_ed_id = $this->super_model->count_rows_where("damage_info","ed_id",$dam->ed_id);
+                    }
+                    //$damage_id =$this->super_model->select_column_where("damage_info", "damage_id", "ed_id", $det->ed_id);
                     $data['damage'][] = array(
                         'damage_id'=>$damage_id,
                         'ed_id'=>$det->ed_id,
@@ -59,7 +63,8 @@ class Repair extends CI_Controller {
                         'category'=>$category,
                         'subcat'=>$subcat,
                         'qty'=>$qty,
-                        'brand'=>$det->brand
+                        'brand'=>$det->brand,
+                        'count_ed_id'=>$count_ed_id,
                     );
                 }
             }

@@ -154,10 +154,12 @@
             if($his['method']=='Current'){
                 $bg = 'bg-info-alt';
                 $border = "border-info";
-            } else 
-            if($his['method'] == 'Repaired'){
+            } else if($his['method'] == 'Damaged'){
                 $bg = 'bg-danger-alt';
                 $border = "border-danger";
+            } else if($his['method'] == 'Repaired'){
+                $bg = 'bg-primary-alt';
+                $border = "border-primary";
             } else if($his['method'] == 'Borrowed'){
                 $bg = 'bg-warning-alt';
                 $border = "border-warning";
@@ -215,6 +217,17 @@
                     <p class="m-b-10"><?php echo $his['returned_by']; ?></p>
                     <p class="font-bold">Return Date:</p>
                     <p class="m-b-10"><?php echo (!empty($his['returned_date']) ? date('F d, Y', strtotime($his['returned_date'])) : ""); ?></p>
+                <?php } else if($his['method'] == 'Damaged'){ ?>
+                    <p class="font-bold">Receive Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['receive_date']) ? date('F d, Y', strtotime($his['receive_date'])) : ""); ?></p>
+                    <p class="font-bold">Incident Description:</p>
+                    <p class="m-b-10"><?php echo $his['remarks']; ?></p>
+                    <p class="font-bold">Location where incident occurred:</p>
+                    <p class="m-b-10"><?php echo $his['dam_location']; ?></p>
+                    <p class="font-bold">Equipment Damage:</p>
+                    <p class="m-b-10"><?php echo $his['remarks']; ?></p>
+                    <p class="font-bold">Submitted  By :</p>
+                    <p class="m-b-10"><?php echo $his['returned_by']; ?></p>
                 <?php } else if($his['method'] == 'Repaired'){ ?>
                     <p class="font-bold">Repair Date:</p>
                     <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('F d, Y', strtotime($his['trdate'])) : ""); ?></p>

@@ -10,8 +10,8 @@
 
     <td class="main-tab" align="center"><?php echo $list['qty']; ?></td>
      <td class="main-tab" align="center"><?php echo $list['unit']; ?></td>
-    <td class="main-tab" align="center"><?php if($list['set_id']==0){ echo $list['price']; } ?></td>
-    <td class="main-tab" align="center"><?php if($list['set_id']==0){ echo number_format($list['total'],2); } ?></td>
+    <td class="main-tab" align="center"><?php if($list['set_id']==0){ echo number_format($list['price'],2)." <small>".$list['currency']."</small>"; } ?></td>
+    <td class="main-tab" align="center"><?php if($list['set_id']==0){ echo number_format($list['total'],2)." <small>".$list['currency']."</small>"; } ?></td>
     <td class = "hid"><center>
         <a class="btn btn-danger-alt btn-sm text-white" onclick="remove_item(<?php echo $list['count']; ?>)"><span class=" fa fa-times"></span></a></center>
         <input type="hidden" name="itemid[]" value="<?php echo $list['et_id']; ?>">

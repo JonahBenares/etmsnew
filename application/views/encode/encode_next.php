@@ -74,7 +74,7 @@
                                 </div>     
                                 <div class="col-lg-6">
                                     <div class="form-group m-b-10">
-                                        <input name="sn[]" type="text" class="form-control form-alt  cc-exp" required>
+                                        <input name="sn[]" type="text" class="form-control form-alt  cc-exp" id = "sn_nos" required>
                                         <label for="" class="control-label mb-1">Serial Number:</label>
                                     </div>
                                 </div>
@@ -230,10 +230,11 @@
                     } 
                     $counter = $count - 1;
                     ?>
+                    <center><div id='alt' style="font-weight:bold"></div></center>
                     <div class="btn-group btn-block" style="border-radius: 10px 10px 10px 10px">
                         <input type="hidden" name="count" id = "count" value = "<?php echo $counter;?>">
-                        <input type ="submit" class="btn btn-info-alt btn-md btn-block" name ="draft" value="Submit Draft" style="border-radius: 10px 0px 0px 10px" onclick="confirmationSave(this);return false;"> 
-                        <input type ="submit" class="btn btn-success-alt btn-md btn-block m-0" name ="saved" value="Submit" style="border-radius: 0px 10px 10px 0px" onclick="confirmationSave(this);return false;"> 
+                        <input type ="submit" class="btn btn-info-alt btn-md btn-block" name ="draft" value="Submit Draft" style="border-radius: 10px 0px 0px 10px" onclick="confirmationSave(this);return false;" id="draft"> 
+                        <input type ="submit" class="btn btn-success-alt btn-md btn-block m-0" name ="saved" value="Submit" style="border-radius: 0px 10px 10px 0px" onclick="confirmationSave(this);return false;" id="saved"> 
                         <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                         <input type="hidden" name="et_id" value = "<?php echo $id;?>">
                         <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         

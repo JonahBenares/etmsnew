@@ -61,6 +61,11 @@
                 <tr>
                 <?php if(!empty($return)){ 
                         foreach($return as $ret){
+                            usort($details, function($a, $b) {
+                                return $a['set_id'] - $b['set_id'];
+                            });
+                            $a=0;
+                            $previousId = '';
                             foreach($details AS $det){ 
                                 switch($det){
                                     case($ret['return_id'] == $det['return_id']): 
@@ -73,13 +78,20 @@
                         <td class="main-tab" align="center"><?php echo $det['type'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['model'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
-                        <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo $det['price']."<small> ".$det['currency']."</small>"; }?></td>
-                        <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo number_format($det['total'],2)."<small> ".$det['currency']."</small>"; }?></td>
+                        <?php if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
+                        <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? $det['price']."<small> ".$det['currency']."</small>" : $det['set_price']; ?></td>
+
+                        <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? number_format($det['total'],2)."<small> ".$det['currency']."</small>" : number_format($det['set_total'],2).$det['currency']; ?></td>
+                        <?php } else if($det['set_id']==0){ ?>
+                        <td class="main-tab" align="center"><?php echo $det['price']."<small> ".$det['currency']."</small>"; ?></td>
+
+                        <td class="main-tab" align="center"><?php echo number_format($det['total'],2)."<small> ".$det['currency']."</small>"; ?></td>
+                        <?php } ?>
                     </tr>
                 <?php   
                     break;
                     default: 
-                    } } } 
+                    } $previousId = $det['set_id']; } } 
                     } else { 
                 ?>
                     <tr>
@@ -115,7 +127,15 @@
                     <td></td>
                     <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black">
                         <?php if($type == 2){ ?>
-                            <?php foreach($child as $c){ echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; }?>
+                            <?php 
+                                if(!empty($child)){ 
+                                    foreach($child as $c){ 
+                                        echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; 
+                                    } 
+                                } else{ 
+                                    echo $name; 
+                                }
+                            ?>
                         <?php } else { ?>
                             <div style = "text-align:center;"><?php echo  $name;?></div>
                             <!-- <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea> -->

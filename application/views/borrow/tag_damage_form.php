@@ -23,9 +23,13 @@
                                             <div class="col-lg-1">
                                                 <center><a href=""  class="btn btn-danger btn-block btn-lg m-t-10"><?php echo $x;?></a></center>
                                             </div>
-                                            <div class="col-11">
+                                            <div class="col-6">
+                                                <label for="" class="control-label mb-1">Receive Date:</label>
+                                                <input id="recdate" name="recdate<?php echo $x;?>" type="date" onChange="chooseEtdr();" class="form-control bor-radius5 cc-exp" required>
+                                            </div>
+                                            <div class="col-5">
                                                 <label for="" class="control-label mb-1">Date of Incident:</label>
-                                                <input id="date" name="date<?php echo $x;?>" type="date" onChange="chooseEtdr();" class="form-control bor-radius5 cc-exp" required>
+                                                <input id="date" name="date<?php echo $x;?>" type="date" class="form-control bor-radius5 cc-exp" required>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -36,6 +40,12 @@
                                             <div class="col-lg-6">
                                                 <label for="" class="control-label mb-1">Location where incident occurred:</label>
                                                 <textarea name="location<?php echo $x;?>" id="" class="form-control" cols="30" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">                                                 
+                                            <div class="col-6">
+                                                <label for="" class="control-label mb-1">Date Acquired:</label>
+                                                <input id="" name="date_aquired" type="date" class="form-control bor-radius5 cc-exp" value = "<?php echo $det['acquisition_date'];?>" style = "pointer-events:none;">
                                             </div>
                                         </div>
                                         <div class="row">                                                 

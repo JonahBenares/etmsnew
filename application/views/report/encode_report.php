@@ -140,7 +140,15 @@
                         <td></td>
                         <td style="border-bottom:1px solid #000;color:black">
                             <?php if($type == 2){ ?>
-                                <?php foreach($child as $c){ echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; }?>
+                                <?php 
+                                    if(!empty($child)){
+                                        foreach($child as $c){ 
+                                            echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; 
+                                        }
+                                    }else{
+                                        echo $name;
+                                    }
+                                ?>
                             <?php } else { ?>
                                 <div style = "text-align:center;"><?php echo  $name;?></div>
                             <?php } ?>

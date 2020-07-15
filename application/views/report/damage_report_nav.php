@@ -28,11 +28,18 @@
             ?>
             <table width="100%">
                 <tr>
-                    <td width="15%"><p class="nomarg">Date of Incident</p></td>
-                    <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['date_incident'];?></label></td>
+                    <td width="15%"><p class="nomarg">Receive Date</p></td>
+                    <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['receive_date'];?></label></td>
                     <td width="20%"></td>
                     <td width="13%"><p class="nomarg pull-right">ETDR No.</p></td>
                     <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['etdr_no'];?></label></td>
+                </tr> 
+                <tr>
+                    <td width="15%"><p class="nomarg">Date of Incident</p></td>
+                    <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['date_incident'];?></label></td>
+                    <td width="20%"></td>
+                    <td width="13%"></td>
+                    <td colspan="3"></td>
                 </tr>            
             </table>
             <br>
@@ -55,7 +62,13 @@
                     <td width="10%"colspan="2"><p class="pull-right">Specification:</p></td>
                     <td></td>
                     <td></td>
-                </tr>     
+                </tr>  
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">Date Acquired </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <?php echo $det['acquisition_date'];?></td>
+                </tr>    
                 <tr>
                     <td></td>
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
@@ -86,7 +99,7 @@
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><p><?php echo $dam['accountability'];?></p></td>
+                    <td style="border-bottom: 1px solid #999"><?php echo $dam['accountability'];?></td>
                 </tr>
                 <tr>
                     <td width="10%"></td>
