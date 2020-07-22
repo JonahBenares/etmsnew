@@ -7383,4 +7383,14 @@ class Report extends CI_Controller {
         $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
         return $column;
     }
+    public function inv_rep_itm_print(){
+        $this->load->view('template/header');
+        $this->load->view('report/inv_rep_itm_print');
+        $this->load->view('template/footer');
+    }
+    // public function inv_rep_itm_print(){
+    //     $this->load->view('template/header');
+    //     $this->load->view('report/inv_rep_itm_print');
+    //     $this->load->view('template/footer');
+    // }
 }
