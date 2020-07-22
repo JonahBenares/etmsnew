@@ -31,6 +31,7 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <a href="<?php echo base_url(); ?>report/inv_rep_det_print/<?php echo $subcat_id; ?>" class="btn btn-info-alt btn-sm pull-right"><span class="fa fa-print"></span>Print</a>
                         <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
                             <thead>
                                 <tr>

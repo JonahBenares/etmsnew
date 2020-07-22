@@ -10,19 +10,45 @@
         <div id="printableArea" style="margin-top:50px">
             <table class=" table-bordered table-hover" style="width:100%">
                 <tr>
-                    <td class="thead">Item Name</td>
+                    <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
+                    <td class="thead" align="center">Item Name</td>
                     <td class="thead" align="center">Set Name</td>
                     <td class="thead" align="center">Available</td>
-                    <td class="thead"><p style="width: 300px">In-Use</p></td>
+                    <td class="thead" align="center">In-Use</td>
+                    <?php } else { ?>
+                    <td class="thead" align="center">Set Name</td>
+                    <td class="thead" align="center">Set Count</td>
+                    <?php } ?>  
                 </tr>
                 <tbody>
+                    <?php 
+                        usort($itema, function($a, $b) {
+                            return $a['set_id'] - $b['set_id'];
+                        });
+                        $a=0;
+                        $previousId = '';
+                        foreach($itema AS $i){ 
+                    ?>
                     <tr>
-                        <td></td>
-                        <td align="center"></td>
-                        <td align="center"></td>
-                        <td style="white-space: normal!important;"></td>
+                        <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
+                        <td> 
+                            <a href="<?php echo base_url(); ?>report/inv_report_itm/<?php echo $i['item_id'];?>/<?php echo $i['set_id'];?>" class="" style="white-space: normal!important;text-align: left" data-toggle="tooltip" data-placement="left" title="View">
+                               <?php echo $i['item']; ?>
+                            </a>           
+                        </td>
+                        <?php if ($i['set_id']!=0 && ($previousId !== $i['set_id'])) { ?>
+                        <td <?php if($i['set_id']!=0) echo " rowspan='".$i['count_set']."'"; ?>><?php echo $i['set']; ?></td>
+                        <?php }else if($i['set_id']==0){ ?>
+                        <td><?php echo $i['set']; ?></td>
+                        <?php } ?>
+                        <td align="center"><?php echo $i['avcount']; ?></td>
+                        <td align="center"><?php echo $i['incount']; ?></td>
+                        <?php } else { ?>
+                        <td><?php echo $i['set']; ?></td>
+                        <td align="center"><?php echo $i['count']; ?></td>
+                        <?php } ?>
                     </tr>
-                    
+                    <?php $previousId = $i['set_id']; } ?>
                 </tbody>
             </table>
             <hr>

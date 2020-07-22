@@ -103,14 +103,8 @@ class Report extends CI_Controller {
         if($row!=0){
             foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
-                /*foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
-                    $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
-                    $set_id = $r->set_id;
-                }*/
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
-                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
                     $avcount = $av->av;
                 }
@@ -394,7 +388,8 @@ class Report extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "Category");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Subcategory");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "Department");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Status / Accountability");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Set Name");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Status / Accountability");
         $styleArray = array(
           'borders' => array(
             'allborders' => array(
@@ -402,7 +397,7 @@ class Report extends CI_Controller {
             )
           )
         );
-        foreach(range('A','G') as $columnID){
+        foreach(range('A','H') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
         $num=3;
@@ -507,6 +502,7 @@ class Report extends CI_Controller {
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
+                $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$et->set_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $item_desc = $et->et_desc.", ".$et->brand.", ".$et->model.", ".$et->serial_no;
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
@@ -528,12 +524,13 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $category);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $subcat);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $et->department);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $status);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":G".$num)->applyFromArray($styleArray);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $set_name);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $status);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
                 $objPHPExcel->getActiveSheet()->getStyle('B'.$num.":C".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle("G".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle("H".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
-                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":G".$num,'admin');
+                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":H".$num,'admin');
                 $num++;
             }
         }else {
@@ -542,6 +539,7 @@ class Report extends CI_Controller {
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $ss->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $ss->subcat_id);
                     $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ss->accountability_id);
+                    $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$r->set_id);
                     $location = $this->super_model->select_column_where("location", "location_name", "location_id", $r->location_id);
                     $item_desc = $ss->et_desc.", ".$r->brand.", ".$r->model.", ".$r->serial_no;
                     if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0){
@@ -563,19 +561,20 @@ class Report extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $category);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $subcat);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $ss->department);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $status);
-                    $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":G".$num)->applyFromArray($styleArray);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $status);
+                    $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
                     $objPHPExcel->getActiveSheet()->getStyle('B'.$num.":C".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                    $objPHPExcel->getActiveSheet()->getStyle("G".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle("H".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
-                    $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":G".$num,'admin');
+                    $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":H".$num,'admin');
                     $num++;
                 } 
             }
         }
-        $objPHPExcel->getActiveSheet()->getStyle('A2:G2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:G2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:G2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         if (file_exists($exportfilename))
@@ -776,6 +775,7 @@ class Report extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
         $subcat=$this->uri->segment(3);
+        $data['subcat_id']=$this->uri->segment(3);
         $row = $this->super_model->count_rows_where("et_head","subcat_id",$subcat);
         $data['subcat_name'] = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat);                     
         $data['count'] = $this->super_model->count_rows_where('et_head','subcat_id',$subcat);
@@ -898,8 +898,16 @@ class Report extends CI_Controller {
         if(!empty($this->input->post('item')) && !empty($this->input->post('set'))){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
 
-                $avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                $incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
+                    $avcount = $av->av;
+                }
+
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
+                    $incount = $inc->incount;
+                }
+                
                 foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
                     $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
                     $set_id = $r->set_id;
@@ -916,8 +924,15 @@ class Report extends CI_Controller {
         }else if(!empty($this->input->post('item'))){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
 
-                $avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                $incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
+                    $avcount = $av->av;
+                }
+
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
+                    $incount = $inc->incount;
+                }
                 foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
                     $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
                     $set_id = $r->set_id;
@@ -7389,14 +7404,77 @@ class Report extends CI_Controller {
         $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
         return $column;
     }
+
     public function inv_rep_itm_print(){
         $this->load->view('template/header');
-        $this->load->view('report/inv_rep_itm_print');
+        $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
+        $row=$this->super_model->count_rows("et_head");
+        if($row!=0){
+            foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
+                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                $data['count_set']=$count_set;
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
+                    $avcount = $av->av;
+                }
+
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
+                    $incount = $inc->incount;
+                }
+                
+                $data['itema'][]= array(
+                    'item_id'=>$ss->et_id,
+                    'set_id'=>$set_id,
+                    'item'=>$ss->et_desc,
+                    'set'=>$sets,
+                    'count'=>$counts,
+                    'count_set'=>$count_set,
+                    'avcount'=>$avcount,
+                    'incount'=>$incount,
+                );
+            }
+        }else {
+            $data['itema'] = array();
+        }
+        $this->load->view('report/inv_rep_itm_print',$data);
         $this->load->view('template/footer');
     }
-    // public function inv_rep_itm_print(){
-    //     $this->load->view('template/header');
-    //     $this->load->view('report/inv_rep_itm_print');
-    //     $this->load->view('template/footer');
-    // }
+
+    public function inv_rep_det_print(){
+        $this->load->view('template/header');
+        $subcat=$this->uri->segment(3);
+        $data['subcat_id']=$this->uri->segment(3);
+        $row = $this->super_model->count_rows_where("et_head","subcat_id",$subcat);
+        $data['subcat_name'] = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat);                     
+        $data['count'] = $this->super_model->count_rows_where('et_head','subcat_id',$subcat);
+        if($row!=0){
+            foreach($this->super_model->select_custom_where("et_head","subcat_id='$subcat' ORDER BY et_desc ASC") AS $t){
+                $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $t->accountability_id);                     
+                $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id); 
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id); 
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);                     
+                $data['item'][]=array(
+                    'item'=>$t->et_desc,
+                    'damaged'=>$damaged,
+                    'borrowed'=>$borrowed,
+                    'location'=>$location,
+                    'change_location'=>$change_location,
+                    'lost'=>$lost,
+                    'accountability'=>$employee,
+                    'accountability_id'=>$t->accountability_id,
+                    'qty'=>$t->qty,
+                );
+            }
+        }else {
+            $data['item']=array();
+        }
+        $this->load->view('report/inv_rep_det_print',$data);
+        $this->load->view('template/footer');
+    }
 }
