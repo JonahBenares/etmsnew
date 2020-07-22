@@ -20,18 +20,20 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-primary-alt" style="border-radius: 5px 5px 0px 0px;">                    
-                        <div class="bor-radius100 btn-group btn-block">
+                        <div class="bor-radius100  btn-block">
                             <!-- <h3><a href="<?php echo base_url(); ?>report/inv_rep/" class="text-white"><span class="fa fa-chevron-left"></span></a></h3> -->
                             <h4 class="text-white">
                                 <span class=" badge-alt badge badge-white m-r-10 animated infinite pulse">
                                     <b><?php echo $count;?></b>
                                 </span>
                                 <?php echo $subcat_name;?>
+                                <a href="<?php echo base_url(); ?>report/inv_rep_det_print/<?php echo $subcat_id; ?>" class="btn btn-info-alt btn-sm pull-right"><span class="fa fa-print"></span>Print</a>
                             </h4>
+
                         </div>
                     </div>
                     <div class="card-body">
-                        <a href="<?php echo base_url(); ?>report/inv_rep_det_print/<?php echo $subcat_id; ?>" class="btn btn-info-alt btn-sm pull-right"><span class="fa fa-print"></span>Print</a>
+                        
                         <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
                             <thead>
                                 <tr>
