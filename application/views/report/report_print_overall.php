@@ -16,6 +16,7 @@
                     <td class = "thead">Category</td>
                     <td class = "thead">Subcategory</td>
                     <td class = "thead">Department</td>
+                    <td class = "thead">Set Name</td>
                     <td class = "thead">Status / Accountability</td>
                 </tr>
                     <?php 
@@ -41,6 +42,7 @@
                         <td><?php echo $i['category'];?></td>
                         <td><?php echo $i['subcategory'];?></td>
                         <td><?php echo $i['department'];?></td>
+                        <td><?php echo $i['set_name'];?></td>
                         <td align="center"><?php echo $status;?></td>
                     </tr>
                     <?php } ?>

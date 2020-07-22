@@ -69,18 +69,22 @@
                                 <tr>
                                     <th align="center" width="1%">#</th>
                                     <th>Series</th>
+                                    <th>Item Name</th>
                                     <th>Employee Name</th>
                                     <th>Borrowed Date/Time</th>
                                     <th>Returned Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                                 <?php if(!empty($all)){ $x=1; foreach($all as $a){ ?>
                                 <tr>
                                     <td align="center" width="1%"><?php echo $x;?></td>
                                     <td><?php echo $a['series'];?></td>
+                                    <td><?php echo $a['item_name'];?></td>
                                     <td><?php echo $a['employee'];?></td>
                                     <td><?php echo $a['date'];?></td>
                                     <td><?php if(!empty($a['returned_date'])) { echo date("Y-m-d",strtotime($a['returned_date'])); }else { echo ''; }?></td>
+                                    <td align="center"><a href="<?php echo base_url(); ?>borrow/borrow_print/<?php echo $a['borrowed_by']; ?>/<?php echo $a['bh_id']; ?>/<?php echo $a['bd_id']; ?>" class="btn btn-warning-alt text-white btn-sm"><i class="fa fa-print"></i></a></td>
                                 </tr>
                                 <?php $x++; } }?>
                             </tbody>

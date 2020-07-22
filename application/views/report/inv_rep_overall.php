@@ -176,6 +176,7 @@
                                     <th>Category</th>
                                     <th>Subcategory</th>
                                     <th>Department</th>
+                                    <th>Set Name</th>
                                     <th>Status / Accountability</th>
                                 </tr>
                             </thead> 
@@ -207,6 +208,7 @@
                                     <td><?php echo $i['category']; ?></td>
                                     <td><?php echo $i['subcategory']; ?></td>
                                     <td><?php echo $i['department']; ?></td>
+                                    <td><?php echo $i['set_name']; ?></td>
                                     <td align="center"><?php echo $status; ?></td>
                                 </tr>
                                 <?php } ?>

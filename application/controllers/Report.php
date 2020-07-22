@@ -150,12 +150,14 @@ class Report extends CI_Controller {
                     $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$ss->subcat_id);
                     $employee = $this->super_model->select_column_where("employees","employee_name","employee_id",$ss->accountability_id);
                     $location = $this->super_model->select_column_where("location","location_name","location_id",$r->location_id);
+                    $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$r->set_id);
                     $item_desc = $ss->et_desc.", ".$r->brand.", ".$r->model.", ".$r->serial_no;
                     $data['details'][]= array(
                         'et_id'=>$ss->et_id,
                         'item'=>$item_desc,
                         'qty'=>1,
                         'department'=>$ss->department,
+                        'set_name'=>$set_name,
                         'accountability_id'=>$ss->accountability_id,
                         'employee'=>$employee,
                         'category'=>$category,
@@ -686,6 +688,7 @@ class Report extends CI_Controller {
                 $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$et->subcat_id);
                 $employee = $this->super_model->select_column_where("employees","employee_name","employee_id",$et->accountability_id);
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$et->location_id);
+                $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$et->set_id);
                 $item_desc = $et->et_desc.", ".$et->brand.", ".$et->model.", ".$et->serial_no;
                 $data['details'][]= array(
                     'et_id'=>$et->et_id,
@@ -693,6 +696,7 @@ class Report extends CI_Controller {
                     'qty'=>1,
                     'department'=>$et->department,
                     'accountability_id'=>$et->accountability_id,
+                    'set_name'=>$set_name,
                     'employee'=>$employee,
                     'category'=>$category,
                     'subcategory'=>$subcategory,
@@ -712,6 +716,7 @@ class Report extends CI_Controller {
                     $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$ss->subcat_id);
                     $employee = $this->super_model->select_column_where("employees","employee_name","employee_id",$ss->accountability_id);
                     $location = $this->super_model->select_column_where("location","location_name","location_id",$r->location_id);
+                    $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$r->set_id);
                     $item_desc = $ss->et_desc.", ".$r->brand.", ".$r->model.", ".$r->serial_no;
                     $data['details'][]= array(
                         'et_id'=>$ss->et_id,
@@ -719,6 +724,7 @@ class Report extends CI_Controller {
                         'qty'=>1,
                         'department'=>$ss->department,
                         'accountability_id'=>$ss->accountability_id,
+                        'set_name'=>$set_name,
                         'employee'=>$employee,
                         'category'=>$category,
                         'subcategory'=>$subcategory,
