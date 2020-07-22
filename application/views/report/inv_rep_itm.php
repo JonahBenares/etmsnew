@@ -33,6 +33,7 @@
                                     </div>
                                 </form>
                             </div>
+                            <a href="<?php echo base_url(); ?>report/inv_rep_itm_print/" class="btn btn-info-alt btn-sm"><span class="fa fa-print"></span>Print</a>
                         </div>
                         <br>
                         <?php if(!empty($filt)){?>     
