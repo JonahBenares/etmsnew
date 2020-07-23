@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <br>
-                                <a href="<?php echo base_url(); ?>report/inv_rep_itm_print/" class="btn btn-info-alt btn-sm pull-right"><span class="fa fa-print"></span>Print</a>
+                                <a href="<?php echo base_url(); ?>report/inv_rep_itm_print/<?php echo $item; ?>/<?php echo $set; ?>" class="btn btn-info-alt btn-sm pull-right"><span class="fa fa-print"></span>Print</a>
                             </div>
                         </div>
                         <br>

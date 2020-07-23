@@ -28,6 +28,7 @@
                         $a=0;
                         $previousId = '';
                         foreach($itema AS $i){ 
+                            if(empty($item) && empty($set)){
                     ?>
                     <tr>
                         <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
@@ -48,7 +49,23 @@
                         <td align="center"><?php echo $i['count']; ?></td>
                         <?php } ?>
                     </tr>
-                    <?php $previousId = $i['set_id']; } ?>
+                    <?php }else { ?>
+                    <tr>
+                        <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
+                        <td> 
+                            <a href="<?php echo base_url(); ?>report/inv_report_itm/<?php echo $i['item_id'];?>/<?php echo $i['set_id'];?>" class="" style="white-space: normal!important;text-align: left" data-toggle="tooltip" data-placement="left" title="View">
+                               <?php echo $i['item']; ?>
+                            </a>           
+                        </td>
+                        <td><?php echo $i['set']; ?></td>
+                        <td align="center"><?php echo $i['avcount']; ?></td>
+                        <td align="center"><?php echo $i['incount']; ?></td>
+                        <?php } else { ?>
+                        <td><?php echo $i['set']; ?></td>
+                        <td align="center"><?php echo $i['count']; ?></td>
+                        <?php } ?>
+                    </tr>
+                    <?php } $previousId = $i['set_id']; } ?>
                 </tbody>
             </table>
             <hr>

@@ -896,10 +896,16 @@ class Report extends CI_Controller {
         $data['filt']=substr($filter, 0, -2);
 
         if(!empty($this->input->post('item')) && !empty($this->input->post('set'))){
-            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
 
                 //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
                 //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                $data['count_set']=$count_set;
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
                     $avcount = $av->av;
                 }
@@ -907,25 +913,29 @@ class Report extends CI_Controller {
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
                     $incount = $inc->incount;
                 }
-                
-                foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
-                    $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
-                    $set_id = $r->set_id;
-                }
+
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
                     'item'=>$ss->et_desc,
-                    'set'=>$setss,
+                    'set'=>$sets,
+                    'count'=>$counts,
+                    'count_set'=>$count_set,
                     'avcount'=>$avcount,
                     'incount'=>$incount,
                 );
             }
         }else if(!empty($this->input->post('item'))){
-            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
 
                 //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
                 //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                $data['count_set']=$count_set;
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
                     $avcount = $av->av;
                 }
@@ -933,15 +943,13 @@ class Report extends CI_Controller {
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
                     $incount = $inc->incount;
                 }
-                foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
-                    $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
-                    $set_id = $r->set_id;
-                }
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
                     'item'=>$ss->et_desc,
-                    'set'=>$setss,
+                    'set'=>$sets,
+                    'count'=>$counts,
+                    'count_set'=>$count_set,
                     'avcount'=>$avcount,
                     'incount'=>$incount,
                 );
@@ -7408,7 +7416,116 @@ class Report extends CI_Controller {
     public function inv_rep_itm_print(){
         $this->load->view('template/header');
         $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
-        $row=$this->super_model->count_rows("et_head");
+        if(!empty($this->uri->segment(3))){
+            $data['item'] = $this->uri->segment(3);
+            $item=$this->uri->segment(3);
+        } else {
+            $data['item'] = "null";
+            $item = "";
+        }
+
+        if(!empty($this->uri->segment(4))){
+            $data['set'] = $this->uri->segment(4);
+            $set = $this->uri->segment(4);
+        } else {
+            $data['set'] = "null";
+            $set = "";
+        }
+
+        $sql="";
+        $filter = " ";
+        if($item!='null'){
+            $item = $item;
+            $sql.=" et_desc LIKE '%$item%' AND";
+            $filter .= "Item Description - ".$item.", ";
+        }
+
+        if($set!='null'){
+            $set = $set;
+            $sql.=" set_name LIKE '%$set%' AND";
+            //$sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
+            $q = "INNER JOIN et_set es ON ed.set_id = es.set_id";
+            $filter .= "Set Name - ".$set.", ";
+        }
+
+        $query=substr($sql, 0, -3);
+        $data['filt']=substr($filter, 0, -2);
+
+        if($item!='null' && $set!='null'){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
+
+                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                $data['count_set']=$count_set;
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
+                    $avcount = $av->av;
+                }
+
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
+                    $incount = $inc->incount;
+                }
+
+                $data['itema'][]= array(
+                    'item_id'=>$ss->et_id,
+                    'set_id'=>$set_id,
+                    'item'=>$ss->et_desc,
+                    'set'=>$sets,
+                    'count'=>$counts,
+                    'count_set'=>$count_set,
+                    'avcount'=>$avcount,
+                    'incount'=>$incount,
+                );
+            }
+        }else if($item!='null'){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
+
+                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                $data['count_set']=$count_set;
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
+                    $avcount = $av->av;
+                }
+
+                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
+                    $incount = $inc->incount;
+                }
+                $data['itema'][]= array(
+                    'item_id'=>$ss->et_id,
+                    'set_id'=>$set_id,
+                    'item'=>$ss->et_desc,
+                    'set'=>$sets,
+                    'count'=>$counts,
+                    'count_set'=>$count_set,
+                    'avcount'=>$avcount,
+                    'incount'=>$incount,
+                );
+            }
+        } 
+
+        if($set!='null' && $item=='null'){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query." GROUP BY set_name") AS $ss){
+
+                $count_set = $this->super_model->count_custom("SELECT DISTINCT(ed.set_id) FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query);
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $data['itema'][]= array(
+                    'set'=>$sets,
+                    'set_id'=>$set_id,
+                    'count'=>$count_set,
+                );
+            }
+        }
+        /*$row=$this->super_model->count_rows("et_head");
         if($row!=0){
             foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
@@ -7438,7 +7555,7 @@ class Report extends CI_Controller {
             }
         }else {
             $data['itema'] = array();
-        }
+        }*/
         $this->load->view('report/inv_rep_itm_print',$data);
         $this->load->view('template/footer');
     }
