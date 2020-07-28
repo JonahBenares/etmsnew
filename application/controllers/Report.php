@@ -5208,7 +5208,7 @@ class Report extends CI_Controller {
         $rows=$this->super_model->count_custom_where("et_head","et_desc LIKE '%$item%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND cancelled='0' AND et_desc LIKE '%$item%'") AS $itm){
+            foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND cancelled='0' AND save_temp = '0' AND et_desc LIKE '%$item%'") AS $itm){
                 foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0' AND lost='0'") AS $det){  
                     $qty = 1;
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
