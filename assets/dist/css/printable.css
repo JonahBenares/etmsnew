@@ -52,7 +52,7 @@ p, .main-tab, h5, label.nomarg{
     #print, #printhide{
         display: none;
     }
-    p,h5{font-size: 14px!important;}
+    p,h5{font-size: 12px!important;}
 }
 .cancel{
     background-image: url('../../../assets/images/cancel.png')!important;
