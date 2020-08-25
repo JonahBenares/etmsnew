@@ -355,6 +355,7 @@ class Report extends CI_Controller {
             $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$et->subcat_id);
             $employee = $this->super_model->select_column_where("employees","employee_name","employee_id",$et->accountability_id);
             $location = $this->super_model->select_column_where("location","location_name","location_id",$et->location_id);
+            $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$et->set_id);
             $item_desc = $et->et_desc.", ".$et->brand.", ".$et->model.", ".$et->serial_no;
             $data['details'][]= array(
                 'et_id'=>$et->et_id,
@@ -367,6 +368,7 @@ class Report extends CI_Controller {
                 'subcategory'=>$subcategory,
                 'borrowed'=>$et->borrowed,
                 'damaged'=>$et->damage,
+                'set_name'=>$set_name,
                 'change_location'=>$et->change_location,
                 'lost'=>$et->lost,
                 'location'=>$location,
