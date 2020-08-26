@@ -26,8 +26,6 @@
                 <div class="modal-footer">
                     <input type='submit' class="btn btn-primary-alt btn-block btn-fill" value='Add' onclick="confirmationSave(this);return false;">
                     <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
-                    <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
-                   <!--  <a  href="<?php echo base_url(); ?>borrow/borrow_add" class="btn btn-primary btn-block btn-fill">Add</a> -->
                 </div>
             </form>
         </div>
@@ -38,7 +36,6 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <!-- <h4 class="text-themecolor">Employee List</h4> -->
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">

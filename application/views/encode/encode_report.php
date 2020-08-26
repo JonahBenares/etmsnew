@@ -135,7 +135,6 @@
                     <tr>
                         <td></td>
                         <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black" align = 'center'>
-                            <!-- <input class="select" type="text" name="" value="<?php echo $user_id;?>"> -->
                             <?php echo $user_id;?>
                         </td> 
                         <td></td>

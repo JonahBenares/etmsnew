@@ -30,7 +30,6 @@
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary-alt btn-block">Add</button>
-                        <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                     </div>
                 </form>
             </div>                                        

@@ -110,9 +110,6 @@
                                 <tbody>
                                     <?php
                                         foreach($head AS $ret){ 
-                                            /*foreach($returned AS $det){ 
-                                                switch($det){
-                                                    case($ret['return_id'] == $det['return_id']): */
                                     ?>
                                     <tr>
                                         <td><?php echo $ret['employee']; ?></td>
@@ -124,10 +121,7 @@
                                             </label>
                                         </td>
                                     </tr>
-                                    <?php 
-                                        /*break;
-                                        default: 
-                                        } }*/ }
+                                    <?php  }
                                     ?>
                                 </tbody>
                             </table>

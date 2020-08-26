@@ -7,7 +7,7 @@ $( document ).ready(function() {
             url: redirect,
             data:'borrow='+$(this).val(),
             beforeSend: function(){
-                $("#borrow").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#borrow").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-borrow").show();
@@ -25,7 +25,7 @@ $( document ).ready(function() {
             url: redirect,
             data:'return='+$(this).val(),
             beforeSend: function(){
-                $("#return").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#return").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-return").show();
@@ -43,7 +43,7 @@ $( document ).ready(function() {
             url: redirect,
             data:'item='+$(this).val(),
             beforeSend: function(){
-                $("#item").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#item").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-item").show();

@@ -138,7 +138,6 @@
                             ?>
                         <?php } else { ?>
                             <div style = "text-align:center;"><?php echo  $name;?></div>
-                            <!-- <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea> -->
                         <?php } ?>
                     </td>
                     <td></td>

@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="page-wrapper">
@@ -21,7 +22,6 @@
                 <div class="card">
                     <div class="card-header bg-primary-alt" style="border-radius: 5px 5px 0px 0px;">                    
                         <div class="bor-radius100  btn-block">
-                            <!-- <h3><a href="<?php echo base_url(); ?>report/inv_rep/" class="text-white"><span class="fa fa-chevron-left"></span></a></h3> -->
                             <h4 class="text-white">
                                 <span class=" badge-alt badge badge-white m-r-10 animated infinite pulse">
                                     <b><?php echo $count;?></b>

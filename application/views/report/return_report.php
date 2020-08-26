@@ -24,9 +24,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                   <!--  <div class="card-header bg-white" style="border-radius: 10px 10px 0px 0px">
-                        
-                    </div> -->
                     <div class="card-body"> 
                         <h4 class="card-title">
                             <a onclick="history.go(-1);" class="btn ">

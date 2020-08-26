@@ -59,7 +59,6 @@
                                         <th>Quantity</th>
                                         <th>Department</th>
                                         <th width="10%">Set Name</th>
-                                        <!-- <th width="5%" class="text-center"><span class="fa fa-bars"></span></th> -->
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -88,7 +88,6 @@
                         <div id = 'subcat'></div>
                     </div>
                     <div class="form-group">
-                    <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                     <button type="submit" class="btn btn-primary-alt btn-block">Update</button>
                 </div>
                 </form>
@@ -101,7 +100,6 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <!-- <h4 class="text-themecolor">Employee List</h4> -->
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">

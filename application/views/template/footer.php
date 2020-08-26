@@ -9,7 +9,6 @@
         $('.select2').select2();
     </script> 
     <script src="<?php echo base_url(); ?>assets/dist/js/jquery.dataTables.min.js"></script>
-    <!-- <script src="<?php echo base_url(); ?>assets/node_modules/jquery/jquery-3.2.1.min.js"></script> -->
     <script src="<?php echo base_url(); ?>assets/node_modules/popper/popper.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/dist/js/perfect-scrollbar.jquery.min.js"></script>
@@ -21,7 +20,6 @@
     <script src="<?php echo base_url(); ?>assets/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/node_modules/d3/d3.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/node_modules/c3-master/c3.min.js"></script>
-    <!-- <script src="dist/js/dashboard1.js"></script> -->
     <script type="text/javascript">
         $(document).ready(function(){
             $('#myTable').DataTable({
@@ -71,27 +69,7 @@
             $('#myTable_peret').DataTable();
             $('#myTable_peremp').DataTable();
             $('#myTable_avail').DataTable();
-        } );   
-
-        // var tab_per_et = document.getElementById("table_peret");
-        // var tab_per_emp = document.getElementById("table_peremp");
-        // var tab_avail = document.getElementById("table_avail");
-        // $("#peret_btn").click(function(){            
-        //     tab_per_et.setAttribute('style', 'display:block');
-        //     tab_per_emp.setAttribute('style', 'display:none');
-        //     tab_avail.setAttribute('style', 'display:none');
-        // });
-
-        // $("#peremp_btn").click(function(){
-        //     tab_per_emp.setAttribute('style', 'display:block');
-        //     tab_per_et.setAttribute('style', 'display:none');
-        //     tab_avail.setAttribute('style', 'display:none');
-        // });  
-        // $("#avail_btn").click(function(){
-        //     tab_per_emp.setAttribute('style', 'display:none');
-        //     tab_per_et.setAttribute('style', 'display:none');
-        //     tab_avail.setAttribute('style', 'display:block');
-        // });   
+        } );     
 
         
         var mas_name = document.getElementById("mas_name");
@@ -151,9 +129,12 @@
             window.open('<?php echo base_url(); ?>masterfile/employee_pop/'+empid, '_blank', 'top=100px,left=400px,width=600,height=450');
         }
 
-        document.querySelector("#print").addEventListener("click", function() {
-            window.print();
-        });
+        var check = document.getElementById("print");
+        if(check!=null){
+            document.querySelector("#print").addEventListener("click", function() {
+                window.print();
+            });
+        }
 
         function confirmationDelete(anchor){
             var conf = confirm('Are you sure you want to delete this record?');

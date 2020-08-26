@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="page-wrapper">
@@ -26,14 +27,12 @@
                             <div class="col-lg-4 offset-lg-2">
                                 <form method='POST' action="<?php echo base_url(); ?>report/generateSubcat/">                          
                                     <div class="bor-radius100 btn-group btn-block ">
-                                        <!-- <a onclick="history.go(-1);" class="btn btn-default"><span class="fa fa-arrow-left"></span></a> -->
                                         <select name = "subcat" class = "form-control form-alt" style="">
                                             <?php foreach($subcat1 AS $s){ ?>
                                                 <option value = "<?php echo $s->subcat_id;?>"><?php echo $s->subcat_name;?></option>
                                             <?php } ?>
                                         </select>
                                         <input type="submit" name="generate" id="generate" class="btn btn-success-alt btn-sm" value ="Generate" style="border-radius: 0px 20px 20px 0px">
-                                        <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                     </div>
                                 </form>
                             </div>

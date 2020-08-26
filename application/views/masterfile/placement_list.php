@@ -68,9 +68,6 @@
                                                 <a href="<?php echo base_url(); ?>masterfile/placement_update/<?php echo $dep->placement_id?>" class="btn btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
-                                               <!-- <a href="<?php echo base_url(); ?>masterfile/delete_placement/<?php echo $dep->placement_id;?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
-                                                    <i class="fa fa-trash"></i>
-                                                </a>-->
                                             </div>
                                         </td>
                                     </tr>

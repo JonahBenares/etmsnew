@@ -7,7 +7,7 @@
             url: redirect,
             data:'accountability='+$(this).val(),
             beforeSend: function(){
-                $("#accountability").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#accountability").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-accountability").show();
@@ -26,7 +26,7 @@
                 url: redirect,
                 data:'acquired='+$(this).val()+'&id='+id,
                 beforeSend: function(){
-                    $("#acquired"+id).css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    $("#acquired"+id).css("background","#FFF");
                 },
                 success: function(data){
                     $("#suggestion-acquired"+id).show();

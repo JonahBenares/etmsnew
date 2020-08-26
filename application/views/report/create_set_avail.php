@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="page-wrapper">

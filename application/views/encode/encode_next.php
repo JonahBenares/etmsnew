@@ -48,7 +48,6 @@
                     ?>
                     <div class="card bor-radius5 shadow-sv animated fadeInUp" > <!-- style="border:2px solid #e5a255" -->
                         <div class="card-header cheader-bor bg-primary-alt">
-                            <!-- <h4 class="pull-right m-b-5"><span class="badge badge-pill badge-light "><strong><?php echo $count;?></strong></span></h4> -->
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -198,7 +197,6 @@
                                         <div id="img-check-none1-<?php echo $x?>" class="alert alert-danger">
                                           <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
                                         </div>
-                                        <!-- <span id="img1-check" class='img-check-note'></span> -->
                                     </div> 
                                     <div class="col-lg-4 float-col">
                                         <label for="pic1">Picture 2:</label>

@@ -14,9 +14,9 @@
                 <form method = "POST" action="<?php echo base_url();?>masterfile/insert_location">
                     <div class="form-group">
                         <label for="" class="control-label mb-1">Location:</label>
-                        <input id="" name="location" type="text" class="form-control bor-radius5" placeholder="">
+                        <input name="location" type="text" class="form-control bor-radius5" placeholder="">
                         <label for="" class="control-label mb-1">Location Perfix:</label>
-                        <input id="" name="prefix" type="text" class="form-control bor-radius5" placeholder="">
+                        <input name="prefix" type="text" class="form-control bor-radius5" placeholder="">
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary-alt btn-block">Add</button>

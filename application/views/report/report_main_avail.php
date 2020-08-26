@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="modal fade" id="lostTag" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
@@ -32,7 +33,6 @@
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success btn-sm btn-block bor-radius" value='Save'>
                 </div>
-                <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                 <input type="hidden" name="emp_id" id="emp_id">
                 <input type="hidden" name="ed_id" id="ed_id">
                 <input type="hidden" name="et_id" id="et_id">

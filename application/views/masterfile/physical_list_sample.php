@@ -45,43 +45,7 @@
                         <h6 class="card-subtitle"><br></h6>
                         <div class="table-responsive">
                             <img  src="<?php echo base_url(); ?>assets/images/Gradient-Button-Hover.jpg" class="m-b-20" >
-                           <!-- <button class="animated infinite flash btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button> Flassh
-                            <br><br>
-                            <button class="animated infinite pulse btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button> pulse
-                            <br><br> 
-                            <button class="animated infinite rubberBand btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button> rubberband
-                            <br><br>
-                            <button class="animated infinite swing btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>swing
-                            <br><br>
-                            <button class="animated infinite headShake btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>headshake
-                            <br><br>
-                            <button class="animated infinite tada btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>tada
-                            <br><br>
-                            <button class="animated infinite wobble btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>wobble
-                            <br><br>
-                            <button class="animated infinite jello btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>jello 
-                            <br><br>
-                            <button class="animated infinite flip btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>flip
-                            <br><br>
-                            <button class="animated infinite flipInX btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>flip
-                            <br><br>
-                            <button class="animated infinite rotateIn btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>flip
-                            <br><br>
-                            <button class="animated infinite hinge btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>flip
-                            <br><br>
-                            <button class="animated infinite rollIn btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>flip
-                            <br><br>
-                            <button class="animated infinite headShake btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="animated infinite headShake btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="animated infinite headShake btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="animated infinite headShake btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button>
-                            <button class="btn btn-danger btn-sm waves-effect waves-dark"><span class="fa fa-bars"></span></button> -->
+                          
                         </div>
                     </div>
                 </div>
