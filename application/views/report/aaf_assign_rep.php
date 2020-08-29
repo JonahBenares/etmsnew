@@ -25,7 +25,6 @@
                     <tr>
                         <td width="13%"><h5 class="nomarg">Employee</h5></td>
                         <td width="40%" style="border-bottom: 1px solid #999">
-                            <!-- <input type="text" style="width: 100%"> -->
                             <input type="text" id = "assign" name = "assigned" autocomplete="off" style="width: 100%" required>
                             <span id="suggestion-assign"></span>
                         </td>

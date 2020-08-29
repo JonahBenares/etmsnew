@@ -7,7 +7,7 @@ $( document ).ready(function() {
             url: redirect,
             data:'rec='+$(this).val(),
             beforeSend: function(){
-                $("#rec").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#rec").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-receivedby").show();
@@ -27,7 +27,7 @@ $( document ).ready(function() {
                 url: redirect,
                 data:'receive='+$(this).val()+'&id='+id,
                 beforeSend: function(){
-                    $("#receive"+id).css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    $("#receive"+id).css("background","#FFF");
                 },
                 success: function(data){
                     $("#suggestion-receive"+id).show();
@@ -44,9 +44,3 @@ function selectRec(id, val, loopid) {
     $("#receive"+loopid).val(val);
     $("#suggestion-receive"+loopid).hide();
 }
-
-/*function selectRec(id, val) {
-    $("#rec_id").val(id);
-    $("#rec").val(val);
-    $("#suggestion-receivedby").hide();
-}*/

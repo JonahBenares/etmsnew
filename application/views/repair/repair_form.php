@@ -46,50 +46,7 @@
             ?>
             <div class="row">                
                 <div class="col-lg-12">
-                    <!-- <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <p class="m-b-0">Asset Control No: </p>
-                                    <p class="m-b-15 font-medium"><?php echo $r['acn'];?></p>
-                                    <p class="m-b-0">Item Description: </p>
-                                    <p class="m-b-15 font-medium"><?php echo $r['item'];?></p>
-                                    <p class="m-b-0">Category: </p>
-                                    <p class="m-b-15 font-medium"><?php echo $r['category'];?></p>
-                                    <p class="m-b-0">Brand: </p>
-                                    <p class="m-b-15 font-medium"><?php echo $r['brand'];?></p>
-                                    <p class="m-b-0">Model: </p>
-                                    <p class="m-b-15 font-medium"><?php echo $r['model'];?></p>
-                                    <p class="m-b-0">Serial No.: </p>
-                                    <p class="m-b-15 font-medium"><?php echo $r['serial'];?></p>
-                                </div>
-                                <div class="col-lg-4">
-                                    <label for="" class="control-label mb-1">Repair Date:</label>
-                                    <input id="date" name="date<?php echo $z;?>" type="date"  class="form-control bor-radius5 cc-exp" required>
-                                    <label for="" class="control-label mb-1">Repair Price:</label>
-                                    <input id="price" name="price<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp" onkeypress="return isNumberKey(event,this)">
-                                    <label for="" class="control-label mb-1">JO No.:</label>
-                                    <input id="date" name="jo<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
-                                    <label for="" class="control-label mb-1">Supplier:</label>
-                                    <input id="date" name="supplier<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
-                                </div>
-                                <div class="col-lg-4">
-                                    <label for="" class="control-label mb-1">Assessment:</label>
-                                    <br>
-                                    <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="1" required> Repaired</p>
-                                    <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="2" required> Beyond Repair</p>
-                                    <br>
-                                    <label for="" class="control-label mb-1">Received by:</label>
-                                    <input name="receive" type="text" class="form-control bor-radius5 cc-exp receive" data-trigger="<?php echo $z;?>"  autocomplete = "off"  id = "receive<?php echo $z; ?>">
-                                    <span id="suggestion-receive<?php echo $z;?>"></span>
-                                    <input type="hidden" name="rec_id<?php echo $z;?>" id="rec_id<?php echo $z;?>">
-
-                                    <label for="" class="control-label mb-1">Remarks:</label>
-                                    <textarea name="remarks<?php echo $z;?>" id=""  rows="2" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+                    
                     <div class="card bor-radius20 shadow encode_css_success">
                         <div class=" card-body ">
                             <table class="table">
@@ -151,7 +108,6 @@
                                     </td>
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                     <input type="hidden" name="ed_id<?php echo $z;?>" value = "<?php echo $d['ed_id'];?>">
-                                    <!-- <input type="hidden" name="et_id[]" value = "<?php echo $d['et_id'];?>"> -->
                                     <input type="hidden" name="user_id<?php echo $z;?>" value = "<?php echo $_SESSION['user_id'];?>">
                                 </tr>
                             </table>
@@ -165,12 +121,8 @@
                     } $z++; } $counter = $z-1; }  ?>
             <!-- LOOP HERE -->
             <div class="row">
-               <!--  <div style="position: fixed; z-index: 3;bottom:0px;width: 100%"> -->
                     <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $z;?>">
-                    <!-- <a href="<?php echo base_url(); ?>repair/repair_form" class="btn btn-success btn-block  btn-md"> Save</a> -->
                     <input type="submit" name="submit" class="btn btn-success btn-block  btn-md" value = "Save" onclick="confirmationSave(this);return false;">
-
-               <!--  </div> -->
             </div>
         </form> 
     </div>

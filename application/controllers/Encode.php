@@ -29,7 +29,6 @@ class Encode extends CI_Controller {
     public function encode_et(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        /*$data['department'] = $this->super_model->select_all_order_by('department', 'department_name', 'ASC');*/
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $data['unit'] = $this->super_model->select_all_order_by('unit', 'unit_name', 'ASC');
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
@@ -45,7 +44,6 @@ class Encode extends CI_Controller {
         $id=$this->uri->segment(3);   
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
-        //$data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
@@ -110,46 +108,6 @@ class Encode extends CI_Controller {
         if($this->super_model->insert_into("et_head", $data)){
             echo "<script>window.location ='".base_url()."encode/encode_next/$et_id'; </script>";
         }
-
-       /* $data = array(
-            'user_id'=>$this->input->post('user_id'),
-            'acquisition_date'=>$this->input->post('acq_date'),
-            'asset_control_no'=>$this->input->post('tag'),
-            'et_desc'=>$this->input->post('item'),
-            'brand'=>$this->input->post('brand'),
-            'model'=>$this->input->post('model'),
-            'type'=>$this->input->post('type'),
-            'qty'=>$this->input->post('qty'),
-            'unit_id'=>$this->input->post('uom'),
-            'serial_no'=>$this->input->post('serial'),
-            'accountability_id'=>$this->input->post('accountability_id'),
-            'remarks'=>$this->input->post('remarks'),
-            'damaged'=>$this->input->post('damaged'),
-            'damaged_of_unit'=>$this->input->post('dou'),
-            'damaged_remarks'=>$this->input->post('damaged_remarks'),
-            'category_id'=>$this->input->post('category'),
-            'subcat_id'=>$this->input->post('subcategory'),
-            'date_issued'=>$this->input->post('date_issued'),
-            'department_id'=>$this->input->post('department'),
-            'create_date'=>date("Y-m-d H:i:s"),
-            'unit_price'=>$this->input->post('price')
-        );
-
-        if($this->super_model->insert_into("et_info", $data)){
-            $assetdetails=explode("-", $this->input->post('tag'));
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-            $series = $assetdetails[2];
-            $asset_data= array(
-                'subcat_prefix'=>$subcat_prefix,
-                'series'=>$series
-            );
-            $this->super_model->insert_into("asset_series", $asset_data);
-
-            echo "<script>alert('Equipment/Tool successfully Added!'); 
-                window.location ='".base_url()."encode/encode_et'; </script>";
-        }*/
     }
 
     public function encode_report(){  
@@ -228,14 +186,9 @@ class Encode extends CI_Controller {
             /*$itemname=$test;*/
             $error_ext=0;
             $dest= realpath(APPPATH . '../uploads/');
-            //$count = count($_FILES['pic']['name']);
-           // $z=1;
-           // for($y=0;$y<$count;$y++){
                 if(!empty($_FILES['pic1']['name'][$x])){
                      $img1= basename($_FILES['pic1']['name'][$x]);
                      $ext1= pathinfo($img1, PATHINFO_EXTENSION);
-                     //$img1=explode('.',$img1);
-                     //$ext1=$img1[1];
                     
                     if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
                         $error_ext++;
@@ -250,8 +203,6 @@ class Encode extends CI_Controller {
             
                 if(!empty($_FILES['pic2']['name'][$x])){
                      $img2= basename($_FILES['pic2']['name'][$x]);
-                     /*$img2=explode('.',$img2);
-                     $ext2=$img2[1];*/
                      $ext2= pathinfo($img2, PATHINFO_EXTENSION);
                      
                     if($ext2=='php' || ($ext2!='png' && $ext2 != 'jpg' && $ext2!='jpeg')){
@@ -266,8 +217,6 @@ class Encode extends CI_Controller {
 
                 if(!empty($_FILES['pic3']['name'][$x])){
                      $img3= basename($_FILES['pic3']['name'][$x]);
-                    /* $img3=explode('.',$img3);
-                     $ext3=$img3[1];*/
                      $ext3= pathinfo($img3, PATHINFO_EXTENSION);
                     
                     if($ext3=='php' || ($ext3!='png' && $ext3 != 'jpg' && $ext3!='jpeg')){
@@ -280,8 +229,6 @@ class Encode extends CI_Controller {
                 } else {
                     $filename3="";
                 }
-               // $z++;        
-        //    }
 
             if($this->input->post('saved')=='Submit'){  
                 $data = array(
@@ -324,12 +271,6 @@ class Encode extends CI_Controller {
                         $subcat_prefix=$subcat_prefix1;
                         $series = $assetdetails[2];
                     }
-
-                    /*$subcat_prefix1=$assetdetails[0];
-                    $subcat_prefix2=$assetdetails[1];
-                    $location=$assetdetails[2];
-                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$location;
-                    $series = $assetdetails[3];*/
                     $asset_data= array(
                         'subcat_prefix'=>$subcat_prefix,
                         'location'=>$location,
@@ -387,11 +328,6 @@ class Encode extends CI_Controller {
                         $subcat_prefix=$subcat_prefix1;
                         $series = $assetdetails[2];
                     }
-                    /*$subcat_prefix1=$assetdetails[0];
-                    $subcat_prefix2=$assetdetails[1];
-                    $location=$assetdetails[2];
-                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                    $series = $assetdetails[3];*/
                     $asset_data= array(
                         'subcat_prefix'=>$subcat_prefix,
                         'location'=>$location,
@@ -438,7 +374,6 @@ class Encode extends CI_Controller {
 
     public function getPrefix(){
         $subcat = $this->input->post('subcat');
-        /*foreach($this->super_model->select_row_where('et_info', 'subcat_id', $subcat) AS $row){*/
         $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $subcat);
 
         $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
@@ -450,7 +385,6 @@ class Encode extends CI_Controller {
             $asset_no = $subcat_prefix."-".$next;
         }
         echo '<option value="'. $asset_no .'">'. $asset_no .'</option>';
-        //}
     }
 
     public function get_name($col, $table, $whr_clm, $whr_val){

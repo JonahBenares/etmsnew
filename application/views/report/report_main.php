@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
@@ -16,7 +17,7 @@
                             <table width="100%">
                                 <tr>
                                     <td><p>Acquired Date (from):</p>
-                                        <input type="date" id="acdfrom" name="from" class="form-control bor-radius10" >
+                                        <input type="date"  name="from" class="form-control bor-radius10" >
                                     </td>
                                 </tr>
                                 <tr>
@@ -72,7 +73,7 @@
                             <table width="100%">
                                 <tr>
                                     <td><p>Acquired Date (to):</p>
-                                        <input type="date" id="acdfrom" name="to" class="form-control bor-radius10" >
+                                        <input type="date"  name="to" class="form-control bor-radius10" >
                                     </td>
                                 </tr>
                                 <tr>
@@ -126,7 +127,6 @@
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success-alt btn-sm btn-block bor-radius" value='Filter'>
                 </div>
-                 <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
             </form>
         </div>
     </div>
@@ -164,7 +164,6 @@
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success-alt btn-sm btn-block bor-radius" value='Save'>
                 </div>
-                <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                 <input type="hidden" name="emp_id" id="emp_id">
                 <input type="hidden" name="ed_id" id="ed_id">
                 <input type="hidden" name="et_id" id="et_id">

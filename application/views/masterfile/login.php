@@ -30,8 +30,6 @@
                     </div>                    
                     <div class="col-lg-6">
                         <div class="login-form p-t-50 p-r-50 p-l-40">
-                            <!-- <h1 class=" login-title m-b-0">ETMS</h1>
-                            <center><small>EQUIPMENT AND TOOLS MANAGEMENT SYSTEM</small></center> -->
                             <center>
                                 <img src="<?php echo base_url(); ?>assets/images/logo-nameb.png" class="m-b-20" style="width:350px">
                             </center>

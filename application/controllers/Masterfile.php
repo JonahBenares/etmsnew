@@ -140,12 +140,10 @@ class Masterfile extends CI_Controller {
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_rows_where("employee_inclusion","parent_id",$id);
         $data['employee'] = $this->super_model->select_all_order_by('employees', 'employee_name', 'ASC');
-        //$data['employee'] = $this->super_model->select_row_where_order_by("employees", "type", "1", "employee_name", "ASC");
         if($row!=0){
             foreach($this->super_model->select_row_where("employee_inclusion","parent_id",$id) AS $multi){
                 $employee_name =$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$multi->child_id'");
                 $status = $this->super_model->select_column_where("employees","status","employee_id",$multi->child_id);
-                //$data['parent']=
                 $data['multi_emp'][] = array(
                     'id'=>$multi->child_id,
                     'emp_name'=>$employee_name,
@@ -212,11 +210,6 @@ class Masterfile extends CI_Controller {
                 'status'=>$status,
             );
             if($this->super_model->insert_into("employees", $data)){
-                /*$emp=explode("-", $this->input->post('aaf_no'));
-                $aaf_prefix1=$emp[0];
-                $aaf_prefix2=$emp[1];
-                $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                $series = $emp[2];*/
                 $emp=explode("-", $this->input->post('aaf_no'));
                 $one=$emp[0];
                 $two=$emp[1];
@@ -237,7 +230,6 @@ class Masterfile extends CI_Controller {
                 );
                 $this->super_model->insert_into("employee_series", $emp_data);
                 echo "<script>alert('Successfully Added!');  </script>";
-                    //window.location ='".base_url()."masterfile/employee_list'; </script>";
                  redirect(base_url().'masterfile/employee_list');   
             }
         }
@@ -302,16 +294,6 @@ class Masterfile extends CI_Controller {
                     'aaf_no'=>$aaf_no,
                 );
                 if($this->super_model->update_where('employees', $data, 'employee_id', $empid)){
-                    /*$emp=explode("-", $this->input->post('aaf_no'));
-                    $aaf_prefix1=$emp[0];
-                    $aaf_prefix2=$emp[1];
-                    $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                    $series = $emp[2];
-                    $emp_data= array(
-                        'aaf_prefix'=>$aaf_prefix,
-                        'series'=>$series
-                    );
-                    $this->super_model->insert_into("employee_series", $emp_data);*/
                     $emp=explode("-", $this->input->post('aaf_no'));
                     $one=$emp[0];
                     $two=$emp[1];
@@ -853,7 +835,6 @@ class Masterfile extends CI_Controller {
                 'location'=>$s->location,
             );
         }
-        /*$data['subcat'] = $this->super_model->select_all('subcategory');*/
         $this->load->view('masterfile/categ_list',$data);
         $this->load->view('template/footer');
     }
@@ -904,15 +885,8 @@ class Masterfile extends CI_Controller {
         if($row!=0){
             foreach($this->super_model->select_all_order_by('employees', 'employee_name', 'ASC') AS $emp){
                 $location= $this->super_model->select_column_where('location', 'location_name', 'location_id', $emp->location_id);
-                /*$rows =$this->super_model->count_rows("employee_inclusion");
-                if($rows!=0){
-                    $eid= $this->super_model->select_column_where('employee_inclusion', 'ei_id', 'parent_id', $emp->employee_id);   
-                }else{
-                    $eid = 'null';
-                }*/
                 $data['employee'][] = array(
                     'id'=>$emp->employee_id,
-                    /*'eid'=>$eid,*/
                     'name'=>$emp->employee_name,
                     'location'=>$location,
                     'position'=>$emp->position,
@@ -1045,10 +1019,6 @@ class Masterfile extends CI_Controller {
 
     public function delete_office(){
         $id=$this->uri->segment(3);
-        /*$eid=$this->uri->segment(4);
-        if($eid=='null'){
-            $eid = '';
-        }*/
         $row = $this->super_model->count_rows_where("et_head","accountability_id",$id);
         if($row!=0){
             echo "<script>alert('You cannot delete this record!'); 

@@ -33,15 +33,6 @@
                 <tbody>
                     <?php 
                         foreach($report AS $r){ 
-                            /*if($r['accountability_id']!=0 && $r['borrowed']==0){
-                                $status = 'Assigned';
-                            }else if($r['accountability_id']==0 && $r['damaged']==0){
-                                $status = 'Available';
-                            }else if($r['borrowed']==1){
-                                $status = 'Borrowed';
-                            }else if($r['damaged']==1){
-                                $status = 'Damaged';
-                            }*/
                             if($r['accountability_id']!=0 && $r['borrowed']==0){
                                 $status = 'Assigned';
                             }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0){

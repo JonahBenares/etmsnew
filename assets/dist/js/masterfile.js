@@ -7,7 +7,7 @@ $( document ).ready(function() {
             url: redirect,
             data:'employee='+$(this).val(),
             beforeSend: function(){
-                $("#employee").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#employee").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-employee").show();

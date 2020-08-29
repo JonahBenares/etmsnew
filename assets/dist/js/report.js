@@ -7,7 +7,7 @@
             url: redirect,
             data:'rec='+$(this).val(),
             beforeSend: function(){
-                $("#rec").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#rec").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-receivedby").show();
@@ -27,7 +27,7 @@
                 url: redirect,
                 data:'checked='+$(this).val()+'&id='+id,
                 beforeSend: function(){
-                    $("#checked"+id).css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    $("#checked"+id).css("background","#FFF");
                 },
                 success: function(data){
                     $("#suggestion-checked"+id).show();
@@ -48,7 +48,7 @@
                 url: redirect,
                 data:'submitted='+$(this).val()+'&id='+id,
                 beforeSend: function(){
-                    $("#submitted"+id).css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    $("#submitted"+id).css("background","#FFF");
                 },
                 success: function(data){
                     $("#suggestion-submitted"+id).show();
@@ -69,7 +69,7 @@
                 url: redirect,
                 data:'noted='+$(this).val()+'&id='+id,
                 beforeSend: function(){
-                    $("#noted"+id).css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    $("#noted"+id).css("background","#FFF");
                 },
                 success: function(data){
                     $("#suggestion-noted"+id).show();
@@ -88,7 +88,7 @@
             url: redirect,
             data:'assign='+$(this).val(),
             beforeSend: function(){
-                $("#assign").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#assign").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-assign").show();
@@ -106,7 +106,7 @@
             url: redirect,
             data:'item='+$(this).val(),
             beforeSend: function(){
-                $("#item").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                $("#item").css("background","#FFF");
             },
             success: function(data){
                 $("#suggestion-item").show();
@@ -115,54 +115,7 @@
             }
         });
     });
-
-    /*var loc= document.getElementById("baseurl").value;
-    var redirect=loc+'report/rep_itm';
-    $("#items").keyup(function(){
-        $.ajax({
-            type: "POST",
-            url: redirect,
-            data:'item='+$(this).val(),
-            beforeSend: function(){
-                $("#items").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
-            },
-            success: function(data){
-                $("#suggestion-items").show();
-                $("#suggestion-items").html(data);
-                $("#items").css("background","#FFF");
-            }
-        });
-    });*/
-
-
-
-    /*$(document).on('click', '#getID', function(e){
-        e.preventDefault();
-        var edid = document.getElementById("edid").value;
-        var count = document.getElementById("count").value;
-        for(var){
-
-        }
-        var loc= document.getElementById("baseurl").value;
-        var redir=loc+'report/add_set_modal';
-        $.ajax({
-              url: redir,
-              type: 'POST',
-              data: 'id='+edid,
-            beforeSend:function(){
-                $("#set").html('Please wait ..');
-            },
-            success:function(data){
-               $("#set").html(data);
-            },
-        })
-    });*/
-    
 });
-
-/*function createSet(count){
-    
-}*/
  
 function selectChk(id, val, loopid) {  
     $("#checked_id"+loopid).val(id);
@@ -189,13 +142,7 @@ function selectRec(id, val) {
 }
 
 function selectAssign(emp_id,emp,dept,position,aaf_no, children,type) {
-    /*if(type==1){
-        $("#receive_by").val(emp);
-     } else {
-        $("#receive_by").val(children);
-     }*/
     if(type==1){
-        //$("#receive_by").val(emp);
         var element = document.getElementById("receive_by");
         element.innerHTML = emp;
     } else {
@@ -207,9 +154,6 @@ function selectAssign(emp_id,emp,dept,position,aaf_no, children,type) {
             ch += "<p>"+child[i]+"</p>";
             element.innerHTML = ch;
         }
-        //var child = children.replace(',', '\n');
-        //$("#receive_by").val(child);
-        //document.getElementById("receive_by").textContent=child;
     }
     $("#assign_id").val(emp_id);
     $("#assign").val(emp);
@@ -228,7 +172,6 @@ function selectItem(id,setid,edid,val,acn,date,type,serial,brand,model,qty,unit,
     $("#ed_id").val(edid);
     $("#set_id").val(setid);
     $("#type").val(type);
-    //$("#item").val(val+' - '+brand+' - '+serial+' - '+model);
     $("#item").val(val);
     $("#acn").val(acn);
     $("#acq_date").val(date);
@@ -242,12 +185,6 @@ function selectItem(id,setid,edid,val,acn,date,type,serial,brand,model,qty,unit,
     $("#total").val(total);
     $("#suggestion-item").hide();
 }
-
-/*function selectItems(id,val) {
-    $("#items_id").val(id);
-    $("#items").val(val);
-    $("#suggestion-items").hide();
-}*/
 
 function add_item(){
     var loc= document.getElementById("baseurl").value;
@@ -386,7 +323,7 @@ $('.noted').keyup(function(){
                 url: redirect,
                 data:'noted='+$(this).val()+'&id='+id,
                 beforeSend: function(){
-                    $("#noted"+id).css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    $("#noted"+id).css("background","#FFF");
                 },
                 success: function(data){
                     $("#suggestion-noted"+id).show();
@@ -404,10 +341,7 @@ function saveReplace(){
     var assign = document.getElementById('assign').value;
     var loc= document.getElementById("baseurl").value;
     var redirect = loc+'index.php/report/insert_replace';
-    /*if(assign==""){
-        alert('Please fill out Employee.');
-    }
-    else */if(itemid==""){
+    if(itemid==""){
         alert('Please fill out Item.');
     }else {
          $.ajax({

@@ -663,7 +663,6 @@ class Report extends CI_Controller {
 
         if($condition!='null'){
             $sql.=" ed.physical_condition LIKE '%$condition%' AND";
-            //$physical = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $condition);
             $filter .= $condition;
         }
 
@@ -889,7 +888,6 @@ class Report extends CI_Controller {
         if(!empty($this->input->post('set'))){
             $set = $this->input->post('set');
             $sql.=" set_name LIKE '%$set%' AND";
-            //$sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
             $q = "INNER JOIN et_set es ON ed.set_id = es.set_id";
             $filter .= "Set Name - ".$set.", ";
         }
@@ -899,9 +897,6 @@ class Report extends CI_Controller {
 
         if(!empty($this->input->post('item')) && !empty($this->input->post('set'))){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
-
-                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
@@ -929,9 +924,6 @@ class Report extends CI_Controller {
             }
         }else if(!empty($this->input->post('item'))){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
-
-                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
@@ -985,20 +977,16 @@ class Report extends CI_Controller {
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
-        //$data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $data['placement1'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         if($row!=0){
             foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0' GROUP BY eh.et_id") AS $et){
-            //foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0'",'et_id') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
-                //$department =$et->department;
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'ed_id'=>$et->ed_id,
@@ -1046,10 +1034,6 @@ class Report extends CI_Controller {
                 'employee_id'=> $emp_id,
             );
             if($this->super_model->insert_into("lost_items", $data)){
-                /*$data_et = array(
-                    'accountability_id'=>0,
-                );
-                $this->super_model->update_where('et_head', $data_et, 'et_id', $et_id);*/
                 echo "<script>alert('Successfully Tagged as Lost!'); location.replace(document.referrer); </script>";
             }
         }
@@ -1325,7 +1309,6 @@ class Report extends CI_Controller {
         $filters=substr($filter, 0, -2);
         if($filters!=''){
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE $query GROUP BY eh.et_id") AS $et){
-            //foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1372,8 +1355,6 @@ class Report extends CI_Controller {
                 );
             }
         }else {
-            //foreach($this->super_model->select_join_where('et_head','et_details', 'accountability_id!=0 AND save_temp=0 AND lost=0','et_id') AS $et){
-            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0') AS $et){
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND save_temp='0' AND lost='0' GROUP BY eh.et_id") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -1500,7 +1481,6 @@ class Report extends CI_Controller {
 
         if($condition!='null'){
             $sql.=" ed.physical_condition LIKE '%$condition%' AND";
-            //$physical = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $condition);
             $filter .= $condition;
         }
 
@@ -1527,7 +1507,6 @@ class Report extends CI_Controller {
         $filters=substr($filter, 0, -2);
         if($filters!=''){
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE $query GROUP BY eh.et_id") AS $et){
-            //foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1574,8 +1553,6 @@ class Report extends CI_Controller {
                 );
             }
         }else {
-            //foreach($this->super_model->select_join_where('et_head','et_details', 'accountability_id!=0 AND save_temp=1 AND lost=0 AND cancelled=0','et_id') AS $et){
-            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND save_temp='1' AND lost='0' AND cancelled='0' GROUP BY eh.et_id") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -1636,7 +1613,6 @@ class Report extends CI_Controller {
         $edid=$this->uri->segment(4); 
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
-        //$data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
@@ -1717,7 +1693,6 @@ class Report extends CI_Controller {
         $edid=$this->uri->segment(4); 
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
-        //$data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
@@ -1798,12 +1773,8 @@ class Report extends CI_Controller {
             for($x=0;$x<$qty;$x++){
                 $edid = $this->input->post('ed_id['.$x.']');
                 $serial = $this->input->post('sn['.$x.']');
-                /*$itemname=$test;*/
                 $error_ext=0;
                 $dest= realpath(APPPATH . '../uploads/');
-                //$count = count($_FILES['pic']['name']);
-               // $z=1;
-               // for($y=0;$y<$count;$y++){
                     if(!empty($_FILES['pic1']['name'][$x])){
                          $img1= basename($_FILES['pic1']['name'][$x]);
                          $img1=explode('.',$img1);
@@ -2023,13 +1994,9 @@ class Report extends CI_Controller {
     public function report_main_hist(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
-            $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
-        }*/
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
-        /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $row=$this->super_model->count_rows("et_head");
         if($row!=0){
             foreach($this->super_model->select_all_order_by('et_head', 'et_desc', 'ASC') AS $itm){
@@ -2071,7 +2038,6 @@ class Report extends CI_Controller {
             $data['location'] =$this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
             foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
-                //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);
                 $qty=1;
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
                 $data['ids'] =$head->accountability_id;
@@ -2087,12 +2053,7 @@ class Report extends CI_Controller {
 
         $row_return=$this->super_model->count_rows_where("return_details", "ed_id",$id);
         if($row_return!=0){
-            /*foreach($this->super_model->custom_query("SELECT rh.accountability_id, rh.return_date, rh.received_by, rd.et_id FROM return_head rh INNER JOIN return_details rd ON rd.return_id = rh.return_id WHERE rd.ed_id = '$id' GROUP BY rd.return_id") AS $ret){*/
             foreach($this->super_model->select_row_where('return_details', 'ed_id', $id) AS $d){
-           /* foreach($this->super_model->select_all('return_head') AS $ret){*/
-                /*foreach($this->super_model->select_row_where('return_details', 'return_id', $ret->return_id) AS $d){
-                    $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $d->et_id);
-                }*/
                 $row_return=$this->super_model->count_rows_where("return_details", "return_id",$d->return_id);
                 if($row_return!=0){
                     foreach($this->super_model->select_row_where('return_head', 'return_id', $d->return_id) AS $ret){
@@ -2109,7 +2070,6 @@ class Report extends CI_Controller {
                 }else {
                     $data['head']=array();
                 }
-            //}
             }
             
         } else {
@@ -2138,7 +2098,6 @@ class Report extends CI_Controller {
                 }else {
                     $data['borrow']=array();
                 }
-            //}
             }
             
         } else {
@@ -2151,10 +2110,6 @@ class Report extends CI_Controller {
                 $receive_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->received_by);
                 $row_repair=$this->super_model->count_rows_where("repair_details", "ed_id",$d->ed_id);
                 if($row_repair!=0){
-                    /*foreach($this->super_model->select_row_where('et_details', 'ed_id', $d->ed_id) AS $ret){
-                        $borrowed_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->borrowed_by);
-                        $borrowed_date =$ret->borrowed_date;
-                    }*/
                         $data['repair'][] = array(
                             "repair_id"=>$d->repair_id,
                             "receive_by"=>$receive_by,
@@ -2168,7 +2123,6 @@ class Report extends CI_Controller {
                 }else {
                     $data['repair']=array();
                 }
-            //}
             }
             
         } else {
@@ -2215,18 +2169,11 @@ class Report extends CI_Controller {
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
 
         $row_avail = $this->row_avail();
-        /*foreach($this->super_model->select_custom_where("et_head", "accountability_id='0'") AS $check){
-            $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
-        }*/
-        /*$data['available_qty']=$this->super_model->count_join_where('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');*/
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_avail!=0){
-            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
-            //foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0'","et_id") as $et){
             foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0'","et_id") as $et){
-                /*foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$et->et_id'") AS $det){*/
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -2234,11 +2181,6 @@ class Report extends CI_Controller {
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
                 $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et->et_id);
                 $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et->et_id);
-                /*$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                $serial =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
-                $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);*/
                 $ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
                 if($damage==0){
                     $data['avail'][] = array(
@@ -2253,14 +2195,8 @@ class Report extends CI_Controller {
                         'subcat'=>$subcat,
                         'qty'=>$qty,
                         'accountability'=>'',
-                        /*'serial_no'=>$serial,
-                        'asset_control'=>$acn,
-                        'acquisition_date'=>$acquisition_date,
-                        'brand'=>$brand
-                        'model'=>$model,*/
                     );
                 }
-                //}
             }
         }else {
             $data['avail'] = array();
@@ -2274,7 +2210,6 @@ class Report extends CI_Controller {
         $this->load->view('template/header');
         $data['report']=array();
         foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND cancelled = '0' GROUP BY eh.et_id") AS $et){
-        //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0 AND cancelled=0') AS $et){
             $data['user_id'] = $_SESSION['fullname'];
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
             $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -2289,7 +2224,6 @@ class Report extends CI_Controller {
             foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
                 $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
             }
-            //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
             $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
             $data['report'][]=array(
                 'item'=>$et->et_desc,
@@ -2340,23 +2274,11 @@ class Report extends CI_Controller {
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_set_avail!=0){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='0' AND cancelled='0'") AS $et){
-                //foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0' AND lost='0' AND cancelled='0'","et_id") as $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
                 foreach($this->super_model->select_custom_where("et_details", "damage='0' AND change_location = '0' AND set_id!='0' AND et_id ='$et->et_id' ORDER BY set_id ASC") AS $det){
-                    //$damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                    //$item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                    //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et->et_id);
-                    //$empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et->et_id);
-                    /*$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                    $serial =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                    $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
-                    $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                    $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);*/
-                    //$ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
-                    //if($det->damage==0){
                         $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
                         $data['avail'][] = array(
                             'et_id'=>$et->et_id,
@@ -2371,13 +2293,7 @@ class Report extends CI_Controller {
                             'qty'=>$et->qty,
                             'set_name'=>$set_name,
                             'set_id'=>$det->set_id,
-                            /*'serial_no'=>$serial,
-                            'asset_control'=>$acn,
-                            'acquisition_date'=>$acquisition_date,
-                            'brand'=>$brand
-                            'model'=>$model,*/
                         );
-                    //}
                 }
             }
         }else {
@@ -2387,11 +2303,7 @@ class Report extends CI_Controller {
         $this->load->view('report/report_set_avail',$data);
         $this->load->view('template/footer');
     }
-/*
-    public function count_set($set_id){
-       $count_next_set= $this->super_model->count_rows_where("et_details","set_id",$set_id);
-       return $count_next_set;
-    }*/
+
     public function set_print_avail1(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
@@ -2400,30 +2312,15 @@ class Report extends CI_Controller {
         $row=$this->super_model->count_custom_where("et_head","accountability_id='0' AND cancelled='0'");
         if($row!=0){
             foreach($this->super_model->select_row_where('et_head','accountability_id=0 AND cancelled=0') AS $aaf){
-                //$data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
-                /*foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
-                    $data['child'][] = array( 
-                        'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
-                    );
-                }*/
-                //$data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
-                //$data['user_id'] =$_SESSION['fullname'];
-                //$data['username'] =$this->super_model->select_column_where("users", "fullname", "user_id", $aaf->user_id);
-                //$accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
-                //$data['department'] =$aaf->department;
                 $qty = 1;
-                //if(!isset($id)){
                     foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id = '$id' AND damage = '0' ORDER BY set_id DESC") AS $det){
                         $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$det->set_id'");
                          $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != '0'");
-                        
-                        //$data['count_set']=$count_set;
                         $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                         $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
                         $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
                         $set_lot = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $det->set_id);
-                        //echo $currency;
                         $total=$qty*$set_price;
                         $data['details'][] = array(
                             'set_id'=>$det->set_id,
@@ -2444,42 +2341,10 @@ class Report extends CI_Controller {
                          $data['set'][]=$count_set;
                     }
                    
-                /*}else {
-                    foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id = '$id' ORDER BY set_id DESC") AS $det){
-                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND cancelled='0' AND set_id ='$id'");
-                        //$data['count_set']=$count_set;
-                        $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
-                        $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
-                        $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
-                        $set_lot = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $det->set_id);
-                        $total=$qty*$set_price;
-                        $data['details'][] = array(
-                            'set_id'=>$det->set_id,
-                            'acquisition_date'=>$det->acquisition_date,
-                            'asset_control_no'=>$det->asset_control_no,
-                            'et_desc'=>$aaf->et_desc,
-                            'unit'=>$unit,
-                            'qty'=>$qty,
-                            'date_issued'=>$det->date_issued,
-                            'unit_price'=>$set_price,
-                            'set_name'=>$set_name,
-                            'set_lot'=>$set_lot,
-                            'currency'=>$currency,
-                            'total'=>$total,
-                            'count_set'=>$count_set,
-                        );
-
-                         $data['set'][]=$count_set;
-                    }
-
-                }*/
+            
             }
         }else {
             $data['details'] = array();
-            /*$data['department'] =  '';
-            $data['type'] =  '';
-            $data['date_issued'] =  '';
-            $data['user_id'] =  '';*/
         }
         $this->load->view('report/set_print_avail1',$data);
         $this->load->view('template/footer');
@@ -2602,17 +2467,11 @@ class Report extends CI_Controller {
     public function report_main_emp(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
-            $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
-        }*/
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
-        /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         foreach($this->super_model->select_all_order_by("employees", "employee_name", "ASC") AS $emp){
-            /*$count = $this->super_model->count_custom_where('et_head',"accountability_id = '$emp->employee_id'");*/
-            //$count = $this->super_model->select_sum("et_head", "qty", "accountability_id",$emp->employee_id);
             $count = $this->super_model->select_sum_where("et_head", "qty", "accountability_id='$emp->employee_id' AND cancelled='0'");
             if($count!=0){
                 $count = $count;
@@ -3053,7 +2912,6 @@ class Report extends CI_Controller {
                     $date_returned =$this->super_model->select_column_where("return_head", "return_date", "return_id", $ret->return_id);
                     $date_issued =$this->super_model->select_column_where("return_details", "date_issued", "return_id", $ret->return_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $r->et_id);
-                    //$data['atf_no'] =$this->super_model->select_column_where("return_head", "atf_no", "return_id", $ret->return_id);
                     if(!empty($accountabilitys)){
                         $remarks = $ret->return_remarks;
                     }else {
@@ -3259,7 +3117,6 @@ class Report extends CI_Controller {
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND cancelled = '0' AND accountability_id = '0'",'et_id');
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
-        /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         foreach($this->super_model->custom_query($query) AS $emp){
@@ -3475,18 +3332,10 @@ class Report extends CI_Controller {
         $data['placement1'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE cancelled='0' AND save_temp='0' AND $query GROUP BY eh.et_id") AS $et){
-        //foreach ($this->super_model->select_join_where("et_head", "et_details", "cancelled='0' AND save_temp='0' AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                //$acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
-                //$damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                //$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                //$date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
-                //$ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'ed_id'=>$et->ed_id,
@@ -3514,11 +3363,6 @@ class Report extends CI_Controller {
         }
 
         $this->load->view('report/report_main',$data);
-        /*if($url=='report_main'){
-            $this->load->view('report/report_main',$data);
-        }else{
-            $this->load->view('report/report_draft',$data);
-        }*/
         $this->load->view('template/footer');
     }
 
@@ -3718,17 +3562,10 @@ class Report extends CI_Controller {
         $data['placement1'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE cancelled='0' AND save_temp='1' AND $query GROUP BY eh.et_id") AS $et){
-        //foreach ($this->super_model->select_join_where("et_head", "et_details", "cancelled='0' AND save_temp=1 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                //$acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
-                //$damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                //$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                //$date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'cat'=>$category,
@@ -3755,11 +3592,6 @@ class Report extends CI_Controller {
         }
 
         $this->load->view('report/report_draft',$data);
-        /*if($url=='report_main'){
-            $this->load->view('report/report_main',$data);
-        }else{
-            $this->load->view('report/report_draft',$data);
-        }*/
         $this->load->view('template/footer');
     }
 
@@ -3769,18 +3601,13 @@ class Report extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
-        //$row=$this->super_model->count_custom_where("et_head","accountability_id = '$id'");
         $row=$this->super_model->count_join_where('et_head','et_details', "accountability_id='$id' AND cancelled = '0'","et_id");
         if($row!=0){
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='$id' AND cancelled = '0' GROUP BY eh.et_id") AS $sub){
-            //foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id='$id' AND cancelled = '0'","et_id") AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
-                //$edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
-                //$lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $sub->et_id);
-                //$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $sub->set_id);
                 $data['sub'][] = array(
                     'et_id'=>$sub->et_id,
@@ -4155,29 +3982,6 @@ class Report extends CI_Controller {
 
         $atf_format = date("Y");
         $atf_pref=$location."-".$atf_format;
-        /*$ret_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-        
-        $ret_pref=explode("-", $ret_prefix);
-        $ret_one=(!empty($ret_pref[0])) ? $ret_pref[0] : '';
-        $ret_two=(!empty($ret_pref[1])) ? $ret_pref[1] : '';
-        $ret_three=(!empty($ret_pref[2])) ? $ret_pref[2] : '';
-        $ret_four = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
-        if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
-            $atf_pref1=$ret_pref[0];
-            $atf_pref2=$ret_pref[1];
-            $atf_pref3=$ret_pref[2];
-            $atf_pref=$atf_pref1."-".$atf_pref2."-".$atf_pref3;
-            $series = $ret_pref[3];
-        }else if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three)){
-            $atf_pref1=$ret_pref[0];
-            $atf_pref=$atf_pref1;
-            $series = $ret_pref[1];
-        }else {
-            $atf_pref1=$ret_pref[0];
-            $atf_pref2=$ret_pref[1];
-            $atf_pref=$atf_pref1."-".$atf_pref2;
-            $series = $ret_pref[2];
-        }*/
 
         $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$atf_pref'");
         if($rows==0){
@@ -4423,12 +4227,6 @@ class Report extends CI_Controller {
         $date = $this->input->post('date');
         $id = $this->input->post('ids');
         foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-            if($location == 'Bacolod'){
-                $location = 'BCD';
-            }else {
-                $location = 'BS';
-            }*/
             $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
             $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
             if($locations == $l->location_id){
@@ -4440,33 +4238,6 @@ class Report extends CI_Controller {
 
         $date_format = date("Y-m",strtotime($date));
         $subcat_prefix=$location."-".$date_format;
-        /*$prefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
-        //secho $prefix;
-        $assetdetails=explode("-", $prefix);
-        $one=$assetdetails[0];
-        $two=$assetdetails[1];
-        $three=(!empty($prefix[2])) ? $prefix[2] : '';
-        $four = $assetdetails[3];
-        $five = (!empty($prefix[4])) ? $prefix[4] : '';
-        if(!empty($one) && !empty($two) && !empty($three) && !empty($four) && !empty($five)){
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix3=$assetdetails[2];
-            $subcat_prefix4=$assetdetails[3];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
-            $series = $assetdetails[4];
-        }else if(!empty($one) && !empty($two) && !empty($three)){
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-            $series = $assetdetails[2];
-        }else {
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix3=$assetdetails[2];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
-            $series = $assetdetails[3];
-        }*/
 
         $rows=$this->super_model->count_custom_where("returned_series","prefix = '$subcat_prefix'");
         if($rows==0){
@@ -4485,12 +4256,6 @@ class Report extends CI_Controller {
 
         if($id!=0){
             foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-                /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-                if($location == 'Bacolod'){
-                    $location = 'BCD';
-                }else {
-                    $location = 'BS';
-                }*/
                 $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
                 $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
                 if($locations == $l->location_id){
@@ -4503,8 +4268,6 @@ class Report extends CI_Controller {
             $location = 'NA';
         }
         $date_format = date("Y-m",strtotime($date));
-        //$prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
-        //secho $prefix;
         $prefix=$location."-".$date_format;
         $rows=$this->super_model->count_custom_where("damage_info","etdr_no = '$prefix'");
         if($rows==0){
@@ -4759,28 +4522,6 @@ class Report extends CI_Controller {
 
             $date_format = date("Y-m",strtotime($date_rec));
             $dam_prefix = $location1."-".$date_format;
-            /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
-            $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
-            $dam_pref=explode("-", $damage_no);
-            $one1=(!empty($dam_pref[0])) ? $dam_pref[0] : '';
-            $two1=(!empty($dam_pref[1])) ? $dam_pref[1] : '';
-            $three1=(!empty($dam_pref[2])) ? $dam_pref[2] : '';
-            $four1 = (!empty($dam_pref[3])) ? $dam_pref[3] : '';
-            $five1 = (!empty($dam_pref[4])) ? $dam_pref[4] : '';
-            if(!empty($one1) && !empty($two1) && !empty($three1) && !empty($four1) && !empty($five1)){
-                $dam_prefix1=$dam_pref[0];
-                $dam_prefix2=$dam_pref[1];
-                $dam_prefix3=$dam_pref[2];
-                $dam_prefix4=$dam_pref[3];
-                $dam_prefix=$dam_prefix1."-".$dam_prefix2."-".$dam_prefix3."-".$dam_prefix4;
-                //$series = $dam_pref[4];
-            }else {
-                $dam_prefix1=$dam_pref[0];
-                $dam_prefix2=$dam_pref[1];
-                $dam_prefix3=$dam_pref[2];
-                $dam_prefix=$dam_prefix1."-".$dam_prefix2."-".$dam_prefix3;
-                $series = $dam_pref[3];
-            }*/
 
             $rows=$this->super_model->count_custom_where("damage_series","damage_prefix = '$dam_prefix'");
             if($rows==0){
@@ -4847,24 +4588,6 @@ class Report extends CI_Controller {
 
         $atf_format = date("Y");
         $ret_prefix=$location1."-".$atf_format;
-        /*$return_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-        $ret_pref=explode("-", $return_prefix);
-        $one3=$ret_pref[0];
-        $two3=(!empty($ret_pref[1])) ? $ret_pref[1] : '';
-        $three3=$ret_pref[2];
-        $four3 = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
-        if(!empty($one3) && !empty($two3) && !empty($three3) && !empty($four3)){
-            $ret_prefix1=$ret_pref[0];
-            $ret_prefix2=$ret_pref[1];
-            $ret_prefix3=$ret_pref[2];
-            $ret_prefix=$ret_prefix1."-".$ret_prefix2."-".$ret_prefix3;
-            //$series = $ret_pref[3];
-        }else {
-            $ret_prefix1=$ret_pref[0];
-            $ret_prefix2=$ret_pref[1];
-            $ret_prefix=$ret_prefix1."-".$ret_prefix2;
-            //$series = $ret_pref[2];
-        }*/
 
         $row=$this->super_model->count_custom_where("atf_series","atf_prefix = '$ret_prefix'");
         if($row==0){
@@ -4902,27 +4625,6 @@ class Report extends CI_Controller {
 
         $date_format = date("Y-m",strtotime($date_rec));
         $sub_prefix=$location1."-".$date_format;
-        /*$arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
-        $pref=explode("-", $arsprefix);
-        $one2=$pref[0];
-        $two2=$pref[1];
-        $three2=(!empty($pref[2])) ? $pref[2] : '';
-        $four2 = $pref[3];
-        $five2 = (!empty($pref[4])) ? $pref[4] : '';
-        if(!empty($one2) && !empty($two2) && !empty($three2) && !empty($four2) && !empty($five2)){
-            $sub_prefix1=$pref[0];
-            $sub_prefix2=$pref[1];
-            $sub_prefix3=$pref[2];
-            $sub_prefix4=$pref[3];
-            $sub_prefix=$sub_prefix1."-".$sub_prefix2."-".$sub_prefix3."-".$sub_prefix4;
-            //$series = $pref[4];
-        }else{
-            $sub_prefix1=$pref[0];
-            $sub_prefix2=$pref[1];
-            $sub_prefix3=$pref[2];
-            $sub_prefix=$sub_prefix1."-".$sub_prefix2."-".$sub_prefix3;
-            //$series = $pref[3];
-        }*/
 
         $rowss=$this->super_model->count_custom_where("returned_series","prefix = '$sub_prefix'");
         if($rowss==0){
@@ -5004,7 +4706,6 @@ class Report extends CI_Controller {
 
     public function damage_report(){  
         $this->load->view('template/header');
-        // $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $damage_id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('damage_info', 'damage_id', $damage_id) AS $dam){
@@ -5216,7 +4917,6 @@ class Report extends CI_Controller {
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
-                    //$desc = str_replace(array(':', '-', '/', '*', '"',"'"), '', $itm->et_desc);
                     $desc = str_replace(array(':', '*', '"', "'"), '', $itm->et_desc);
             ?>
                    <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->set_id; ?>','<?php echo $det->ed_id; ?>','<?php echo $desc; ?>','<?php echo $det->asset_control_no;?>','<?php echo $det->acquisition_date; ?>','<?php echo $det->type; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $qty; ?>','<?php echo $unit; ?>','<?php echo $det->unit_price; ?>','<?php echo $total; ?>','<?php echo $currency; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->type." - ".$det->serial_no." - ".$det->model; ?></li>
@@ -5988,12 +5688,6 @@ class Report extends CI_Controller {
         $ars_no = $this->input->post('ars_no');
         $received_by = $this->input->post('rec_id');
         foreach($this->super_model->select_row_where("employees","employee_id", $accountability_id) AS $l){
-            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-            if($location == 'Bacolod'){
-                $location = 'BCD';
-            }else {
-                $location = 'BS';
-            }*/
             $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
             $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
             if($locations == $l->location_id){
@@ -6004,23 +5698,6 @@ class Report extends CI_Controller {
         }
         $atf_format = date("Y");
         $atf_pref=$location."-".$atf_format;
-        /*$atfprefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-
-        $atfpref=explode("-", $atfprefix);
-        $atf_one=$atfpref[0];
-        $atf_two=$atfpref[1];
-        $atf_three=$atfpref[2];
-        $atf_four = (!empty($atfpref[3])) ? $atfpref[3] : '';
-        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
-            $atf_pref1=$atfpref[0];
-            $atf_pref2=$atfpref[1];
-            $atf_pref3=$atfpref[2];
-            $atf_pref=$atf_pref1."-".$atf_pref2."-".$atf_pref3;
-        }else{
-            $atf_pref1=$atfpref[0];
-            $atf_pref2=$atfpref[1];
-            $atf_pref=$atf_pref1."-".$atf_pref2;
-        }*/
         $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$atf_pref'");
         if($rows==0){
             $atf_no= $location."-".$atf_format."-1001";
@@ -6349,44 +6026,20 @@ class Report extends CI_Controller {
         if($filter!=''){
             $previousId = '';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.cancelled='0' AND eh.save_temp='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
-            //foreach ($this->super_model->select_join_where("et_head", "et_details", "cancelled='0' AND save_temp=0 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
-                //$department =$et->department;
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                //$acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
-                //$date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
-                //$unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
-                //$currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $et->currency_id);
-                //$condition =$this->super_model->select_column_where("et_details", "physical_condition", "et_id", $et->et_id);
-                //$company_id =$this->super_model->select_column_where("et_details", "company_id", "et_id", $et->et_id);
                 $company = $this->super_model->select_column_where("company", "company_name", "company_id", $et->company_id);
-                //$rack_id =$this->super_model->select_column_where("et_details", "rack_id", "et_id", $et->et_id);
                 $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $et->rack_id);
-                //$placement_id =$this->super_model->select_column_where("et_details", "placement_id", "et_id", $et->et_id);
                 $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
-                //$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                //$remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $serial_no='';
                 foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
-                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                //$model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
-                //$type =$this->super_model->select_column_where("et_details", "type", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
-                //$employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
-                //$damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                //$lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
-                //$change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
-                //$location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
-                //$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
@@ -6433,7 +6086,6 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $et->physical_condition);
                 if($et->set_id!=0 && ($previousId !== $et->set_id)){
                     $count_set=$count_set-1;
-                    //echo $count_set."-".$et->set_id."<br>";
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $unit_price.' '.$currency);
@@ -6459,48 +6111,22 @@ class Report extends CI_Controller {
                 $previousId = $et->set_id;
             }
         }else {
-            //foreach($this->super_model->select_custom_where('et_head', "cancelled ='0' AND accountability_id!='0' AND save_temp='0' ORDER BY et_desc ASC") AS $et){
             $previousId = '';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='0' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
-            //foreach ($this->super_model->select_join_where_order("et_head", "et_details", "accountability_id!='0' AND cancelled='0' AND save_temp='0'", "et_id", "set_id","DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
-                //$department =$et->department;
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                //$acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
-                //$date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
-                //$unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
-                //$currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $et->currency_id);
-                //$condition =$this->super_model->select_column_where("et_details", "physical_condition", "et_id", $et->et_id);
-                //$company_id =$this->super_model->select_column_where("et_details", "company_id", "et_id", $et->et_id);
                 $company = $this->super_model->select_column_where("company", "company_name", "company_id", $et->company_id);
-                //$rack_id =$this->super_model->select_column_where("et_details", "rack_id", "et_id", $et->et_id);
                 $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $et->rack_id);
-                //$placement_id =$this->super_model->select_column_where("et_details", "placement_id", "et_id", $et->et_id);
                 $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
-                //$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                //$remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
-                //$total = $et->qty*$et->unit_price;
                 $serial_no='';
                 foreach($this->super_model->select_custom_where("et_details", "et_id='$et->et_id' ORDER BY set_id ASC") AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
-                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                //$model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
-                //$type =$this->super_model->select_column_where("et_details", "type", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
-                //$employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
-                //$damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                //$lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
-                //$change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
-                //$location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
-                //$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
@@ -6525,13 +6151,6 @@ class Report extends CI_Controller {
                 }else if($et->lost==1){
                     $status = 'Lost Item / '.$accountability;
                 }
-                /*$count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id != '0' AND set_id='$et_set_id'");
-                if($set_id==$et_set_id){
-                    $objPHPExcel->getActiveSheet()->mergeCells('S'.$num.":S".$t);
-                    $objPHPExcel->getActiveSheet()->mergeCells('T'.$num.":T".$t);
-                    $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.":U".$t);
-                    $t++;   
-                }*/
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $category);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $subcat);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $et->asset_control_no);
@@ -6743,46 +6362,19 @@ class Report extends CI_Controller {
         if($filter!=''){
             $previousId='';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE save_temp='1' AND cancelled='0' AND $query GROUP BY eh.et_id") AS $et){
-            //foreach ($this->super_model->select_join_where("et_head", "et_details", "save_temp=1 AND cancelled=0 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
-                //$department =$et->department;
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                //$acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
-                //$date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
-                //$unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
-                //$currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $et->currency_id); 
-                //$condition =$this->super_model->select_column_where("et_details", "physical_condition", "et_id", $et->et_id);
-                //$company_id =$this->super_model->select_column_where("et_details", "company_id", "et_id", $et->et_id);
                 $company = $this->super_model->select_column_where("company", "company_name", "company_id", $et->company_id);
-                //$rack_id =$this->super_model->select_column_where("et_details", "rack_id", "et_id", $et->et_id);
                 $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $et->rack_id);
-                //$placement_id =$this->super_model->select_column_where("et_details", "placement_id", "et_id", $et->et_id);
                 $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
-                //$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                //$remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
-                //$total = $et->qty*$unit_price;
                 $serial_no='';
                 foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
-                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                //$type =$this->super_model->select_column_where("et_details", "type", "et_id", $et->et_id);
-                //$model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
-                //$unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
-                //$employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
-                //$damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                //$lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
-                //$change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
-                //$location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
-                //$location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
-                //$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
@@ -6856,45 +6448,20 @@ class Report extends CI_Controller {
         }else {
             $previousId='';
             foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id!=0 AND save_temp=1 AND cancelled=0 GROUP BY eh.et_id") AS $et){
-            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
-                //$department =$et->department;
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                //$asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                //$acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
-                //$date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
-                //$unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
-                //$currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $et->currency_id);
-                //$condition =$this->super_model->select_column_where("et_details", "physical_condition", "et_id", $et->et_id);
-                //$company_id =$this->super_model->select_column_where("et_details", "company_id", "et_id", $et->et_id);
                 $company = $this->super_model->select_column_where("company", "company_name", "company_id", $et->company_id);
-                //$rack_id =$this->super_model->select_column_where("et_details", "rack_id", "et_id", $et->et_id);
                 $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $et->rack_id);
-                //$placement_id =$this->super_model->select_column_where("et_details", "placement_id", "et_id", $et->et_id);
                 $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
-                //$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                //$remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
-                //$total = $et->qty*$unit_price;
                 $serial_no='';
                 foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
-                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                //$type =$this->super_model->select_column_where("et_details", "type", "et_id", $et->et_id);
-                //$model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
-                //$employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
-                //$borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
-                //$damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                //$lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
-                //$change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
-                //$location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
-                //$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
@@ -7006,7 +6573,6 @@ class Report extends CI_Controller {
         if($row_avail!=0){
             foreach($this->super_model->select_custom_where("et_details", "lost='1'") AS $det){
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
-                //$empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
                 $lost_date =$this->super_model->select_column_where("lost_items", "lost_date", "ed_id", $det->ed_id);
                 $accountable =$this->super_model->select_column_where("lost_items", "employee_id", "ed_id", $det->ed_id);
                 $accountability = $this->super_model->select_column_where("employees","employee_name","employee_id",$accountable);
@@ -7141,7 +6707,6 @@ class Report extends CI_Controller {
             $data['location'] =$this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
             foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
-                //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);
                 $picture1 =$this->super_model->select_column_where("et_details", "picture1", "et_id", $head->et_id);
                 $qty=1;
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
@@ -7220,7 +6785,6 @@ class Report extends CI_Controller {
                 }else {
                     $data['head']=array();
                 }
-            //}
             }
             
         } else {
@@ -7270,7 +6834,6 @@ class Report extends CI_Controller {
                 }else {
                     $data['borrow']=array();
                 }
-            //}
             }
             
         } else {
@@ -7283,10 +6846,6 @@ class Report extends CI_Controller {
                 $receive_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->received_by);
                 $row_repair=$this->super_model->count_rows_where("repair_details", "ed_id",$d->ed_id);
                 if($row_repair!=0){
-                    /*foreach($this->super_model->select_row_where('et_details', 'ed_id', $d->ed_id) AS $ret){
-                        $borrowed_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->borrowed_by);
-                        $borrowed_date =$ret->borrowed_date;
-                    }*/
                       $data['history'][] = array(
                         "id"=>$d->repair_id,
                         "employee"=>"",
@@ -7320,7 +6879,6 @@ class Report extends CI_Controller {
                 }else {
                     $data['repair']=array();
                 }
-            //}
             }
             
         } else {
@@ -7445,7 +7003,6 @@ class Report extends CI_Controller {
         if($set!='null'){
             $set = $set;
             $sql.=" set_name LIKE '%$set%' AND";
-            //$sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
             $q = "INNER JOIN et_set es ON ed.set_id = es.set_id";
             $filter .= "Set Name - ".$set.", ";
         }
@@ -7486,9 +7043,6 @@ class Report extends CI_Controller {
             }
         }else if($item!='null' && $set!='null'){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
-
-                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
@@ -7516,9 +7070,6 @@ class Report extends CI_Controller {
             }
         }else if($item!='null'){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
-
-                //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
-                //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
@@ -7558,37 +7109,6 @@ class Report extends CI_Controller {
                 );
             }
         }
-        /*$row=$this->super_model->count_rows("et_head");
-        if($row!=0){
-            foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
-                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
-                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
-                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
-                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
-                $data['count_set']=$count_set;
-                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
-                    $avcount = $av->av;
-                }
-
-                foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS incount FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND ed.et_id = '$ss->et_id'") AS $inc){
-                    $incount = $inc->incount;
-                }
-                
-                $data['itema'][]= array(
-                    'item_id'=>$ss->et_id,
-                    'set_id'=>$set_id,
-                    'item'=>$ss->et_desc,
-                    'set'=>$sets,
-                    'count'=>$counts,
-                    'count_set'=>$count_set,
-                    'avcount'=>$avcount,
-                    'incount'=>$incount,
-                );
-            }
-        }else {
-            $data['itema'] = array();
-        }*/
         $this->load->view('report/inv_rep_itm_print',$data);
         $this->load->view('template/footer');
     }

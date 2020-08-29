@@ -149,6 +149,7 @@
                 <input type='hidden' name='serial' id='serial'>
                 <input type='hidden' name='model' id='model'>
                 <input type='hidden' name='brand' id='brand'>
+                <input type='hidden' name='currency' id='currency'>
                 <input type='hidden' name='qty' id='qty'>
                 <input type='hidden' name='unit' id='unit'>
                 <input type='hidden' name='price' id='price'>

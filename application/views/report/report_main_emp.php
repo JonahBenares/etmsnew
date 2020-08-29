@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="modal fade" id="locModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
@@ -29,7 +30,6 @@
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success-alt btn-sm btn-block bor-radius" value='Filter'>
                 </div>
-                 <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
             </form>
         </div>
     </div>
@@ -82,10 +82,7 @@
                             ?>
                                 <tr>
                                     <td>
-                                        <?php echo $emp['employee'];?>
-                                        <!-- <a href="<?php echo base_url(); ?>report/report_sub/<?php echo $emp['employee_id']?>" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
-                                            <?php echo $emp['employee'];?>
-                                        </a> -->                                            
+                                        <?php echo $emp['employee'];?>                                        
                                     </td>
                                     <td><?php echo $emp['count'];?></td>
                                     <td>

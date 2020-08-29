@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
@@ -41,7 +42,7 @@
                             <table width="100%">
                                 <tr>
                                     <td><p>Acquired Date (from):</p>
-                                        <input type="date" id="acdfrom" name="from" class="form-control bor-radius10" >
+                                        <input type="date" name="from" class="form-control bor-radius10" >
                                     </td>
                                 </tr>
                                 <tr>
@@ -97,7 +98,7 @@
                             <table width="100%">
                                 <tr>
                                     <td><p>Acquired Date (to):</p>
-                                        <input type="date" id="acdfrom" name="to" class="form-control bor-radius10" >
+                                        <input type="date" name="to" class="form-control bor-radius10" >
                                     </td>
                                 </tr>
                                 <tr>
@@ -151,7 +152,6 @@
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success btn-sm btn-block bor-radius" value='Filter'>
                 </div>
-                 <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
             </form>
         </div>
     </div>
@@ -192,7 +192,7 @@
                                 <?php } ?>
                             </div>                           
                         </h4>
-                        <?php if(!empty($filt)){  //if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!=''){ ?>     
+                        <?php if(!empty($filt)){  ?>     
                         <div class='sufee-alert alert with-close alert-success fade show m-l-30 m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filt ?>, <a href='<?php echo base_url(); ?>report/report_draft' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a></div>                    
                         <?php } ?>
                         <table class="table table-borderless table-striped table-earning table-hover" id="myTable_peret">

@@ -81,16 +81,6 @@
                     </tr>
 
                     <tbody id="item_body"></tbody>
-                        <!-- <tr>
-                            <td class="main-tab" align="center"></td>
-                            <td class="main-tab" align="center"></td>
-                            <td class="main-tab" align="center"></td>
-                            <td class="main-tab" align="center"></td>
-                            <td class="main-tab hid" align="center"></td>
-                        </tr>
-                        <tr>
-                            <td class="main-tab" align="center" colspan='5'><center>No Data Available.</center></td>
-                        </tr> -->
                     <tr>
                         <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
                     </tr>   

@@ -47,7 +47,6 @@ class Repair extends CI_Controller {
                         $damage_id =$dam->damage_id;
                         $count_ed_id = $this->super_model->count_rows_where("damage_info","ed_id",$dam->ed_id);
                     }
-                    //$damage_id =$this->super_model->select_column_where("damage_info", "damage_id", "ed_id", $det->ed_id);
                     $data['damage'][] = array(
                         'damage_id'=>$damage_id,
                         'ed_id'=>$det->ed_id,

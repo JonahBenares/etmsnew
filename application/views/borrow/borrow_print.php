@@ -43,14 +43,7 @@
                         <td></td>
                         <td></td>
                         <td><small id="series">yy-mm-series</small></td>
-                    </tr><!-- 
-                    <tr>
-                        <td colspan="6">
-                            <center>
-                                <input type="submit" name="search_inventory" value='Generate' class="btn btn-warning-alt text-white m-t-20" id="generate" >
-                            </center>
-                        </td>  
-                    </tr> -->    
+                    </tr> 
                 </table>
                  <input type="hidden" name="return_id" id="return_id">
                  <input type="hidden" name="bh_id" id="bh_id">

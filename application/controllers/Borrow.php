@@ -34,11 +34,6 @@ class Borrow extends CI_Controller {
             foreach($this->super_model->select_all_order_by('borrow_head', 'borrowed_date', 'DESC') AS $all){
                 $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $all->borrowed_by);
                 foreach($this->super_model->select_row_where("borrow_details","bh_id",$all->bh_id) AS $det){
-                    /*$data['bh_id'] = $all->bh_id;*/
-                    /*$item_name="";
-                    foreach($this->super_model->select_row_where("et_head","et_id",$det->et_id) AS $itm){
-                        $item_name .= $itm->et_desc.", ";
-                    }*/
                     $item_name = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                     $data['all'][] = array(
                         'bh_id'=>$all->bh_id,
@@ -96,27 +91,6 @@ class Borrow extends CI_Controller {
         $date = $this->input->post('date');
         $date_format = date("Y-m",strtotime($date));
         $borrow_pref=$location."-".$date_format;
-        /*$bor_prefix= $this->super_model->select_column_custom_where("borrow_head", "borrow_series", "borrowed_date LIKE '$date_format%'");
-        
-        $borpref=explode("-", $bor_prefix);
-        $bor_one=$borpref[0];
-        $bor_two=$borpref[1];
-        $bor_three=(!empty($borpref[2])) ? $borpref[2] : '';
-        $bor_four = $borpref[3];
-        $bor_five = (!empty($borpref[4])) ? $borpref[4] : '';
-        if(!empty($bor_one) && !empty($bor_two) && !empty($bor_three) && !empty($bor_four) && !empty($bor_five)){
-            $borrow_pref1=$borpref[0];
-            $borrow_pref2=$borpref[1];
-            $borrow_pref3=$borpref[2];
-            $borrow_pref4=$borpref[3];
-            $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref3."-".$borrow_pref4;
-        }else{
-            $borrow_pref1=$borpref[0];
-            $borrow_pref2=$borpref[1];
-            $borrow_pref3=$borpref[2];
-            $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref3;
-        }*/
-
         $rows=$this->super_model->count_custom_where("borrow_series","borrow_prefix = '$borrow_pref'");
         if($rows==0){
             $borrow_no= $location."-".$date_format."-1001";
@@ -313,7 +287,6 @@ class Borrow extends CI_Controller {
         $this->load->view('template/navbar',$this->dropdown);
         $user = $_SESSION['user_id'];
         $data['user_id'] = $this->super_model->select_column_where("users", "username", "user_id", $user); 
-        /*$data['bh_id']=$this->uri->segment(3);*/
         $borrowed_by=$this->uri->segment(3);
         $bh_id=$this->uri->segment(4);
         $data['borrowed_by']=$this->uri->segment(3);
@@ -325,7 +298,6 @@ class Borrow extends CI_Controller {
 
         $query=substr($sql,0,-3);
         $count=$this->super_model->custom_query("SELECT * FROM borrow_head WHERE ".$query);
-        /*$count=$this->super_model->custom_query("SELECT * FROM borrow_head WHERE ".$query);*/
         if($count!=0){
             foreach($this->super_model->custom_query("SELECT * FROM borrow_head WHERE ".$query) AS $head){
                 $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->borrowed_by);  
@@ -599,11 +571,9 @@ class Borrow extends CI_Controller {
                     $brand =$this->super_model->select_column_where("et_details", "brand", "ed_id", $dets->ed_id);
                     $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $dets->ed_id);
                     $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "ed_id", $dets->ed_id);
-                    /*$damage =$this->super_model->select_column_where("et_details", "damage", "ed_id", $dets->ed_id);*/
                     $data['details'][]=array(
                         'ed_id'=>$dets->ed_id,
                         'item'=>$item,
-                        //'damage'=>$damage,
                         'category'=>$category,
                         'brand'=>$brand,
                         'model'=>$model,
@@ -659,26 +629,6 @@ class Borrow extends CI_Controller {
             }
             $date_format = date("Y-m",strtotime($recdate));
             $dam_pref=$location1."-".$date_format;
-            /*$damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
-            
-            $damagepref=explode("-", $damage_no);
-            $dam_one=$damagepref[0];
-            $dam_two=$damagepref[1];
-            $dam_three=$damagepref[2];
-            $dam_four = $damagepref[3];
-            $dam_five = (!empty($damagepref[4])) ? $damagepref[4] : '';
-            if(!empty($dam_one) && !empty($dam_two) && !empty($dam_three) && !empty($dam_four) && !empty($dam_five)){
-                $dam_pref1=$damagepref[0];
-                $dam_pref2=$damagepref[1];
-                $dam_pref3=$damagepref[2];
-                $dam_pref4=$damagepref[3];
-                $dam_pref=$dam_pref1."-".$dam_pref2."-".$dam_pref3."-".$dam_pref4;
-            }else{
-                $dam_pref1=$damagepref[0];
-                $dam_pref2=$damagepref[1];
-                $dam_pref3=$damagepref[2];
-                $dam_pref=$dam_pref1."-".$dam_pref2."-".$dam_pref3;
-            }*/
 
             $rows=$this->super_model->count_custom_where("damage_series","damage_prefix = '$dam_pref'");
             if($rows==0){
@@ -744,22 +694,6 @@ class Borrow extends CI_Controller {
 
         $atf_format = date("Y");
         $ret_pref=$location1."-".$atf_format;
-        /*$retpref= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-        $retp=explode("-", $retpref);
-        $ret_one=$retp[0];
-        $ret_two=$retp[1];
-        $ret_three=$retp[2];
-        $ret_four = (!empty($retp[3])) ? $retp[3] : '';
-        if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
-            $ret_pref1=$retp[0];
-            $ret_pref2=$retp[1];
-            $ret_pref3=$retp[2];
-            $ret_pref=$ret_pref1."-".$ret_pref2."-".$ret_pref3;
-        }else{
-            $ret_pref1=$retp[0];
-            $ret_pref2=$retp[1];
-            $ret_pref=$ret_pref1."-".$ret_pref2;
-        }*/
 
         $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$ret_pref'");
         if($rows==0){
@@ -797,26 +731,6 @@ class Borrow extends CI_Controller {
 
         $date_format = date("Y-m",strtotime($recdate));
         $ars_pref=$location1."-".$date_format;
-        /*$arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
-
-        $arspref=explode("-", $arsprefix);
-        $ars_one=$arspref[0];
-        $ars_two=$arspref[1];
-        $ars_three=$arspref[2];
-        $ars_four =$arspref[3];
-        $ars_five = (!empty($arspref[4])) ? $arspref[4] : '';
-        if(!empty($ars_one) || !empty($ars_two) || !empty($ars_three) || !empty($ars_four) || !empty($ars_five)){
-            $ars_pref1=$arspref[0];
-            $ars_pref2=$arspref[1];
-            $ars_pref3=$arspref[2];
-            $ars_pref4=$arspref[3];
-            $ars_pref=$ars_pref1."-".$ars_pref2."-".$ars_pref3."-".$ars_pref4;
-        }else{
-            $ars_pref1=$arspref[0];
-            $ars_pref2=$arspref[1];
-            $ars_pref3=$arspref[2];
-            $ars_pref=$ars_pref1."-".$ars_pref2."-".$ars_pref3;
-        }*/
 
         $rows=$this->super_model->count_custom_where("returned_series","prefix = '$ars_pref'");
         if($rows==0){

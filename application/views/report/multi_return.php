@@ -103,7 +103,7 @@
                                 <center><button class="btn btn-lg btn-success-alt p-l-50 p-r-50" type = "submit">Return</button></center>
                                 <input type="hidden" id="id" name="id" class="form-control" value = "<?php echo $id;?>">
                                 <input type = "hidden" id = "ids" name = "id" value="<?php echo $id;?>">
-                                <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $x;?>">
+                                <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo (!empty($x)) ? $x : '0';?>">
                                 <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                 <input type="hidden" id="user_id" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                             <br>

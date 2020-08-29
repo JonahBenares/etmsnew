@@ -118,10 +118,6 @@
                                     <div class="thumbnail">
                                         <img id="" class="pictures" src="<?php echo (empty($det['picture1']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture1']); ?>" alt="your image" />
                                     </div>
-                                    <!-- <div id="img-check-none1-<?php echo $x?>" class="alert alert-danger">
-                                      <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
-                                    </div> -->
-                                    <!-- <span id="img1-check" class='img-check-note'></span> -->
                                 </div> 
                                 <div class="col-lg-4 float-col">
                                     <label for="pic1">Picture 2:</label>
@@ -129,9 +125,6 @@
                                     <div class="thumbnail">
                                         <img id="" class="pictures" src="<?php echo (empty($det['picture2']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture2']); ?>" alt="your image" />
                                     </div>
-                                    <!-- <div id="img-check-none2-<?php echo $x;?>" class="alert alert-danger">
-                                      <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
-                                    </div> -->
                                 </div>
                                 <div class="col-lg-4 float-col">
                                     <label for="pic1">Picture 3:</label>
@@ -139,9 +132,6 @@
                                     <div class="thumbnail">
                                         <img id="" class="pictures" src="<?php echo (empty($det['picture3']) ? base_url().'assets/default/default-img.jpg' : base_url().'uploads/'.$det['picture3']); ?>" alt="your image" />
                                     </div>
-                                    <!-- <div id="img-check-none3-<?php echo $x;?>" class="alert alert-danger">
-                                      <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>

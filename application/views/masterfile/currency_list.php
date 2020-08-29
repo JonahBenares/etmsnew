@@ -30,7 +30,6 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <!-- <h4 class="text-themecolor">Employee List</h4> -->
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
@@ -68,8 +67,6 @@
                                                 <a href="<?php echo base_url(); ?>masterfile/currency_update/<?php echo $un->currency_id?>" class="btn btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
-                                               <!-- <a href="<?php echo base_url(); ?>masterfile/delete_currency/<?php echo $un->currency_id;?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
-                                                    <i class="fa fa-trash"></i>-->
                                                 </a>
                                             </div>
                                         </td>

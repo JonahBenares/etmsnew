@@ -14,13 +14,13 @@
                 <form method = "POST" action="<?php echo base_url();?>masterfile/insert_employee">
                     <div class="form-group">
                         <label for="" class="control-label mb-1">Employee:</label>
-                        <input id="" name="employee" type="text" class="form-control bor-radius5" placeholder="">
+                        <input name="employee" type="text" class="form-control bor-radius5" placeholder="">
 
                         <label for="" class="control-label mb-1">Position:</label>
-                        <input id="" name="position" type="text" class="form-control bor-radius5" placeholder="">
+                        <input name="position" type="text" class="form-control bor-radius5" placeholder="">
 
                         <label for="" class="control-label mb-1">Department:</label>
-                        <input id="" name="department" type="text" class="form-control bor-radius5" placeholder="">
+                        <input name="department" type="text" class="form-control bor-radius5" placeholder="">
 
                         <label for="" class="control-label mb-1">Location:</label>
                         <select name="location" class="form-control bor-radius5" id="location" onChange="chooseLoc();">
@@ -43,7 +43,6 @@
                         <br>
                         <br>
                         <button type="submit" class="btn btn-primary-alt btn-block">Add</button>
-                        <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                     </div>
                 </form>
             </div>                                        
@@ -108,9 +107,6 @@
                                                     <a href="<?php echo base_url(); ?>masterfile/employee_update/<?php echo $emp['id']?>" class="btn btn-info-alt btn-xs" data-toggle="tooltip" data-placement="top" title="Update">
                                                         <i class="fa fa-pencil-square-o"></i>
                                                     </a>
-                                                   <!--<a href="<?php echo base_url(); ?>masterfile/delete_employee/<?php echo $emp['id'];?>" onclick="confirmationDelete(this);return false;" class="btn btn-danger-alt btn-xs" data-toggle="tooltip" data-placement="top" title="Delete" title="Delete" alt='Delete'>
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>-->
                                                 </div>
                                             </center>
                                         </td>

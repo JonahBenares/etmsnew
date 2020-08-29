@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 
 <div class="page-wrapper">
@@ -29,7 +30,6 @@
                                         <input id="item" name="item" type="text" class="form-control form-alt" placeholder="Enter Item Name" autocomplete="off">
                                         <input id="set" name="set" type="text" class="form-control form-alt" placeholder="Enter Set Name" autocomplete="off">
                                         <input type="submit" name="generate" id="generate" class="btn btn-success-alt btn-sm" value ="Generate" style="border-radius: 0px 20px 20px 0px">
-                                        <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                     </div>
                                 </form>
                             </div>

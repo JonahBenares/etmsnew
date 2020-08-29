@@ -27,19 +27,12 @@
                                     <label for="" class="control-label mb-1">ARS No.:</label>
                                 </div>                                
                                 <div class="col-lg-3 col-md-3">
-                                    <!-- <table width="100%">
-                                        <tr>
-                                            <td width="10%"><input id="changeloc" name="changeloc" type="checkbox" class="form-control" style="width: 10%" value='1'></td>
-                                            <td width="90%"> -->
                                                 <select class = "form-control form-alt" name = "location_id">
                                                     <option value="">--Select Location--</option>
                                                     <?php foreach($location AS $loc){ ?>
                                                     <option value="<?php echo $loc->location_id; ?>"><?php echo $loc->location_name; ?></option>
                                                     <?php } ?>
                                                 </select>
-                                            <!-- </td>
-                                        </tr>
-                                    </table> -->
                                     <label for="" class="control-label mb-1">Change Location:</label>
                                 </div>
                             </div>
