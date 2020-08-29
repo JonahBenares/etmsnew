@@ -5108,6 +5108,81 @@ class Report extends CI_Controller {
             $data['return'][] = array(
                 'return_id'=>$ret->return_id,
             ); 
+        }
+        $this->load->view('report/ars_report',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function ars_report_return(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
+            $data['test'] = $this->super_model->select_column_where("et_head", "accountability_id", "accountability_id", $ret->accountability_id);
+            $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $ret->accountability_id); 
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$ret->accountability_id) AS $em){
+                $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
+            }
+            $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->accountability_id);
+            $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $ret->accountability_id);
+            $data['ars_no'] =$this->super_model->select_column_where("return_head", "ars_no", "return_id", $ret->return_id);
+            $data['return_date'] =$this->super_model->select_column_where("return_head", "return_date", "return_id", $ret->return_id);
+            $data['remarks']=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $ret->return_id);
+            foreach($this->super_model->select_row_where('return_details','return_id',$ret->return_id) AS $det){
+                $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
+                $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
+                $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
+                $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
+                $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
+                $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $det->ed_id);
+                $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $det->ed_id);
+                $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $qty = '1';
+                $total = $qty * $price;
+                $data['lost'] = '0';
+                foreach($this->super_model->select_row_where('et_head','et_id',$det->et_id) AS $u){
+                    $unit = $this->super_model->select_column_where('unit', 'unit_name', 'unit_id', $u->unit_id);
+                    $data['user_id'] =$_SESSION['fullname'];
+                    $data['department'] =$u->department;
+
+                    foreach($this->super_model->select_row_where('et_details','et_id',$u->et_id) AS $d){
+                        $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$d->set_id);
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$ret->accountability_id' AND set_id ='$et_set_id'");
+                        $data['count_set']=$count_set;
+                        $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
+                        $set_total=$qty*$set_price;
+                    }
+                }
+
+                $data['details'][] = array(
+                    'return_id'=>$det->return_id,
+                    'set_id'=>$set_id,
+                    'count_set'=>$count_set,
+                    'set_price'=>$set_price,
+                    'qty'=>$qty,
+                    'item'=>$item,
+                    'brand'=>$brand,
+                    'type'=>$type,
+                    'serial'=>$serial,
+                    'model'=>$model,
+                    'price'=>$price,
+                    'total'=>$total,
+                    'set_total'=>$set_total,
+                    'lost'=>0,
+                    'currency'=>$currency,
+                    'unit'=>$unit
+                );
+            }
+            $data['return'][] = array(
+                'return_id'=>$ret->return_id,
+            ); 
 
             foreach($this->super_model->select_custom_where("lost_items", "employee_id = '$ret->accountability_id' AND replacement = '0'") AS $l){
                 $etid = $this->super_model->select_column_where("et_details","et_id","ed_id",$l->ed_id);
@@ -5146,7 +5221,7 @@ class Report extends CI_Controller {
                 );
             }
         }
-        $this->load->view('report/ars_report',$data);
+        $this->load->view('report/ars_report_return',$data);
         $this->load->view('template/footer');
     }
 
@@ -5841,7 +5916,7 @@ class Report extends CI_Controller {
                             'qty'=>$new_qty,
                         );
                         $this->super_model->update_where('et_head', $qty_data, 'et_id', $ret->et_id);
-                        echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."report/ars_report/$return_id';</script>";
+                        echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."report/ars_report_return/$return_id';</script>";
                     }
                 } else if($val == $ret->qty){
                     $data = array(
@@ -5869,7 +5944,7 @@ class Report extends CI_Controller {
                             }
                         }
                     }
-                    echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."report/ars_report/$return_id';</script>";
+                    echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."report/ars_report_return/$return_id';</script>";
                 }
             }
         $y++;
