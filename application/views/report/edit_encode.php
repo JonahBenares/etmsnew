@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
-                                        <input name="date_issued[]" readonly="" class="form-control form-alt  cc-cvc" type="date" value="<?php echo $d['date_issued'];?>">
+                                        <input name="date_issued[]" class="form-control form-alt  cc-cvc" type="date" value="<?php echo $d['date_issued'];?>">
                                         <label for="" class="control-label mb-1">Date Issued:</label>
                                     </div>
                                 </div>
