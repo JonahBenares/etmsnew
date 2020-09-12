@@ -3959,7 +3959,11 @@ class Report extends CI_Controller {
         $date = $this->input->post('date');
         $remarks = $this->input->post('remarks');
         $ars_no = $this->input->post('ars_no');
-        $changeloc = $this->input->post('changeloc');
+        if(!empty($this->input->post('location_id'))){
+            $changeloc = 1;
+        }else{
+            $changeloc = 0;
+        }
         $location_id = $this->input->post('location_id');
         $received_by = $this->input->post('rec_id');
         $head_rows = $this->super_model->count_rows("return_head");
