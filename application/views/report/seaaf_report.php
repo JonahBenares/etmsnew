@@ -78,10 +78,10 @@
 
                            <?php 
                               if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
-                                <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']; } ?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']."<small> ".$det['set_currency']."</small>"; } ?></td>
 
 
-                            <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo number_format($det['total'],2); }else { echo number_format($det['set_total'],2); }?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo number_format($det['total'],2)."<small> ".$det['currency']."</small>"; }else { echo number_format($det['set_total'],2)."<small> ".$det['set_currency']."</small>"; }?></td>
                        
                             <?php } else if($det['set_id']==0){ ?>
                                  <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit_price']."<small> ".$det['currency']."</small>"; ?></td>

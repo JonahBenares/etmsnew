@@ -2399,12 +2399,25 @@ class Report extends CI_Controller {
         foreach($this->super_model->select_custom_where("et_head","accountability_id='$empid' AND cancelled='0'") AS $a){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
             $data['department'] = $a->department;
+            $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $a->accountability_id); 
+            $data['fullname'] =$_SESSION['fullname'];
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$a->accountability_id) AS $em){
+                $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
+            }
+            $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $a->accountability_id);
             foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id='$id'  AND damage = '0'") AS $b){
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$id' AND damage = '0'");
                 $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != '0' AND damage = '0'");
                 $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$id);
                 $set_lot = $this->super_model->select_column_where("et_set","set_serial_no","set_id",$id);
                 $set_price = $this->super_model->select_column_where("et_set","set_price","set_id",$id);
+                $set_currency = $this->super_model->select_column_where("et_set","set_currency","set_id",$id);
+                $currency = $this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency);
                 $data['date_issued'] = $b->date_issued;
                 $total=$qty*$set_price;
                 $data['details'][]=array(
@@ -2415,6 +2428,7 @@ class Report extends CI_Controller {
                     'set_name'=>$set_name,
                     'set_lot'=>$set_lot,
                     'unit_price'=>$set_price,
+                    'currency'=>$currency,
                     'unit'=>$unit,
                     'qty'=>$qty,
                     'brand'=>$b->brand,
@@ -2804,6 +2818,9 @@ class Report extends CI_Controller {
                     $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
                     $data['count_set']=$count_set;
                     $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$s->set_id);
+                    $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$s->set_id);
+                    $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                    $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$s->currency_id);
                     $set_total=$sub->qty*$set_price;
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
@@ -2816,6 +2833,10 @@ class Report extends CI_Controller {
                         'ed_id'=>$s->ed_id,
                         'set_id'=>$s->set_id,
                         'set_name'=>$set_name,
+                        'set_price'=>$set_price,
+                        'set_currency'=>$set_currency,
+                        'currency'=>$currency,
+                        'count_set'=>$count_set,
                         'cat'=>$category,
                         'subcat'=>$subcat,
                         'unit'=>$unit,
@@ -2851,6 +2872,9 @@ class Report extends CI_Controller {
                     $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
                     $data['count_set']=$count_set;
                     $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$s->set_id);
+                    $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$s->set_id);
+                    $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                    $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$s->currency_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
                         if($lo->ed_id==$s->ed_id){
@@ -2863,6 +2887,8 @@ class Report extends CI_Controller {
                         'set_id'=>$s->set_id,
                         'set_name'=>$set_name,
                         'set_price'=>$set_price,
+                        'set_currency'=>$set_currency,
+                        'currency'=>$currency,
                         'count_set'=>$count_set,
                         'cat'=>$category,
                         'subcat'=>$subcat,
@@ -2906,6 +2932,10 @@ class Report extends CI_Controller {
                     $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id);
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $r->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                    $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
+                    $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                    $curid = $this->super_model->select_column_where("et_details","currency_id",'et_id',$r->et_id);
+                    $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
                     $department =$this->super_model->select_column_where("et_head", "department", "et_id", $r->et_id);
                     $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $r->et_id);
                     $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $r->et_id);
@@ -2931,6 +2961,8 @@ class Report extends CI_Controller {
                             'set_id'=>$set_id,
                             'set_name'=>$set_name,
                             'set_price'=>$set_price,
+                            'set_currency'=>$set_currency,
+                            'currency'=>$currency,
                             'count_set'=>$count_set,
                             'cat'=>$category,
                             'subcat'=>$subcat,
@@ -2969,6 +3001,10 @@ class Report extends CI_Controller {
                             $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $dam->et_id);
                             $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $dam->et_id);
                             $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                            $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
+                            $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                            $curid=$this->super_model->select_column_where("et_details","currency_id",'et_id',$dam->et_id);
+                            $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $dam->et_id);
                             foreach($this->super_model->select_custom_where('et_details', "ed_id='$dam->ed_id'") AS $sa){
                                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
@@ -2982,6 +3018,8 @@ class Report extends CI_Controller {
                                 'set_id'=>$set_id,
                                 'set_name'=>$set_name,
                                 'set_price'=>$set_price,
+                                'set_currency'=>$set_currency,
+                                'currency'=>$currency,
                                 'count_set'=>$count_set,
                                 'cat'=>$category,
                                 'subcat'=>$subcat,
@@ -3021,6 +3059,10 @@ class Report extends CI_Controller {
                             $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $et_id);
                             $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et_id);
                             $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                            $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
+                            $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                            $curid = $this->super_model->select_column_where("et_details","currency_id",'et_id',$et_id);
+                            $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
                             foreach($this->super_model->select_custom_where('et_details', "ed_id='$rep->ed_id'") AS $sa){
                                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
@@ -3034,6 +3076,8 @@ class Report extends CI_Controller {
                                 'set_id'=>$set_id,
                                 'set_name'=>$set_name,
                                 'set_price'=>$set_price,
+                                'set_currency'=>$set_currency,
+                                'currency'=>$currency,
                                 'count_set'=>$count_set,
                                 'cat'=>$category,
                                 'subcat'=>$subcat,
@@ -3642,6 +3686,7 @@ class Report extends CI_Controller {
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
         $data['set']=$this->super_model->select_row_where("et_set","set_id",$sets);
+        $data['currency']=$this->super_model->select_all_order_by("currency","currency_name","ASC");
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '$id' AND cancelled ='0'");
         if($row!=0){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled ='0' ORDER BY et_desc ASC") AS $sub){
@@ -3692,6 +3737,7 @@ class Report extends CI_Controller {
         $name = $this->input->post('name');
         $price = $this->input->post('price');
         $serial = $this->input->post('serial');
+        $currency = $this->input->post('currency');
         $checked =count($edid);
         $rows_et=$this->super_model->count_rows("et_set");
         if($rows_et==0){
@@ -3706,6 +3752,7 @@ class Report extends CI_Controller {
                 'set_id'=>$set_id,
                 'set_name'=>$name,
                 'set_price'=>$price,
+                'set_currency'=>$currency,
                 'set_serial_no'=>$serial,
             );
             $this->super_model->insert_into("et_set", $set_data);
@@ -3713,6 +3760,7 @@ class Report extends CI_Controller {
             $set_data = array(
                 'set_name'=>$name,
                 'set_price'=>$price,
+                'set_currency'=>$currency,
                 'set_serial_no'=>$serial,
             );
 
@@ -3756,6 +3804,7 @@ class Report extends CI_Controller {
         $ed_id=$this->uri->segment(3);
         $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
         $data['set']=$this->super_model->select_row_where("et_set","set_id",$sets);
+        $data['currency']=$this->super_model->select_all_order_by("currency","currency_name","ASC");
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '0' AND cancelled = '0'");
         if($row!=0){
             foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0 AND cancelled=0') AS $sub){
@@ -3805,6 +3854,7 @@ class Report extends CI_Controller {
         $name = $this->input->post('name');
         $price = $this->input->post('price');
         $serial = $this->input->post('serial');
+        $currency = $this->input->post('currency');
         $checked =count($edid);
         $rows_et=$this->super_model->count_rows("et_set");
         if($rows_et==0){
@@ -3819,6 +3869,7 @@ class Report extends CI_Controller {
                 'set_id'=>$set_id,
                 'set_name'=>$name,
                 'set_price'=>$price,
+                'set_currency'=>$currency,
                 'set_serial_no'=>$serial,
             );
             $this->super_model->insert_into("et_set", $set_data);
@@ -3826,6 +3877,7 @@ class Report extends CI_Controller {
             $set_data = array(
                 'set_name'=>$name,
                 'set_price'=>$price,
+                'set_currency'=>$currency,
                 'set_serial_no'=>$serial,
             );
             $this->super_model->update_where("et_set", $set_data, "set_id", $sets);
@@ -5086,6 +5138,8 @@ class Report extends CI_Controller {
                         $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$ret->accountability_id' AND set_id ='$et_set_id'");
                         $data['count_set']=$count_set;
                         $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
+                        $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
+                        $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
                         $set_total=$qty*$set_price;
                     }
                 }
@@ -5095,6 +5149,7 @@ class Report extends CI_Controller {
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
                     'set_price'=>$set_price,
+                    'set_currency'=>$set_currency,
                     'qty'=>$qty,
                     'item'=>$item,
                     'brand'=>$brand,
@@ -5161,6 +5216,8 @@ class Report extends CI_Controller {
                         $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$ret->accountability_id' AND set_id ='$et_set_id'");
                         $data['count_set']=$count_set;
                         $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
+                        $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
+                        $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
                         $set_total=$qty*$set_price;
                     }
                 }
@@ -5170,6 +5227,7 @@ class Report extends CI_Controller {
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
                     'set_price'=>$set_price,
+                    'set_currency'=>$set_currency,
                     'qty'=>$qty,
                     'item'=>$item,
                     'brand'=>$brand,
@@ -5441,6 +5499,8 @@ class Report extends CI_Controller {
                     $total=$qty*$det->unit_price;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                     $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$det->set_id);
+                    $set_curr = $this->super_model->select_column_where("et_set","set_currency",'set_id',$det->set_id);
+                    $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_curr);
                     $set_total=$qty*$set_price;
                     $data['details'][] = array(
                         'set_id'=>$det->set_id,
@@ -5458,6 +5518,7 @@ class Report extends CI_Controller {
                         'serial'=>$det->serial_no,
                         'currency'=>$currency,
                         'set_price'=>$set_price,
+                        'set_currency'=>$set_currency,
                         'set_total'=>$set_total,
                         'total'=>$total,
                         'count_set'=>$count_set,

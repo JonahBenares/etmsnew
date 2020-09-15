@@ -33,10 +33,21 @@
                                     <label>Set Name:</label>
                                     <input type = "text" class = "form-control bor-radius20" name = "name" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_name; } }else{ echo ''; } ; ?>" required="">
                                 </div>
-                                <div class = "col-lg-4">
+                                <div class = "col-lg-2">
                                     <label>Set Price:</label>
                                     <input type = "text" class = "form-control bor-radius20" name = "price" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_price; } }else{ echo ''; } ; ?>">
                                 </div>  
+                                <div class = "col-lg-2">
+                                    <label>Currency:</label>
+                                    <select class = "form-control" name="currency">
+                                        <option value="">--Select Currency-</option>
+                                        <?php 
+                                            foreach($currency AS $c){  
+                                        ?>
+                                        <option value="<?php echo $c->currency_id; ?>" <?php foreach($set AS $s){ echo ($s->set_currency==$c->currency_id) ? 'selected' : ''; } ?>><?php echo $c->currency_name; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                                 <div class = "col-lg-4">
                                     <label>Set Serial No.:</label>
                                     <input type = "text" class = "form-control bor-radius20" name = "serial" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_serial_no; } }else{ echo ''; } ; ?>">

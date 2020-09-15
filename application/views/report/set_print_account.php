@@ -79,8 +79,8 @@
                         ?>
                             <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_name'];?></td>
                             <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_lot'];?></td>
-                            <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['unit_price']; ?></td>
-                            <td class="main-tab" align="center" <?php  echo " rowspan='".$value."'"; ?>><?php echo number_format($det['total'],2); ?></td>
+                            <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['unit_price']." <small>".$det['currency']."</small>"; ?></td>
+                            <td class="main-tab" align="center" <?php  echo " rowspan='".$value."'"; ?>><?php echo number_format($det['total'],2)." <small>".$det['currency']."</small>"; ?></td>
                         <?php } } ?>
                     </tr>
                 <?php $a++; } } else { ?> 
@@ -99,6 +99,48 @@
                     <td class="main-tab" style="text-indent:20%">I hereby acknowledge receipt of the company owned property/ies listed above for which I am accountable. I agree to maintain the property/ies in good condition and to return it when I cease working for the company, or earlier on request.  I promise to report any loss or damage immediately and further agree to use the said property for work related purposes.</td>
                 </tr>
             </table>
+            <br>
+            <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td width="26%" class="main-tab">Prepared by:</td>
+                    <td width="10%"></td>
+                    <td width="26%" class="main-tab">Received by:</td>
+                    <td width="10%"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black" align = 'center'>
+                        <?php echo $fullname;?>
+                    </td> 
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black">
+                        <?php if($type == 2){ ?>
+                            <?php 
+                                if(!empty($child)){
+                                    foreach($child as $c){ 
+                                        echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; 
+                                    }
+                                }else{
+                                    echo $name;
+                                }
+                            ?>
+                        <?php } else { ?>
+                            <div style = "text-align:center;"><?php echo  $name;?></div>
+                        <?php } ?>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input class="select" type="" name="" value="Asset Management Assistant" >
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table> 
             <hr>
             <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
         </div>
