@@ -79,7 +79,7 @@
                         <td class="main-tab" align="center"><?php echo $det['model'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
                         <?php if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
-                        <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? $det['price']."<small> ".$det['currency']."</small>" : $det['set_price']." <small>".$det['set_currency']."</small>"; ?></td>
+                        <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? $det['price']." <small>".$det['currency']."</small>" : $det['set_price']." <small>".$det['set_currency']."</small>"; ?></td>
 
                         <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? number_format($det['total'],2)." <small>".$det['currency']."</small>" : number_format($det['set_total'],2)." <small>".$det['set_currency']."</small>"; ?></td>
                         <?php } else if($det['set_id']==0){ ?>

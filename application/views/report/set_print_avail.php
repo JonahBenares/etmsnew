@@ -53,8 +53,8 @@
                     ?>
                         <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_name'];?></td>
                         <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_lot'];?></td>
-                        <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['unit_price']; ?></td>
-                        <td class="main-tab" align="center" <?php  echo " rowspan='".$value."'"; ?>><?php echo number_format($det['total'],2); ?></td>
+                        <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['unit_price']." <small>".$det['set_currency']; ?></td>
+                        <td class="main-tab" align="center" <?php  echo " rowspan='".$value."'"; ?>><?php echo number_format($det['total'],2)." <small>".$det['set_currency']; ?></td>
                     <?php } } ?>
                 </tr>
             <?php $a++; } } else { ?> 

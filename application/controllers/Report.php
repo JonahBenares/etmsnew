@@ -2364,6 +2364,8 @@ class Report extends CI_Controller {
                 $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$id);
                 $set_lot = $this->super_model->select_column_where("et_set","set_serial_no","set_id",$id);
                 $set_price = $this->super_model->select_column_where("et_set","set_price","set_id",$id);
+                $set_cur = $this->super_model->select_column_where("et_set","set_currency","set_id",$id);
+                $set_currency = $this->super_model->select_column_where("currency","currency_name","currency_id",$set_cur);
                 $total=$qty*$set_price;
                 $data['details'][]=array(
                     'set_id'=>$b->set_id,
@@ -2373,6 +2375,7 @@ class Report extends CI_Controller {
                     'set_name'=>$set_name,
                     'set_lot'=>$set_lot,
                     'unit_price'=>$set_price,
+                    'set_currency'=>$set_currency,
                     'unit'=>$unit,
                     'qty'=>$qty,
                     'total'=>$total,
@@ -2815,7 +2818,7 @@ class Report extends CI_Controller {
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
                     $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$s->set_id);
-                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                     $data['count_set']=$count_set;
                     $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$s->set_id);
                     $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$s->set_id);
@@ -2869,7 +2872,7 @@ class Report extends CI_Controller {
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
                     $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$s->set_id);
-                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                     $data['count_set']=$count_set;
                     $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$s->set_id);
                     $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$s->set_id);
@@ -2916,7 +2919,7 @@ class Report extends CI_Controller {
                             $accountabilitys=$this->super_model->select_column_where("employees","employee_name","employee_id",$sab->accountability_id);
                         }
                         $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
-                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                         $data['count_set']=$count_set;
                         $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$sa->set_id);
                     }
@@ -3008,7 +3011,7 @@ class Report extends CI_Controller {
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $dam->et_id);
                             foreach($this->super_model->select_custom_where('et_details', "ed_id='$dam->ed_id'") AS $sa){
                                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
-                                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
+                                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                                 $data['count_set']=$count_set;
                                 $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$sa->set_id);
                             }
@@ -3066,7 +3069,7 @@ class Report extends CI_Controller {
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
                             foreach($this->super_model->select_custom_where('et_details', "ed_id='$rep->ed_id'") AS $sa){
                                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
-                                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
+                                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                                 $data['count_set']=$count_set;
                                 $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$sa->set_id);
                             }
@@ -5135,7 +5138,7 @@ class Report extends CI_Controller {
 
                     foreach($this->super_model->select_row_where('et_details','et_id',$u->et_id) AS $d){
                         $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$d->set_id);
-                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$ret->accountability_id' AND set_id ='$et_set_id'");
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                         $data['count_set']=$count_set;
                         $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
                         $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
@@ -5213,7 +5216,7 @@ class Report extends CI_Controller {
 
                     foreach($this->super_model->select_row_where('et_details','et_id',$u->et_id) AS $d){
                         $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$d->set_id);
-                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$ret->accountability_id' AND set_id ='$et_set_id'");
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                         $data['count_set']=$count_set;
                         $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
                         $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
@@ -5494,7 +5497,7 @@ class Report extends CI_Controller {
                 $qty = 1;
                 foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
                     $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$det->set_id);
-                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id ='$et_set_id'");
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                     $data['count_set']=$count_set;
                     $total=$qty*$det->unit_price;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
