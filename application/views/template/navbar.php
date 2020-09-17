@@ -69,7 +69,7 @@
                             </form>
                         </li>
                     </ul>
-                    <button type="button" class="btn btn-sm btn-danger " data-toggle="modal" data-target="#deletItem">
+                    <button type="button" class="btn btn-sm btn-danger " data-toggle="modal" data-target="#deletItem" disabled>
                         <span class="fa fa-close"></span> Delete Item
                     </button>
                     <ul class="navbar-nav my-lg-0">
