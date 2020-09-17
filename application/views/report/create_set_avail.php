@@ -31,15 +31,21 @@
                             <div class="row m-b-20">
                                 <div class = "col-lg-4">
                                     <label>Set Name:</label>
-                                    <input type = "text" class = "form-control bor-radius20" name = "name" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_name; } }else{ echo ''; } ; ?>" required="">
+                                    <!-- <input type = "text" class = "form-control bor-radius20" name = "name" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_name; } }else{ echo ''; } ; ?>" required=""> -->
+                                    <input list = 'sets' class="form-control" type="text" name="name" id="name" autocomplete="off" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_name; } }else{ echo ''; } ; ?>" required="">
+                                    <datalist id ='sets'>
+                                        <?php foreach($sets AS $s){ ?>
+                                        <option data-customvalue="<?php echo $s->set_id; ?>" value = "<?php echo $s->set_name; ?>"></option>
+                                        <?php } ?>
+                                    </datalist>
                                 </div>
                                 <div class = "col-lg-2">
                                     <label>Set Price:</label>
-                                    <input type = "text" class = "form-control bor-radius20" name = "price" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_price; } }else{ echo ''; } ; ?>">
+                                    <input type = "text" class = "form-control bor-radius20" id="price" name = "price" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_price; } }else{ echo ''; } ; ?>">
                                 </div>  
                                 <div class = "col-lg-2">
                                     <label>Currency:</label>
-                                    <select class = "form-control" name="currency">
+                                    <select class = "form-control" name="currency"  id="currency">
                                         <option value="">--Select Currency-</option>
                                         <?php 
                                             foreach($currency AS $c){  
@@ -50,9 +56,10 @@
                                 </div>
                                 <div class = "col-lg-4">
                                     <label>Set Serial No.:</label>
-                                    <input type = "text" class = "form-control bor-radius20" name = "serial" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_serial_no; } }else{ echo ''; } ; ?>">
+                                    <input type = "text" class = "form-control bor-radius20" id="serial" name = "serial" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_serial_no; } }else{ echo ''; } ; ?>">
                                 </div> 
                                 <input type="hidden" name="set_id" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_id; } } ?>">
+                                <input type="hidden" name = "set" id = "set">
                                 <input type="hidden" name = "set_ed" id = "set_ed" value = "<?php echo $ed_id?>">
                                 <br>
                                 <input type="submit" class="btn btn-block btn-info-alt" name = "submit" id = "submit" value="<?php echo (isset($ed_id)) ? 'Update' : 'Set' ?>">

@@ -358,5 +358,38 @@ function saveReplace(){
      
 }
 
+$(document).ready(function(){
+    $('#name').on('change', function() {
+        var loc= document.getElementById("baseurl").value;
+        var name= document.getElementById("name").value;
+        var redirect = loc+'index.php/report/getsetInfo';
+        var value = $(this).val();
+        var sets = $('#sets [value="' + value + '"]').data('customvalue');
+        if(name!=''){
+            $.ajax({
+                type: 'POST',
+                url: redirect,
+                global:false,
+                data: 'set='+sets,
+                dataType: 'json',
+                cache:false,
+                success: function(response){
+                    $("#set").val(response.set);
+                    $("#name").val(response.set_name);
+                    $("#price").val(response.price);
+                    $("#currency").val(response.currency);
+                    $("#serial").val(response.serial);
+                }
+            });
+        }else{
+            $("#set").val('');
+            $("#name").val('');
+            $("#price").val('');
+            $("#currency").val('');
+            $("#serial").val('');
+        }
+    });
+});
+
 
 

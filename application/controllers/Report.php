@@ -3679,6 +3679,14 @@ class Report extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+    public function getsetInfo(){
+        $set = $this->input->post('set');
+        foreach($this->super_model->custom_query("SELECT * FROM et_set WHERE set_id='$set'") AS $s){   
+            $return = array('set' => $s->set_id,'set_name' => $s->set_name,'price' => $s->set_price,'currency' => $s->set_currency,'serial' => $s->set_serial_no); 
+            echo json_encode($return, JSON_FORCE_OBJECT);   
+        }
+    }
+
     public function create_set(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
@@ -3689,6 +3697,7 @@ class Report extends CI_Controller {
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
         $data['set']=$this->super_model->select_row_where("et_set","set_id",$sets);
+        $data['sets']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
         $data['currency']=$this->super_model->select_all_order_by("currency","currency_name","ASC");
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '$id' AND cancelled ='0'");
         if($row!=0){
@@ -3741,6 +3750,7 @@ class Report extends CI_Controller {
         $price = $this->input->post('price');
         $serial = $this->input->post('serial');
         $currency = $this->input->post('currency');
+        $set_ids = $this->input->post('set');
         $checked =count($edid);
         $rows_et=$this->super_model->count_rows("et_set");
         if($rows_et==0){
@@ -3750,7 +3760,7 @@ class Report extends CI_Controller {
             $set_id = $series+1;
         }
 
-        if(empty($set_ed)){
+        if(empty($set_ed) && empty($set_ids)){
             $set_data = array(
                 'set_id'=>$set_id,
                 'set_name'=>$name,
@@ -3766,15 +3776,23 @@ class Report extends CI_Controller {
                 'set_currency'=>$currency,
                 'set_serial_no'=>$serial,
             );
-
             $this->super_model->update_where("et_set", $set_data, "set_id", $sets);
         }
 
-        for($x=0;$x<$checked;$x++){
-            $det_data = array(
-                'set_id'=>$set_id
-            ); 
-            $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+        if(!empty($set_ids)){ 
+            for($x=0;$x<$checked;$x++){
+                $det_data = array(
+                    'set_id'=>$set_ids
+                ); 
+                $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+            }
+        }else{
+            for($x=0;$x<$checked;$x++){
+                $det_data = array(
+                    'set_id'=>$set_id
+                ); 
+                $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+            }
         }
 
         if(!empty($set_ed)){
@@ -3807,6 +3825,7 @@ class Report extends CI_Controller {
         $ed_id=$this->uri->segment(3);
         $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
         $data['set']=$this->super_model->select_row_where("et_set","set_id",$sets);
+        $data['sets']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
         $data['currency']=$this->super_model->select_all_order_by("currency","currency_name","ASC");
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '0' AND cancelled = '0'");
         if($row!=0){
@@ -3857,6 +3876,7 @@ class Report extends CI_Controller {
         $name = $this->input->post('name');
         $price = $this->input->post('price');
         $serial = $this->input->post('serial');
+        $set_ids = $this->input->post('set');
         $currency = $this->input->post('currency');
         $checked =count($edid);
         $rows_et=$this->super_model->count_rows("et_set");
@@ -3885,12 +3905,21 @@ class Report extends CI_Controller {
             );
             $this->super_model->update_where("et_set", $set_data, "set_id", $sets);
         }
-
-        for($x=0;$x<$checked;$x++){
-            $det_data = array(
-                'set_id'=>$set_id
-            ); 
-            $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+        
+        if(!empty($set_ids)){ 
+            for($x=0;$x<$checked;$x++){
+                $det_data = array(
+                    'set_id'=>$set_ids
+                ); 
+                $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+            }
+        }else{
+            for($x=0;$x<$checked;$x++){
+                $det_data = array(
+                    'set_id'=>$set_id
+                ); 
+                $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+            }
         }
         
         if(!empty($set_ed)){
