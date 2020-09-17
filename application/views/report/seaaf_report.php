@@ -100,7 +100,7 @@
                 <?php } ?>
                 </tr>
                 <tr>
-                    <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
+                    <td class="main-tab" colspan="10"><center>***nothing follows***</center></td>
                 </tr>  
             </table>
             <br>
