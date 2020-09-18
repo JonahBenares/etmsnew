@@ -5891,7 +5891,7 @@ class Report extends CI_Controller {
         $atftwo=$atfdetails[1];
         $atfthree=$atfdetails[2];
         $atffour = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
-        if(!empty($atfone) || !empty($atftwo) || !empty($atfthree) || !empty($atffour)){
+        if(!empty($atfone) && !empty($atftwo) && !empty($atfthree) && !empty($atffour)){
             $atf_prefix1=$atfdetails[0];
             $atf_prefix2=$atfdetails[1];
             $atf_prefix3=$atfdetails[2];
@@ -5938,7 +5938,7 @@ class Report extends CI_Controller {
             $ars_three=$assetdetails[2];
             $ars_four =$assetdetails[3];
             $ars_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
-            if(!empty($ars_one) || !empty($ars_two) || !empty($ars_three) || !empty($ars_four) || !empty($ars_five)){
+            if(!empty($ars_one) && !empty($ars_two) && !empty($ars_three) && !empty($ars_four) && !empty($ars_five)){
                 $subcat_prefix1=$assetdetails[0];
                 $subcat_prefix2=$assetdetails[1];
                 $subcat_prefix3=$assetdetails[2];
