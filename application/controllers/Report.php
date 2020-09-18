@@ -5822,6 +5822,7 @@ class Report extends CI_Controller {
         $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $id);
         $location_id = $this->super_model->select_column_where("employees", "location_id", "employee_id", $id);
         $data['location'] = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
+        $data['location_list'] = $this->super_model->select_all_order_by("location","location_name","ASC");
         $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
         if($row!=0){
             foreach($this->super_model->select_custom_where("et_head", "accountability_id='$id' AND cancelled='0'") AS $mul){
@@ -5859,6 +5860,12 @@ class Report extends CI_Controller {
         $remarks = $this->input->post('remarks');
         $ars_no = $this->input->post('ars_no');
         $received_by = $this->input->post('rec_id');
+        if(!empty($this->input->post('location_id'))){
+            $changeloc = 1;
+        }else{
+            $changeloc = 0;
+        }
+        $location_id = $this->input->post('location_id');
         foreach($this->super_model->select_row_where("employees","employee_id", $accountability_id) AS $l){
             $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
             $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
@@ -5996,6 +6003,8 @@ class Report extends CI_Controller {
                             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){
                                 $det_data = array(
                                     'et_id'=>$new_etid,
+                                    'change_location'=>$changeloc,
+                                    'location_id'=>$location_id,
                                     'date_issued'=>''
                                 ); 
                                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
@@ -6034,6 +6043,8 @@ class Report extends CI_Controller {
                                 $this->super_model->insert_into("return_details", $returndet_data);
                                 foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){
                                     $det_data = array(
+                                        'change_location'=>$changeloc,
+                                        'location_id'=>$location_id,
                                         'date_issued'=>''
                                     ); 
                                     $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);

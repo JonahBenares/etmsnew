@@ -41,9 +41,13 @@
                                         <p>Position: </p>
                                         <p style="text-transform: uppercase;font-weight: 500"><?php echo $position;?></p>
                                     </div>
-                                    <div class="form-group m-b-10">
-                                        <p>Location: </p>
-                                        <p style="text-transform: uppercase;font-weight: 500"><?php echo $location;?></p>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group m-b-10">
+                                                <p>Location: </p>
+                                                <p style="text-transform: uppercase;font-weight: 500"><?php echo $location;?></p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -51,9 +55,24 @@
                                         <p>Return Date: </p>
                                         <input id="date" name="date" type="date" onChange="chooseArs();" class="form-control bor-radius5" required>
                                     </div>
-                                    <div class="form-group m-b-10">
-                                        <p>ARS No.: </p>
-                                        <select id="ars" name="ars_no" type="text" class="form-control bor-radius5" readonly style = "pointer-events:none;-webkit-appearance: none;" ></select>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group m-b-10">
+                                                <p>ARS No.: </p>
+                                                <select id="ars" name="ars_no" type="text" class="form-control bor-radius5" readonly style = "pointer-events:none;-webkit-appearance: none;" ></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group m-b-10">
+                                                <p>Change Location: </p>
+                                                <select class = "form-control form-alt" name = "location_id">
+                                                    <option value="">--Select Location--</option>
+                                                    <?php foreach($location_list AS $loc){ ?>
+                                                    <option value="<?php echo $loc->location_id; ?>"><?php echo $loc->location_name; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -69,6 +69,7 @@
                             foreach($details AS $det){ 
                                 switch($det){
                                     case($ret['return_id'] == $det['return_id']): 
+                                    echo $det['count_set'];
                 ?>
                     <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
