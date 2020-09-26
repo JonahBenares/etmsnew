@@ -35,7 +35,7 @@
                                     <input list = 'sets' class="form-control" type="text" name="name" id="name" autocomplete="off" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_name; } }else{ echo ''; } ; ?>" required="">
                                     <datalist id ='sets'>
                                         <?php foreach($sets AS $s){ ?>
-                                        <option data-customvalue="<?php echo $s->set_id; ?>" value = "<?php echo $s->set_name; ?>"></option>
+                                        <option data-customvalue="<?php echo $s->set_id; ?>" value = "<?php echo $s->set_name." - ".$s->set_serial_no; ?>"></option>
                                         <?php } ?>
                                     </datalist>
                                 </div>
@@ -64,7 +64,7 @@
                                 <br>
                                 <input type="submit" class="btn btn-block btn-info-alt" name = "submit" id = "submit" value="<?php echo (isset($ed_id)) ? 'Update' : 'Set' ?>">
                             </div>                      
-                            <table class="table table-bordersed dataTable table-striped table-earning" id = "myTable_avail_set">
+                            <table class="table table-bordersed dataTable table-striped table-earning" id = "">
                                 <thead>
                                     <tr>
                                         <th width="1%"><center><input type="checkbox" onClick="toggle_multi(this)" class=""></center></th>
