@@ -2399,19 +2399,19 @@ class Report extends CI_Controller {
         $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $empid);
         $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $empid);
         $qty=1;
+        foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$empid) AS $em){
+            $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+            if($status==0){
+                $data['child'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                );
+            }
+        }
         foreach($this->super_model->select_custom_where("et_head","accountability_id='$empid' AND cancelled='0'") AS $a){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
             $data['department'] = $a->department;
             $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $a->accountability_id); 
             $data['fullname'] =$_SESSION['fullname'];
-            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$a->accountability_id) AS $em){
-                $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status==0){
-                    $data['child'][] = array( 
-                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
-                    );
-                }
-            }
             $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $a->accountability_id);
             foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id='$id'  AND damage = '0'") AS $b){
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$id' AND damage = '0'");
