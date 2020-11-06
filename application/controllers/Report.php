@@ -384,14 +384,17 @@ class Report extends CI_Controller {
         $objPHPExcel = new PHPExcel();
         $exportfilename="Overall Report.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Overall Report");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Item Description");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', "Qty");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', "Price");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "Category");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Subcategory");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "Department");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Set Name");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Status / Accountability");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Acquisition Date");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', "Asset Control No.");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', "Item Description");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "Serial No.");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Qty");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "Price");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Category");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Subcategory");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', "Department");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Set Name");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Status / Accountability");
         $styleArray = array(
           'borders' => array(
             'allborders' => array(
@@ -399,7 +402,7 @@ class Report extends CI_Controller {
             )
           )
         );
-        foreach(range('A','H') as $columnID){
+        foreach(range('A','K') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
         $num=3;
@@ -506,7 +509,7 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$et->set_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
-                $item_desc = $et->et_desc.", ".$et->brand.", ".$et->model.", ".$et->serial_no;
+                $item_desc = $et->et_desc.", ".$et->brand.", ".$et->model;
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = $employee;
                 }else if($et->accountability_id==0 && $et->damage==0 && $et->change_location==0){
@@ -520,19 +523,22 @@ class Report extends CI_Controller {
                 }else if($et->lost==1){
                     $status = 'Lost Item / '.$employee;
                 }
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $item_desc);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, '1');
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $et->unit_price);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $category);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $subcat);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $et->department);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $set_name);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $status);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('B'.$num.":C".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle("H".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $et->acquisition_date);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $et->asset_control_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $item_desc);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $et->serial_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, '1');
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $et->unit_price);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $category);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $subcat);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $et->department);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $set_name);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $status);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":K".$num)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle('E'.$num.":F".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle("K".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
-                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":H".$num,'admin');
+                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":K".$num,'admin');
                 $num++;
             }
         }else {
@@ -543,7 +549,7 @@ class Report extends CI_Controller {
                     $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ss->accountability_id);
                     $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$r->set_id);
                     $location = $this->super_model->select_column_where("location", "location_name", "location_id", $r->location_id);
-                    $item_desc = $ss->et_desc.", ".$r->brand.", ".$r->model.", ".$r->serial_no;
+                    $item_desc = $ss->et_desc.", ".$r->brand.", ".$r->model;
                     if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0){
                         $status = $employee;
                     }else if($ss->accountability_id==0 && $r->damage==0 && $r->change_location==0){
@@ -557,26 +563,29 @@ class Report extends CI_Controller {
                     }else if($r->lost==1){
                         $status = 'Lost Item / '.$employee;
                     }
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $item_desc);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, '1');
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $r->unit_price);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $category);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $subcat);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $ss->department);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $set_name);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $status);
-                    $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":H".$num)->applyFromArray($styleArray);
-                    $objPHPExcel->getActiveSheet()->getStyle('B'.$num.":C".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                    $objPHPExcel->getActiveSheet()->getStyle("H".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $r->acquisition_date);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $r->asset_control_no);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $item_desc);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $r->serial_no);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, '1');
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $r->unit_price);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $category);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $subcat);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $ss->department);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $set_name);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $status);
+                    $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":K".$num)->applyFromArray($styleArray);
+                    $objPHPExcel->getActiveSheet()->getStyle('E'.$num.":F".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle("K".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
-                    $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":H".$num,'admin');
+                    $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":K".$num,'admin');
                     $num++;
                 } 
             }
         }
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         if (file_exists($exportfilename))
