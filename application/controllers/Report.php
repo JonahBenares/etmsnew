@@ -412,11 +412,11 @@ class Report extends CI_Controller {
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
         if(stripos($this->uri->segment(8), "%20%20") !== false) {
-            $item=str_replace("%20%20",", ",$this->uri->segment(8));
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
         } else if(stripos($this->uri->segment(8), "%20") !== false) {
-            $item=str_replace("%20"," ",$this->uri->segment(8));
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=$this->uri->segment(8);
+            $item=urldecode($this->uri->segment(8));
         }
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
@@ -606,7 +606,7 @@ class Report extends CI_Controller {
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
-        $item=str_replace("%20"," ",$this->uri->segment(8));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
         $type=str_replace("%20"," ",$this->uri->segment(11));
@@ -1224,7 +1224,7 @@ class Report extends CI_Controller {
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
-        $item=str_replace("%20"," ",$this->uri->segment(8));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
         $type=str_replace("%20"," ",$this->uri->segment(11));
@@ -1422,7 +1422,7 @@ class Report extends CI_Controller {
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
-        $item=str_replace("%20"," ",$this->uri->segment(8));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
         $type=str_replace("%20"," ",$this->uri->segment(11));
@@ -6117,11 +6117,11 @@ class Report extends CI_Controller {
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
         if(stripos($this->uri->segment(8), "%20%20") !== false) {
-            $item=str_replace("%20%20",", ",$this->uri->segment(8));
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
         } else if(stripos($this->uri->segment(8), "%20") !== false) {
-            $item=str_replace("%20"," ",$this->uri->segment(8));
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=$this->uri->segment(8);
+            $item=urldecode($this->uri->segment(8));
         }
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
@@ -6458,11 +6458,11 @@ class Report extends CI_Controller {
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
         if(stripos($this->uri->segment(8), "%20%20") !== false) {
-            $item=str_replace("%20%20",", ",$this->uri->segment(8));
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
         } else if(stripos($this->uri->segment(8), "%20") !== false) {
-            $item=str_replace("%20"," ",$this->uri->segment(8));
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=$this->uri->segment(8);
+            $item=urldecode($this->uri->segment(8));
         }
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
@@ -7174,7 +7174,7 @@ class Report extends CI_Controller {
         $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
         if(!empty($this->uri->segment(3))){
             $data['item'] = $this->uri->segment(3);
-            $item=$this->uri->segment(3);
+            $item=urldecode($this->uri->segment(3));
         } else {
             $data['item'] = "";
             $item = "";
@@ -7264,7 +7264,7 @@ class Report extends CI_Controller {
                     'incount'=>$incount,
                 );
             }
-        }else if($item!='null'){
+        }else if($item!='null' && $set=='null'){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
