@@ -33,7 +33,7 @@
                     <td style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $position;?></label></td>
                     <td></td>
                     <td></td>
-                    <td><small id="idate">*year-month-thread</small></td>
+                    <td><!-- <small id="idate">*year-month-thread</small> --></td>
                 </tr>
                 <tr>
                     <td><h5 class="nomarg">Date Returned</h5></td>
