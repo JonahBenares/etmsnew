@@ -86,7 +86,7 @@
                             <?php } else if($det['set_id']==0){ ?>
                                  <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit_price']."<small> ".$det['currency']."</small>"; ?></td>
 
-                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo number_format($det['total'],2); ?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo number_format($det['total'],2)."<small> ".$det['currency']."</small>"; ?></td>
                           <?php  }
                             $previousId = $det['set_id'];
 
