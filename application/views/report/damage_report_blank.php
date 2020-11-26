@@ -87,6 +87,12 @@
                     <td><p class="pull-right">Serial Number </p></td>
                     <td style="border-bottom: 1px solid #999"> : </td>
                 </tr> 
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">PO/Si Number </p></td>
+                    <td style="border-bottom: 1px solid #999"> : </td>
+                </tr> 
             </table>
             <br>
             <p>Person(s) who were using the equipment/Memorandum Receipt/Accountability</p>
@@ -134,6 +140,22 @@
             </table>
             <br>
             <p> Provide a recommendation on how the equipment is going to be repaired or replaced:</p>
+            <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td style="border-bottom: 1px solid #999"><br></td>
+                </tr>
+                <tr>
+                    <td width="10%"></td>
+                    <td style="border-bottom: 1px solid #999"><br></td>
+                </tr>
+                <tr>
+                    <td width="10%"></td>
+                    <td style="border-bottom: 1px solid #999"><br></td>
+                </tr>
+            </table>
+            <br>
+            <p> Remarks:</p>
             <table width="100%">
                 <tr>
                     <td width="10%"></td>

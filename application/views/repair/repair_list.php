@@ -15,12 +15,46 @@
                 </div>
             </div>
         </div>
+        <!--Modal Start -->
+        <div class="modal fade" id="damage_modal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mediumModalLabel">Filter</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action = "<?php echo base_url();?>repair/export_damage">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="" class="control-label mb-1">Date Received From:</label>
+                                        <input name="date_received_from" type="date" class="form-control bor-radius5">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="" class="control-label mb-1">Date Received To:</label>
+                                        <input name="date_received_to" type="date" class="form-control bor-radius5">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary-alt btn-block" value="Export">
+                            </div>
+                        </form>
+                    </div>                                        
+                </div>
+            </div>
+        </div>
+        <!--Modal End -->
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Damaged
                             <a href="<?php echo base_url(); ?>report/damage_report_blank" class="btn btn-sm btn-danger pull-right animated headShake infinite">PRINT <b>BLANK</b> E/T DAMAGE REPORT</a>
+                            <a href="#"  data-target= "#damage_modal" data-toggle="modal" class="btn btn-sm btn-primary pull-right ">Filter</a>
                         </h4>
                         <form  action="<?php echo base_url(); ?>repair/insert_redirect" method="POST">
                             <table class="table table-borderless table-striped table-earning table-hover" id="myTable_pseret">

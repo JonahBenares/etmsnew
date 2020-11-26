@@ -135,6 +135,12 @@
                     <td></td>
                     <td><p class="pull-right">Serial Number </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $det['serial'];?></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">PO/Si Number </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <?php echo $dam['po_si_no'];?></td>
                 </tr> 
             </table>
             <br>
@@ -179,6 +185,18 @@
                 <tr>
                     <td width="10%"></td>
                     <td style="border-bottom: 1px solid #999"><?php echo $dam['recommendation'];?><br></td>
+                </tr>
+                <tr>
+                    <td width="10%"></td>
+                    <td><br></td>
+                </tr>
+            </table>
+            <br>
+            <p> Remarks</p>
+            <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td style="border-bottom: 1px solid #999"><?php echo $dam['remarks'];?><br></td>
                 </tr>
                 <tr>
                     <td width="10%"></td>

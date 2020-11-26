@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Report extends CI_Controller {
 
-	function __construct(){
+    function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->library('session');
@@ -978,8 +978,8 @@ class Report extends CI_Controller {
     }
 
     public function report_main(){  
-    	$this->load->view('template/header');
-    	$this->load->view('template/navbar',$this->dropdown);
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
         $row_avail = $this->row_avail();
         $data['available_set_qty']= $this->row_set_avail();
@@ -4586,6 +4586,7 @@ class Report extends CI_Controller {
             $date = $this->input->post('date'.$x);
             $date_rec = $this->input->post('recdate'.$x);
             $edid = $this->input->post('ed_id'.$x);
+            $po_si_no = $this->input->post('po_si_no'.$x);
             $activity = $this->input->post('activity'.$x);
             $checked_by = $this->input->post('checked_id'.$x);
             $submitted_by = $this->input->post('submitted_id'.$x);
@@ -4596,6 +4597,7 @@ class Report extends CI_Controller {
             $damage_done = $this->input->post('damage_done'.$x);
             $receipt = $this->input->post('receipt'.$x);
             $recommendation = $this->input->post('recommendation'.$x);
+            $remarks = $this->input->post('remarks'.$x);
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
                 $det_data = array(
                     'damage'=>1
@@ -4661,11 +4663,13 @@ class Report extends CI_Controller {
                 'activity'=>$activity,
                 'etdr_no'=>$etdr_no,
                 'ed_id'=>$edid,
+                'po_si_no'=>$po_si_no,
                 'damage_location'=>$location,
                 'accountability'=>$receipt,
                 'incident_description'=>$incident,
                 'equip_damage'=>$damage_done,
                 'recommendation'=>$recommendation,
+                'remarks'=>$remarks,
                 'submitted_by'=>$submitted_by,
                 'checked_by'=>$checked_by,
                 'noted_by'=>$noted_by,
@@ -4857,6 +4861,7 @@ class Report extends CI_Controller {
                 'ed_id'=>$dam->ed_id,
                 'et_id'=>$dam->et_id,
                 'etdr_no'=> $dam->etdr_no,
+                'po_si_no'=> $dam->po_si_no,
                 'item'=> $item,
                 'types'=> $types,
                 'typec'=> $typec,
@@ -4868,7 +4873,8 @@ class Report extends CI_Controller {
                 'accountability'=>$dam->accountability,
                 'incident_description'=>$dam->incident_description,
                 'equip_damage'=>$dam->equip_damage,
-                'recommendation'=>$dam->recommendation
+                'recommendation'=>$dam->recommendation,
+                'remarks'=>$dam->remarks
             );
         }
         $this->load->view('report/damage_report',$data);
@@ -4940,6 +4946,7 @@ class Report extends CI_Controller {
                 'ed_id'=>$dam->ed_id,
                 'et_id'=>$dam->et_id,
                 'etdr_no'=> $dam->etdr_no,
+                'po_si_no'=> $dam->po_si_no,
                 'item'=> $item,
                 'types'=> $types,
                 'typec'=> $typec,
@@ -4951,7 +4958,8 @@ class Report extends CI_Controller {
                 'accountability'=>$dam->accountability,
                 'incident_description'=>$dam->incident_description,
                 'equip_damage'=>$dam->equip_damage,
-                'recommendation'=>$dam->recommendation
+                'recommendation'=>$dam->recommendation,
+                'remarks'=>$dam->remarks
             );
         }
         $this->load->view('report/damage_report_nav',$data);

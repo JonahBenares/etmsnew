@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Borrow extends CI_Controller {
 
-	function __construct(){
+    function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->library('session');
@@ -27,8 +27,8 @@ class Borrow extends CI_Controller {
     }
 
     public function borrow_list(){  
-    	$this->load->view('template/header');
-    	$this->load->view('template/navbar',$this->dropdown);
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
         $row=$this->super_model->count_rows("borrow_head");
         if($row!=0){
             foreach($this->super_model->select_all_order_by('borrow_head', 'borrowed_date', 'DESC') AS $all){
@@ -607,6 +607,7 @@ class Borrow extends CI_Controller {
             $date = $this->input->post('date'.$x);
             $recdate = $this->input->post('recdate'.$x);
             $edid = $this->input->post('ed_id'.$x);
+            $po_si_no = $this->input->post('po_si_no'.$x);
             $activity = $this->input->post('activity'.$x);
             $checked_by = $this->input->post('checked_id'.$x);
             $submitted_by = $this->input->post('submitted_id'.$x);
@@ -617,6 +618,7 @@ class Borrow extends CI_Controller {
             $damage_done = $this->input->post('damage_done'.$x);
             $receipt = $this->input->post('receipt'.$x);
             $recommendation = $this->input->post('recommendation'.$x);
+            $remarks = $this->input->post('remarks'.$x);
 
             foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
                 $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
@@ -671,11 +673,13 @@ class Borrow extends CI_Controller {
                 'activity'=>$activity,
                 'etdr_no'=>$etdr_no,
                 'ed_id'=>$edid,
+                'po_si_no'=>$po_si_no,
                 'damage_location'=>$location,
                 'accountability'=>$receipt,
                 'incident_description'=>$incident,
                 'equip_damage'=>$damage_done,
                 'recommendation'=>$recommendation,
+                'remarks'=>$remarks,
                 'submitted_by'=>$submitted_by,
                 'checked_by'=>$checked_by,
                 'noted_by'=>$noted_by,

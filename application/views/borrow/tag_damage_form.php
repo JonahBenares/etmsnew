@@ -47,30 +47,37 @@
                                                 <label for="" class="control-label mb-1">Date Acquired:</label>
                                                 <input id="" name="date_aquired" type="date" class="form-control bor-radius5 cc-exp" value = "<?php echo $det['acquisition_date'];?>" style = "pointer-events:none;">
                                             </div>
-                                        </div>
-                                        <div class="row">                                                 
                                             <div class="col-6">
                                                 <label for="" class="control-label mb-1">Item Name:</label>
                                                 <input id="" name="item" type="text" class="form-control bor-radius5 cc-exp" value = "<?php echo $det['item'];?>" style = "pointer-events:none;">
                                             </div>
+                                        </div>
+                                        <div class="row">                                                 
                                             <div class="col-6">
                                                 <label for="x_card_code" class="control-label mb-1">Model:</label>
                                                 <div class="input-group">
                                                     <input id="" name="model" class="form-control bor-radius5 cc-cvc" type="text" value = "<?php echo $det['model']; ?>" style = "pointer-events:none;">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">                                                 
-                                            <div class="col-6">
+                                             <div class="col-6">
                                                 <label for="" class="control-label mb-1">Brand:</label>
                                                 <input id="" name="brand" type="text" class="form-control bor-radius5 cc-exp"  value = "<?php echo $det['brand']; ?>" style = "pointer-events:none;">
                                             </div>
+                                        </div>
+                                        <div class="row">                                                 
+                                           
                                             <div class="col-6">
                                                 <label for="x_card_code" class="control-label mb-1">Serial Number:</label>
                                                 <div class="input-group">
                                                     <input id="" name="serial" class="form-control bor-radius5 cc-cvc" type="text" value = "<?php echo $det['serial']; ?>" style = "pointer-events:none;">
                                                 </div>
                                             </div>
+                                              <div class="col-6">
+                                            <label for="x_card_code" class="control-label mb-1">PO/SI Number</label>
+                                            <div class="input-group">
+                                                <input id="" name="po_si_no<?php echo $x;?>" class="form-control" type="text">
+                                            </div>
+                                        </div>
                                         </div>
                                         <div class="row">                                                 
                                             <div class="col-12">
@@ -96,6 +103,12 @@
                                                 <textarea name="recommendation<?php echo $x;?>" class="form-control" id="" cols="30" rows="2"></textarea>
                                             </div>
                                         </div>
+                                        <div class="row">                                                 
+                                        <div class="col-12">
+                                            <label for="" class="control-label mb-1">Remarks:</label>
+                                            <textarea name="remarks<?php echo $x;?>" class="form-control" id="" cols="30" rows="2" required></textarea>
+                                        </div>
+                                    </div>
                                         <div class="row">                                                 
                                             <div class="col-6">
                                                 <label for="" class="control-label mb-1">Checked By:</label>

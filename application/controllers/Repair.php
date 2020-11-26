@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Repair extends CI_Controller {
 
-	function __construct(){
+    function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->library('session');
@@ -27,8 +27,8 @@ class Repair extends CI_Controller {
     }
 
     public function repair_list(){  
-    	$this->load->view('template/header');
-    	$this->load->view('template/navbar',$this->dropdown);
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
         $row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
         foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0' AND et_id = '$check->et_id'");           
@@ -203,6 +203,95 @@ class Repair extends CI_Controller {
     public function get_name($col, $table, $whr_clm, $whr_val){
         $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
         return $column;
+    }
+
+    public function export_damage(){
+        $date_received_from=$this->input->post('date_received_from');
+        $date_received_to=$this->input->post('date_received_to');
+        $date = date("FY",strtotime($date_received_from));
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        $exportfilename="Damage Summary Report.xlsx";
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Damage Summary Report $date");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "No.");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', "Received Report");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', "Date Damage");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', "ETDR No.");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Category");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "Persons who where using/ Accountability");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Item Description");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Qty");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', "UOM");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Acquisition Date");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Acquisition Cost");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', "PO No/ Si/ JO");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', "Submitted by");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N2', "Description of the incident");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O2', "Damage done to the Equipment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P2', "Recommendation");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q2', "Remarks");
+        $styleArray = array(
+          'borders' => array(
+            'allborders' => array(
+              'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+          )
+        );
+
+        foreach(range('A','Q') as $columnID){
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $num=3;
+        $x=1;
+        foreach($this->super_model->select_custom_where("damage_info","receive_date BETWEEN '$date_received_from' AND '$date_received_to'") AS $d){
+            $category_id=$this->super_model->select_column_where("et_head","category_id","et_id",$d->et_id);
+            $category=$this->super_model->select_column_where("category","category_name","category_id",$category_id);
+            $et_desc=$this->super_model->select_column_where("et_head","et_desc","et_id",$d->et_id);
+            $qty=$this->super_model->select_column_where("et_head","qty","et_id",$d->et_id);
+            $unit_price=$this->super_model->select_column_where("et_details","unit_price","ed_id",$d->ed_id);
+            $acquisition_date=$this->super_model->select_column_where("et_details","acquisition_date","ed_id",$d->ed_id);
+            $unit_id=$this->super_model->select_column_where("et_head","unit_id","et_id",$d->et_id);
+            $unit_name=$this->super_model->select_column_where("unit","unit_name","unit_id",$unit_id);
+            $submitted_by=$this->super_model->select_column_where("employees","employee_name","employee_id",$d->submitted_by);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $x);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $d->receive_date);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $d->incident_date);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $d->etdr_no);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $category);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $d->accountability);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $et_desc);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $qty);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $unit_name);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $acquisition_date);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $unit_price);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $d->po_si_no);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $submitted_by);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $d->incident_description);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$num, $d->equip_damage);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $d->recommendation);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$num, $d->remarks);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Q".$num)->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":C".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('H'.$num.":L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $x++;
+            $num++;
+        }
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Damage Summary Report.xlsx"');
+        readfile($exportfilename);
     }
 }
 ?>

@@ -93,6 +93,12 @@
                     <td><p class="pull-right">Serial Number </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $det['serial'];?></td>
                 </tr> 
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">PO/SI Number </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <?php echo $dam['po_si_no'];?></td>
+                </tr>
             </table>
             <br>
             <p>Person(s) who were using the equipment/Memorandum Receipt/Accountability</p>
