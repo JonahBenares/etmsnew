@@ -644,8 +644,14 @@ class Report extends CI_Controller {
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
         $company=$this->uri->segment(16);
+        $encoded_from=$this->uri->segment(17);
+        $encoded_to=$this->uri->segment(18);
         $sql="";
         $filter = "";
+        if($encoded_from!='null' && $encoded_to!='null'){
+           $sql.= " eh.create_date BETWEEN '$encoded_from' AND '$encoded_to' AND";
+           $filter .= $encoded_from.''.$encoded_to;
+        }
 
         if($from!='null' && $to!='null'){
            $sql.= " ed.acquisition_date BETWEEN '$from' AND '$to' AND";
@@ -1263,8 +1269,14 @@ class Report extends CI_Controller {
         $placement=$this->uri->segment(15);
         $company=$this->uri->segment(16);
         $rack=$this->uri->segment(17);
+        $encoded_from=$this->uri->segment(18);
+        $encoded_to=$this->uri->segment(19);
         $sql="";
         $filter = "";
+        if($encoded_from!='null' && $encoded_to!='null'){
+           $sql.= " eh.create_date BETWEEN '$encoded_from' AND '$encoded_to' AND";
+           $filter .= $encoded_from.''.$encoded_to;
+        }
 
         if($from!='null' && $to!='null'){
            $sql.= " ed.acquisition_date BETWEEN '$from' AND '$to' AND";
@@ -1461,8 +1473,14 @@ class Report extends CI_Controller {
         $placement=$this->uri->segment(15);
         $company=$this->uri->segment(16);
         $rack=$this->uri->segment(17);
+        $encoded_from=$this->uri->segment(18);
+        $encoded_to=$this->uri->segment(19);
         $sql="";
         $filter = " ";
+        if($encoded_from!='null' && $encoded_to!='null'){
+           $sql.= " eh.create_date BETWEEN '$encoded_from' AND '$encoded_to' AND";
+           $filter .= $encoded_from.''.$encoded_to;
+        }
 
         if($from!='null' && $to!='null'){
            $sql.= " ed.acquisition_date BETWEEN '$from' AND '$to' AND";
