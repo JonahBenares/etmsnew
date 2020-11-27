@@ -6270,10 +6270,10 @@ class Report extends CI_Controller {
         if($damage!='null'){
             $sql.=" ed.damage = '$damage' AND";
             $filter .= $damage;
-        }else{
+        }/*else{
             $sql.=" ed.damage = '0' AND";
             $filter .= $damage;
-        }
+        }*/
 
         if($condition!='null'){
             $sql.=" ed.physical_condition LIKE '%$condition%' AND";
