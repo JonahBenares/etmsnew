@@ -16,6 +16,11 @@
                         <div class="col-lg-6">
                             <table width="100%">
                                 <tr>
+                                    <td><p>Date Encoded (from):</p>
+                                        <input type="date"  name="encoded_from" class="form-control bor-radius10" >
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><p>Acquired Date (from):</p>
                                         <input type="date"  name="from" class="form-control bor-radius10" >
                                     </td>
@@ -71,6 +76,11 @@
                         </div>
                         <div class="col-lg-6">
                             <table width="100%">
+                                <tr>
+                                    <td><p>Date Encoded (to):</p>
+                                        <input type="date"  name="encoded_to" class="form-control bor-radius10" >
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td><p>Acquired Date (to):</p>
                                         <input type="date"  name="to" class="form-control bor-radius10" >
@@ -198,9 +208,9 @@
                                     <span class="fa fa-filter"></span> Filter
                                 </button>
                                 <?php if(!empty($filt)){ ?>
-                                <a href = "<?php echo base_url(); ?>report/export_equipment/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo urlencode($item);?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
+                                <a href = "<?php echo base_url(); ?>report/export_equipment/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo urlencode($item);?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>/<?php echo $encoded_from;?>/<?php echo $encoded_to;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
 
-                                <a href = "<?php echo base_url(); ?>report/report_print/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo urlencode($item);?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-print"></span> Print</a>
+                                <a href = "<?php echo base_url(); ?>report/report_print/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo urlencode($item);?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>/<?php echo $rack;?>/<?php echo $encoded_from;?>/<?php echo $encoded_to;?>" class="btn btn-sm btn-info-alt"><span class="fa fa-print"></span> Print</a>
                                 <?php }else { ?>
                                 <a href = "<?php echo base_url(); ?>report/export_equipment" class="btn btn-sm btn-info-alt"><span class="fa fa-report"></span>Export to Excel</a>
                                 
