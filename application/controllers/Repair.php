@@ -220,16 +220,20 @@ class Repair extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', "Category");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', "Persons who where using/ Accountability");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', "Item Description");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Qty");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', "UOM");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Acquisition Date");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Acquisition Cost");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', "PO No/ Si/ JO");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', "Submitted by");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N2', "Description of the incident");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O2', "Damage done to the Equipment");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P2', "Recommendation");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q2', "Remarks");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', "Brand");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', "Model");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Type");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Serial No.");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', "Qty");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', "UOM");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N2', "Acquisition Date");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O2', "Acquisition Cost");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P2', "PO No/ Si/ JO");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q2', "Submitted by");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R2', "Description of the incident");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S2', "Damage done to the Equipment");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T2', "Recommendation");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U2', "Remarks");
         $styleArray = array(
           'borders' => array(
             'allborders' => array(
@@ -238,7 +242,7 @@ class Repair extends CI_Controller {
           )
         );
 
-        foreach(range('A','Q') as $columnID){
+        foreach(range('A','U') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -250,6 +254,10 @@ class Repair extends CI_Controller {
             $et_desc=$this->super_model->select_column_where("et_head","et_desc","et_id",$d->et_id);
             $qty=$this->super_model->select_column_where("et_head","qty","et_id",$d->et_id);
             $unit_price=$this->super_model->select_column_where("et_details","unit_price","ed_id",$d->ed_id);
+            $brand=$this->super_model->select_column_where("et_details","brand","ed_id",$d->ed_id);
+            $type=$this->super_model->select_column_where("et_details","type","ed_id",$d->ed_id);
+            $serial_no=$this->super_model->select_column_where("et_details","serial_no","ed_id",$d->ed_id);
+            $model=$this->super_model->select_column_where("et_details","model","ed_id",$d->ed_id);
             $acquisition_date=$this->super_model->select_column_where("et_details","acquisition_date","ed_id",$d->ed_id);
             $unit_id=$this->super_model->select_column_where("et_head","unit_id","et_id",$d->et_id);
             $unit_name=$this->super_model->select_column_where("unit","unit_name","unit_id",$unit_id);
@@ -261,27 +269,31 @@ class Repair extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $category);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $d->accountability);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $et_desc);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $qty);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $unit_name);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $acquisition_date);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $unit_price);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $d->po_si_no);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $submitted_by);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $d->incident_description);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$num, $d->equip_damage);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $d->recommendation);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$num, $d->remarks);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Q".$num)->applyFromArray($styleArray);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $brand);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $model);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $type);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $serial_no);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $qty);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $unit_name);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $acquisition_date);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$num, $unit_price);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $d->po_si_no);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$num, $submitted_by);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$num, $d->incident_description);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$num, $d->equip_damage);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $d->recommendation);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $d->remarks);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":U".$num)->applyFromArray($styleArray);
             $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":C".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('H'.$num.":L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $objPHPExcel->getActiveSheet()->getStyle('L'.$num.":O".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('O'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
             $x++;
             $num++;
         }
-        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         if (file_exists($exportfilename))
         unlink($exportfilename);

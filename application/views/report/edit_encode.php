@@ -154,7 +154,7 @@
                                         <select name="placement[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Placement--</option>
                                             <?php foreach($placement AS $ca){ ?>
-                                            <option value = "<?php echo $ca->placement_id; ?>"><?php echo $ca->placement_name;?></option>
+                                            <option value = "<?php echo $ca->placement_id; ?>" <?php echo (($d['placement'] == $ca->placement_id) ? ' selected' : '');?>><?php echo $ca->placement_name;?></option>
                                             <?php } ?>
                                         </select>
                                         <label for="" class="control-label mb-1">Placement:</label>
@@ -187,7 +187,7 @@
                                         <select name="rack[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Rack--</option>
                                             <?php foreach($rack AS $c){ ?>
-                                            <option value = "<?php echo $c->rack_id; ?>"><?php echo $c->rack_name;?></option>
+                                            <option value = "<?php echo $c->rack_id; ?>" <?php echo (($d['rack_id'] == $c->rack_id) ? ' selected' : '');?>><?php echo $c->rack_name;?></option>
                                             <?php } ?>
                                         </select>
                                         <label for="" class="control-label mb-1">Rack:</label>
