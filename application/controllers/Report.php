@@ -6349,7 +6349,7 @@ class Report extends CI_Controller {
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et_set_id' AND save_temp='0' AND damage='0'");
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et_set_id' AND save_temp='0'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -6441,7 +6441,7 @@ class Report extends CI_Controller {
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND set_id ='$et_set_id' AND save_temp='0' AND damage='0'");
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND set_id ='$et_set_id' AND save_temp='0'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
