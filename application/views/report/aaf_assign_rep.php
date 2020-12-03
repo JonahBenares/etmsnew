@@ -112,7 +112,9 @@
                         </td> 
                         <td></td>
                         <td style="border-bottom:1px solid #000">
+                            <center>
                             <div id = "receive_by" style = "color:black;"></div>
+                            </center>
                         </td>
                         <td></td>
                     </tr>
