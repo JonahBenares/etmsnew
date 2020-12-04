@@ -151,21 +151,12 @@
                             <div class="row"> 
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
-                                        <?php if($d['placement']!=0){ ?>
-                                        <select name="placement[]" style = "pointer-events: none" class="form-control form-alt cc-cvc">
+                                        <select name="placement[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Placement--</option>
                                             <?php foreach($placement AS $ca){ ?>
                                             <option value = "<?php echo $ca->placement_id; ?>" <?php echo (($d['placement'] == $ca->placement_id) ? ' selected' : '');?>><?php echo $ca->placement_name;?></option>
                                             <?php } ?>
                                         </select>
-                                        <?php } else { ?>
-                                        <select name="placement[]" class="form-control form-alt cc-cvc">
-                                            <option value = "">--Select Placement--</option>
-                                            <?php foreach($placement AS $ca){ ?>
-                                            <option value = "<?php echo $ca->placement_id; ?>"><?php echo $ca->placement_name;?></option>
-                                            <?php } ?>
-                                        </select>
-                                        <?php } ?>
                                         <label for="" class="control-label mb-1">Placement:</label>
                                     </div>
                                 </div>                                                
@@ -193,21 +184,12 @@
                             <div class="row"> 
                                 <div class = "col-6">
                                     <div class="form-group m-b-10">
-                                        <?php if($d['rack_id']!=0){ ?>
-                                        <select name="rack[]" style = "pointer-events: none" class="form-control form-alt cc-cvc">
+                                        <select name="rack[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Rack--</option>
                                             <?php foreach($rack AS $c){ ?>
                                             <option value = "<?php echo $c->rack_id; ?>" <?php echo (($d['rack_id'] == $c->rack_id) ? ' selected' : '');?>><?php echo $c->rack_name;?></option>
                                             <?php } ?>
                                         </select>
-                                        <?php } else { ?>
-                                        <select name="rack[]" class="form-control form-alt cc-cvc">
-                                            <option value = "">--Select Rack--</option>
-                                            <?php foreach($rack AS $c){ ?>
-                                            <option value = "<?php echo $c->rack_id; ?>"><?php echo $c->rack_name;?></option>
-                                            <?php } ?>
-                                        </select>
-                                        <?php } ?>
                                         <label for="" class="control-label mb-1">Rack:</label>
                                     </div>
                                 </div>                                   
