@@ -5272,10 +5272,20 @@ class Report extends CI_Controller {
                         $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$d->set_id);
                         $count_set = $this->super_model->select_count_join_inner("return_details","et_details", "set_id ='$et_set_id' AND return_id = '$det->return_id'","ed_id");
                         $data['count_set']=$count_set;
-                        $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
-                        $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
-                        $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
-                        $set_total=$qty*$set_price;
+
+                        $count_et = $this->super_model->count_custom_where("et_details", "set_id ='$et_set_id'");
+                        $count_return = $this->super_model->select_count_join_inner("return_details","et_details", "set_id ='$et_set_id' AND return_id = '$det->return_id'","ed_id");
+                        if($count_et<=$count_return){
+                            $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
+                            $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
+                            $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                            $set_total=$qty*$set_price;
+                        }else{
+                            $set_price = "0.00";
+                            $set_cur = "";
+                            $set_currency = "";
+                            $set_total="0.00";
+                        }
                     }
                 }
 
@@ -5310,7 +5320,7 @@ class Report extends CI_Controller {
 
     public function ars_report_return(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar',$this->dropdown);
+        //$this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
@@ -5352,10 +5362,20 @@ class Report extends CI_Controller {
                         $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$d->set_id);
                         $count_set = $this->super_model->select_count_join_inner("return_details","et_details", "set_id ='$et_set_id' AND return_id = '$det->return_id'","ed_id");
                         $data['count_set']=$count_set;
-                        $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
-                        $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
-                        $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
-                        $set_total=$qty*$set_price;
+
+                        $count_et = $this->super_model->count_custom_where("et_details", "set_id ='$et_set_id'");
+                        $count_return = $this->super_model->select_count_join_inner("return_details","et_details", "set_id ='$et_set_id' AND return_id = '$det->return_id'","ed_id");
+                        if($count_et<=$count_return){
+                            $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$d->set_id);
+                            $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$d->set_id);
+                            $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                            $set_total=$qty*$set_price;
+                        }else{
+                            $set_price = "0.00";
+                            $set_cur = "";
+                            $set_currency = "";
+                            $set_total="0.00";
+                        }
                     }
                 }
 
