@@ -2228,6 +2228,7 @@ class Report extends CI_Controller {
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         if($row_avail!=0){
             foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0'","et_id") as $et){
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
@@ -2260,6 +2261,17 @@ class Report extends CI_Controller {
 
         $this->load->view('report/report_main_avail',$data);
         $this->load->view('template/footer');
+    }
+
+    public function transfer_item(){
+        $ed_id = $this->input->post('ed_id');
+        $location = $this->input->post('location');
+        $data = array(
+            'change_location'=>1,
+            'location_id'=>$location,
+        ); 
+        $this->super_model->update_where("et_details", $data, "ed_id", $ed_id);
+        echo "<script>alert('Successfully Transfered!'); window.location = '".base_url()."report/report_main_avail';</script>";
     }
 
     public function report_print_avail(){
@@ -2328,6 +2340,7 @@ class Report extends CI_Controller {
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         if($row_set_avail!=0){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='0' AND cancelled='0'") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -2358,6 +2371,17 @@ class Report extends CI_Controller {
 
         $this->load->view('report/report_set_avail',$data);
         $this->load->view('template/footer');
+    }
+
+    public function transfer_set_item(){
+        $ed_id = $this->input->post('ed_id');
+        $location = $this->input->post('location');
+        $data = array(
+            'change_location'=>1,
+            'location_id'=>$location,
+        ); 
+        $this->super_model->update_where("et_details", $data, "ed_id", $ed_id);
+        echo "<script>alert('Successfully Transfered!'); window.location = '".base_url()."report/report_set_avail';</script>";
     }
 
     public function set_print_avail1(){  
