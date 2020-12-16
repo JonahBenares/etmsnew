@@ -62,7 +62,19 @@
                                     <?php } ?>
                                 </select>
                             </td>
-                        </tr>                                                       
+                        </tr>  
+                        <tr>
+                            <td>
+                                <p>Date Transfer:</p>
+                                <input type="date" id="date" name="transfer_date" onChange="chooseTrans();" class="form-control bor-radius10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>Transfer Series:</p>
+                                <select id="trans" name="transfer_no" class="form-control bor-radius5" readonly style = "pointer-events:none;-webkit-appearance: none;" ></select>
+                            </td>
+                        </tr>                                                     
                     </table>
                 </div>
                 <div class="modal-footer">
