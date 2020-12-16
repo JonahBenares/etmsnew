@@ -80,7 +80,7 @@
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success btn-sm btn-block bor-radius" value='Save'>
                 </div>
-                <input type="hidden" name="ed_id" id="ed_ids">
+                <input type="text" name="ed_id" id="ed_ids">
             </form>
         </div>
     </div>

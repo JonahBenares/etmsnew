@@ -2266,9 +2266,13 @@ class Report extends CI_Controller {
     public function transfer_item(){
         $ed_id = $this->input->post('ed_id');
         $location = $this->input->post('location');
+        $transfer_date = $this->input->post('transfer_date');
+        $transfer_no = $this->input->post('transfer_no');
         $data = array(
             'change_location'=>1,
             'location_id'=>$location,
+            'date_transfer'=>$transfer_date,
+            'transfer_series'=>$transfer_no,
         ); 
         if($this->super_model->update_where("et_details", $data, "ed_id", $ed_id)){
             $trans = $this->input->post('transfer_no');
@@ -3281,11 +3285,42 @@ class Report extends CI_Controller {
     public function transfer_set_item(){
         $ed_id = $this->input->post('ed_id');
         $location = $this->input->post('location');
+        $transfer_date = $this->input->post('transfer_date');
+        $transfer_no = $this->input->post('transfer_no');
         $data = array(
             'change_location'=>1,
             'location_id'=>$location,
+            'date_transfer'=>$transfer_date,
+            'transfer_series'=>$transfer_no,
         ); 
-        $this->super_model->update_where("et_details", $data, "ed_id", $ed_id);
+        if($this->super_model->update_where("et_details", $data, "ed_id", $ed_id)){
+            $trans = $this->input->post('transfer_no');
+            $assetdetails=explode("-", $trans);
+            $trans_one=$assetdetails[0];
+            $trans_two=$assetdetails[1];
+            $trans_three=$assetdetails[2];
+            $trans_four =$assetdetails[3];
+            $trans_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
+            if(!empty($trans_one) && !empty($trans_two) && !empty($trans_three) && !empty($trans_four) && !empty($trans_five)){
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix4=$assetdetails[3];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
+                $series = $assetdetails[4];
+            }else {
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                $series = $assetdetails[3]; 
+            }
+            $trans_data= array(
+                'prefix'=>$subcat_prefix,
+                'series'=>$series
+            );
+            $this->super_model->insert_into("transfer_series", $trans_data);
+        }
         echo "<script>alert('Successfully Transfered!'); window.location = '".base_url()."report/report_set_avail';</script>";
     }
 
