@@ -193,7 +193,7 @@
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="<?php echo base_url(); ?>masterfile/dashboard/">Home</a></li>
-                        <li class="breadcrumb-item active">Transfered Items</li>
+                        <li class="breadcrumb-item active">Transferred Items</li>
                     </ol>
                 </div>
             </div>
@@ -202,7 +202,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Transfered Items
+                        <h4 class="card-title">Transferred Items
                             <div class="pull-right btn-group">
                                 <button type="button" class="btn btn-sm btn-info-alt " data-toggle="modal" data-target="#largeModal">
                                     <span class="fa fa-filter"></span> Filter
