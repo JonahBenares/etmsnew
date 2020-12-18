@@ -2373,6 +2373,78 @@ class Report extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+    public function transfer_form(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
+            $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $et->accountability_id); 
+            $data['employee_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $et->accountability_id); 
+            $data['save_temp']=$et->save_temp;
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
+                $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
+            }
+            $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
+            $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $et->accountability_id);
+            foreach($this->super_model->select_row_where('et_details','et_id',$et->et_id) AS $det){
+                $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
+                $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
+                $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
+                $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
+                $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
+                $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                $qty = '1';
+                $total = $qty * $price;
+                $data['date_issued'] = $det->date_issued;
+                foreach($this->super_model->select_row_where('et_head','et_id',$det->et_id) AS $u){
+                    $unit = $this->super_model->select_column_where('unit', 'unit_name', 'unit_id', $u->unit_id);
+                    $data['user_id'] =$_SESSION['fullname'];
+                    $data['department'] =$u->department;
+                }
+                $data['date_transfer'] = $det->date_transfer;
+                $data['transfer_series'] = $det->transfer_series;
+                $data['details'][] = array(
+                    'et_id'=>$det->et_id,
+                    'ed_id'=>$det->ed_id,
+                    'date_transfer'=>$det->date_transfer,
+                    'transfer_series'=>$det->transfer_series,
+                    'acn_no'=>$det->asset_control_no,
+                    'date'=>$det->acquisition_date,
+                    'date_issued'=>$det->date_issued,
+                    'currency'=>$currency,
+                    'qty'=>$qty,
+                    'item'=>$item,
+                    'type'=>$type,
+                    'brand'=>$brand,
+                    'serial'=>$serial,
+                    'model'=>$model,
+                    'price'=>$price,
+                    'total'=>$total,
+                    'unit'=>$unit
+                );
+                foreach($this->super_model->select_row_where("et_details", "ed_id", $det->ed_id) AS $et_rem){
+                    $data['remarks_it'][] = array(
+                        'ed_id'=>$et_rem->ed_id,
+                        'remarks'=>$et_rem->remarks
+                    );
+                }
+            }
+            $data['head'][] = array(
+                'et_id'=>$et->et_id,
+            ); 
+              
+        }
+        $this->load->view('report/transfer_form',$data);
+        $this->load->view('template/footer');
+    }
+
     public function search_report_trans(){
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
