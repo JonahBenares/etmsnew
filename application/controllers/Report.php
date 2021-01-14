@@ -7397,15 +7397,16 @@ class Report extends CI_Controller {
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
-                if(empty($set_name)){
-                    $unit_price=$et->unit_price;
-                    $total = $et->qty*$unit_price;
-                }else {
-                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
-                    $total = $et->qty*$unit_price;
-                }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et_set_id' AND save_temp='0'");
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et_set_id' AND save_temp='0' AND $query");
+                $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et_set_id);
+                if(empty($set_name)){
+                    $unit_price=$et->unit_price.' '.$currency;
+                    $total = $et->qty*$unit_price.' '.$currency;
+                }else if($count_set==$count_set_id) {
+                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id).' '.$currency;
+                    $total = $et->qty*$unit_price.' '.$currency;
+                }
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -7445,8 +7446,8 @@ class Report extends CI_Controller {
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
@@ -7455,8 +7456,8 @@ class Report extends CI_Controller {
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total);
                     $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
@@ -7756,7 +7757,7 @@ class Report extends CI_Controller {
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND save_temp='1'");
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND save_temp='1' AND $query");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
