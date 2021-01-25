@@ -8,7 +8,7 @@
             <option value = "">--Select Location--</option>
             <?php foreach($location AS $l){ ?>
             <option value = "<?php echo $l->location_prefix; ?>" <?php echo (($s->location == $l->location_prefix) ? ' selected' : '');?>><?php echo $l->location_name; ?></option>
-            <?php } ?>
+            <?php } ?> 
             <!-- <option value = "BCD" <?php echo (($s->location == 'BCD') ? ' selected' : '');?>>Bacolod</option>
             <option value = "BS" <?php echo (($s->location == 'BS') ? ' selected' : '');?>>Bago</option> -->
         </select>
