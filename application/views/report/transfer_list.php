@@ -250,7 +250,7 @@
                                     <td><?php echo $m['location']; ?></td>
                                     <td>                                            
                                         <div class="btn-group">
-                                        <a href = "<?php echo base_url(); ?>report/edit_encode/<?php echo $m['et_id'];?>" class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
+                                        <a href = "<?php echo base_url(); ?>report/edit_encode_transfer/<?php echo $m['et_id'];?>" class="btn btn-info-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
                                                 <i class="fa fa-edit"></i>
                                             </a> 
                                             <a href = "<?php echo base_url(); ?>report/transfer_form/<?php echo $m['et_id'];?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">

@@ -1819,7 +1819,85 @@ class Report extends CI_Controller {
         $this->load->view('report/edit_encode_draft',$data);
         $this->load->view('template/footer');
     }
+public function edit_encode_transfer(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown); 
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);  
+        $data['edid']=$this->uri->segment(4);
+        $edid=$this->uri->segment(4); 
+        $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
+        $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
+        $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
+        $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
+        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $x=1;
+        foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
+            $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
+            $subcat = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $nxt->subcat_id);
+            $employee_name = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $nxt->accountability_id);
+            $department = $this->super_model->select_column_where("employees", "department", "employee_id", $nxt->accountability_id);
+            $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $nxt->unit_id);
+            $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
+            $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
+            $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
+            if(empty($rows)){
+                $next = '1001';
+                $asset_no= $subcat_prefix."-".$next;
+            } else {
+                $series = $this->super_model->get_max_where("asset_series", "series","subcat_prefix = '$subcat_prefix'");
+                $next=$series+1;
+                $asset_no = $subcat_prefix."-".$next;
+            }
 
+            $data['prefix'] = $subcat_prefix;
+            $data['location'] = $location;
+            $data['asset_no'] = $next;
+
+            $data['head'][] = array(
+                'et_id'=>$nxt->et_id,
+                'item'=>$nxt->et_desc,
+                'cat'=>$category,
+                'subcat'=>$subcat,
+                'asset_no'=>$asset_no,
+                'unit'=>$unit,
+                'accountability'=>$employee_name,
+                'department'=>$department
+            );
+
+            $row = $this->super_model->count_rows_where('et_details','et_id',$nxt->et_id);
+            if($row!=0){  
+                foreach($this->super_model->select_row_where('et_details','et_id',$nxt->et_id) AS $det){
+                    $data['details'][] = array(
+                        'et_id'=>$det->et_id,
+                        'ed_id'=>$det->ed_id,
+                        'date'=>$det->acquisition_date,
+                        'asset_control_no'=>$det->asset_control_no,
+                        'date_issued'=>$det->date_issued,
+                        'serial'=>$det->serial_no,
+                        'brand'=>$det->brand,
+                        'model'=>$det->model,
+                        'type'=>$det->type,
+                        'price'=>$det->unit_price,
+                        'currency'=>$det->currency_id,
+                        'physical'=>$det->physical_condition,
+                        'rack_id'=>$det->rack_id,
+                        'company'=>$det->company_id,
+                        'placement'=>$det->placement_id,
+                        'acquired_by'=>$det->acquired_by,
+                        'remarks'=>$det->remarks,
+                        'picture1'=>$det->picture1,
+                        'picture2'=>$det->picture2,
+                        'picture3'=>$det->picture3,
+                    );
+                }
+            }else {
+                $data['details']=array();
+            }
+        }
+        $this->load->view('report/edit_encode_transfer',$data);
+        $this->load->view('template/footer');
+    }
     public function update_encode(){
         $id = $this->input->post('et_id');
         $qty = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
@@ -2046,7 +2124,231 @@ class Report extends CI_Controller {
             }
         }
     }
+public function update_encode_transfer(){
+        $id = $this->input->post('et_id');
+        $qty = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
+        $row = $this->super_model->count_rows_where('et_details','et_id',$id);
+        if($row!=0){
+            for($x=0;$x<$qty;$x++){
+                $edid = $this->input->post('ed_id['.$x.']');
+                $serial = $this->input->post('sn['.$x.']');
+                $error_ext=0;
+                $dest= realpath(APPPATH . '../uploads/');
+                    if(!empty($_FILES['pic1']['name'][$x])){
+                         $img1= basename($_FILES['pic1']['name'][$x]);
+                         $img1=explode('.',$img1);
+                         $ext1=$img1[1];
+                        
+                        if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                            $error_ext++;
+                        } else {
+                            $filename1=$serial.'-1.'.$ext1;
+                            move_uploaded_file($_FILES['pic1']['tmp_name'][$x], $dest.'\/'.$filename1);
+                            $data_pic1 = array(
+                                'picture1'=>$filename1
+                            );
+                            $this->super_model->update_where("et_details", $data_pic1, "ed_id", $edid);
+                        }
+                    } 
+                
+                
+                    if(!empty($_FILES['pic2']['name'][$x])){
+                         $img2= basename($_FILES['pic2']['name'][$x]);
+                         $img2=explode('.',$img2);
+                         $ext2=$img2[1];
+                         
+                        if($ext2=='php' || ($ext2!='png' && $ext2 != 'jpg' && $ext2!='jpeg')){
+                            $error_ext++;
+                        } else {
+                            $filename2=$serial.'-2.'.$ext2;
+                            move_uploaded_file($_FILES["pic2"]['tmp_name'][$x], $dest.'\/'.$filename2);
+                            $data_pic2 = array(
+                                'picture2'=>$filename2
+                            );
+                            $this->super_model->update_where("et_details", $data_pic2, "ed_id", $edid);
+                        }
+                    }
 
+                    if(!empty($_FILES['pic3']['name'][$x])){
+                         $img3= basename($_FILES['pic3']['name'][$x]);
+                         $img3=explode('.',$img3);
+                         $ext3=$img3[1];
+                        
+                        if($ext3=='php' || ($ext3!='png' && $ext3 != 'jpg' && $ext3!='jpeg')){
+                            $error_ext++;
+                        } else {
+                            $filename3=$serial.'-3.'.$ext3;
+                            move_uploaded_file($_FILES["pic3"]['tmp_name'][$x], $dest.'\/'.$filename3);
+                            $data_pic3 = array(
+                                'picture3'=>$filename3
+                            );
+                            $this->super_model->update_where("et_details", $data_pic3, "ed_id", $edid);
+                        }
+                    }
+
+                if($this->input->post('saved') == 'Submit'){
+                    $data = array(
+                        'et_id'=>$this->input->post('et_id'),
+                        'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                        'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                        'serial_no'=>$this->input->post('sn['.$x.']'),
+                        'brand'=>$this->input->post('brand['.$x.']'),
+                        'model'=>$this->input->post('model['.$x.']'),
+                        'type'=>$this->input->post('type['.$x.']'),
+                        'unit_price'=>$this->input->post('price['.$x.']'),
+                        'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                        'remarks'=>$this->input->post('remarks['.$x.']'),
+                        'currency_id'=>$this->input->post('cur['.$x.']'),
+                        'physical_condition'=>$this->input->post('condition['.$x.']'),
+                        'placement_id'=>$this->input->post('placement['.$x.']'),
+                        'company_id'=>$this->input->post('company['.$x.']'),
+                        'rack_id'=>$this->input->post('rack['.$x.']'),
+                    );
+
+                    if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
+                        $data_up = array(
+                            'save_temp'=>0,
+                        );
+                        $this->super_model->update_where("et_head", $data_up, "et_id", $id);
+
+                        
+                            $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                            $subcat_prefix1=$assetdetails[0];
+                            $subcat_prefix2=$assetdetails[1];
+                            $location=$assetdetails[2];
+                            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                            $series = $assetdetails[3];
+                            $asset_data= array(
+                                'subcat_prefix'=>$subcat_prefix,
+                                'location'=>$location,
+                                'series'=>$series
+                            );
+                            $this->super_model->insert_into("asset_series", $asset_data);
+
+                            echo "<script>alert('Equipment/Tool successfully Updated!'); 
+                            window.location ='".base_url()."report/transfer_list'; </script>";
+                    }    
+                }else {
+                    $data = array(
+                        'et_id'=>$this->input->post('et_id'),
+                        'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                        'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                        'serial_no'=>$this->input->post('sn['.$x.']'),
+                        'brand'=>$this->input->post('brand['.$x.']'),
+                        'model'=>$this->input->post('model['.$x.']'),
+                        'type'=>$this->input->post('type['.$x.']'),
+                        'unit_price'=>$this->input->post('price['.$x.']'),
+                        'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                        'remarks'=>$this->input->post('remarks['.$x.']'),
+                        'currency_id'=>$this->input->post('cur['.$x.']'),
+                        'physical_condition'=>$this->input->post('condition['.$x.']'),
+                        'placement_id'=>$this->input->post('placement['.$x.']'),
+                        'company_id'=>$this->input->post('company['.$x.']'),
+                        'rack_id'=>$this->input->post('rack['.$x.']'),
+                    );
+
+                    if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
+                        $data_up = array(
+                            'save_temp'=>1,
+                        );
+                        $this->super_model->update_where("et_head", $data_up, "et_id", $id);
+                        echo "<script>alert('Equipment/Tool successfully Updated!'); 
+                        window.location ='".base_url()."report/report_draft'; </script>";
+                    }
+                }    
+            }
+        }else{
+            for($x=0;$x<$qty;$x++){
+                $serial = $this->input->post('sn['.$x.']');
+                $error_ext=0;
+                $dest= realpath(APPPATH . '../uploads/');
+                if(!empty($_FILES['pic1']['name'][$x])){
+                     $img1= basename($_FILES['pic1']['name'][$x]);
+                     $img1=explode('.',$img1);
+                     $ext1=$img1[1];
+                    
+                    if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                        $error_ext++;
+                    } else {
+                        $filename1=$serial.'-1.'.$ext1;
+                        move_uploaded_file($_FILES['pic1']['tmp_name'][$x], $dest.'/'.$filename1);
+                    }
+                } else {
+                    $filename1="";
+                }
+            
+            
+                if(!empty($_FILES['pic2']['name'][$x])){
+                     $img2= basename($_FILES['pic2']['name'][$x]);
+                     $img2=explode('.',$img2);
+                     $ext2=$img2[1];
+                     
+                    if($ext2=='php' || ($ext2!='png' && $ext2 != 'jpg' && $ext2!='jpeg')){
+                        $error_ext++;
+                    } else {
+                        $filename2=$serial.'-2.'.$ext2;
+                        move_uploaded_file($_FILES["pic2"]['tmp_name'][$x], $dest.'/'.$filename2);
+                    }
+                } else {
+                    $filename2="";
+                }
+
+                if(!empty($_FILES['pic3']['name'][$x])){
+                     $img3= basename($_FILES['pic3']['name'][$x]);
+                     $img3=explode('.',$img3);
+                     $ext3=$img3[1];
+                    
+                    if($ext3=='php' || ($ext3!='png' && $ext3 != 'jpg' && $ext3!='jpeg')){
+                        $error_ext++;
+                    } else {
+                        $filename3=$serial.'-3.'.$ext3;
+                        move_uploaded_file($_FILES["pic3"]['tmp_name'][$x], $dest.'/'.$filename3);
+
+                    }
+                } else {
+                    $filename3="";
+                }
+            
+                $data = array(
+                    'et_id'=>$this->input->post('et_id'),
+                    'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                    'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                    'asset_control_no'=>$this->input->post('acn['.$x.']'),
+                    'serial_no'=>$this->input->post('sn['.$x.']'),
+                    'brand'=>$this->input->post('brand['.$x.']'),
+                    'model'=>$this->input->post('model['.$x.']'),
+                    'type'=>$this->input->post('type['.$x.']'),
+                    'unit_price'=>$this->input->post('price['.$x.']'),
+                    'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                    'remarks'=>$this->input->post('remarks['.$x.']'),
+                    'currency_id'=>$this->input->post('cur['.$x.']'),
+                    'physical_condition'=>$this->input->post('condition['.$x.']'),
+                    'placement_id'=>$this->input->post('placement['.$x.']'),
+                    'company_id'=>$this->input->post('company['.$x.']'),
+                    'rack_id'=>$this->input->post('rack['.$x.']'),
+                    'picture1'=>$filename1,
+                    'picture2'=>$filename2,
+                    'picture3'=>$filename3
+                );
+            
+                if($this->super_model->insert_into("et_details", $data)){
+                    $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                    $subcat_prefix1=$assetdetails[0];
+                    $subcat_prefix2=$assetdetails[1];
+                    $subcat_prefix3=$assetdetails[2];
+                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                    $series = $assetdetails[3];
+                    $asset_data= array(
+                        'subcat_prefix'=>$subcat_prefix,
+                        'series'=>$series
+                    );
+                    $this->super_model->insert_into("asset_series", $asset_data);
+                    echo "<script>alert('Equipment/Tool successfully Updated!'); 
+                        window.location ='".base_url()."report/transfer_list; </script>";
+                }
+            }
+        }
+    }
     public function report_main_hist(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
