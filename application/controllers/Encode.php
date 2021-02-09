@@ -259,7 +259,15 @@ class Encode extends CI_Controller {
                     $ret_two=(!empty($assetdetails[1])) ? $assetdetails[1] : '';
                     $ret_three=(!empty($assetdetails[2])) ? $assetdetails[2] : '';
                     $ret_four = (!empty($assetdetails[3])) ? $assetdetails[3] : '';
-                    if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
+                    $ret_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
+                    if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four) && !empty($ret_five)){
+                        $subcat_prefix1=$assetdetails[0];
+                        $subcat_prefix2=$assetdetails[1];
+                        $subcat_prefix3=$assetdetails[2];
+                        $location=$assetdetails[2];
+                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                        $series = $assetdetails[4];
+                    }else if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
                         $subcat_prefix1=$assetdetails[0];
                         $subcat_prefix2=$assetdetails[1];
                         $location=$assetdetails[2];
@@ -316,7 +324,15 @@ class Encode extends CI_Controller {
                     $ret_two=(!empty($assetdetails[1])) ? $assetdetails[1] : '';
                     $ret_three=(!empty($assetdetails[2])) ? $assetdetails[2] : '';
                     $ret_four = (!empty($assetdetails[3])) ? $assetdetails[3] : '';
-                    if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
+                    $ret_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
+                    if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four) && !empty($ret_five)){
+                        $subcat_prefix1=$assetdetails[0];
+                        $subcat_prefix2=$assetdetails[1];
+                        $subcat_prefix3=$assetdetails[2];
+                        $location=$assetdetails[2];
+                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                        $series = $assetdetails[4];
+                    }else if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
                         $subcat_prefix1=$assetdetails[0];
                         $subcat_prefix2=$assetdetails[1];
                         $location=$assetdetails[2];
