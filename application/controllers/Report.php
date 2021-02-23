@@ -5474,6 +5474,7 @@ public function update_encode_transfer(){
         $checked =count($edid);
         $date = $this->input->post('date');
         $remarks = $this->input->post('remarks');
+        $ret_remarks = $this->input->post('ret_remarks');
         $ars_no = $this->input->post('ars_no');
         if(!empty($this->input->post('location_id'))){
             $changeloc = 1;
@@ -5626,7 +5627,8 @@ public function update_encode_transfer(){
                             'ed_id'=>$edid[$x],
                             'et_id'=>$et_id,
                             'return_id'=>$return_id,
-                            'date_issued'=>$date_issued
+                            'date_issued'=>$date_issued,
+                            'return_remarks'=>$ret_remarks,
                         );
                         $this->super_model->insert_into("return_details", $returndet_data);
                     }
@@ -5662,7 +5664,8 @@ public function update_encode_transfer(){
                             'ed_id'=>$edid[$x],
                             'et_id'=>$et_id,
                             'return_id'=>$return_id,
-                            'date_issued'=>$date_issued
+                            'date_issued'=>$date_issued,
+                            'return_remarks'=>$ret_remarks[$x],
                         );
                         $this->super_model->insert_into("return_details", $returndet_data);
                     }
@@ -5831,7 +5834,8 @@ public function update_encode_transfer(){
                         "et_id"=>$ret->et_id,
                         "item"=>$item,
                         "price"=>$price,
-                        "serial"=>$serial
+                        "serial"=>$serial,
+                        "return_remarks"=>$ret->return_remarks
                     );
                 }
                 $data['info'][] = array(
@@ -6629,6 +6633,7 @@ public function update_encode_transfer(){
 
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
+                    'return_remarks'=>$det->return_remarks,
                     'et_set_id'=>$et_set_id,
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
@@ -6719,6 +6724,7 @@ public function update_encode_transfer(){
 
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
+                    'return_remarks'=>$det->return_remarks,
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
                     'set_price'=>$set_price,
@@ -7061,6 +7067,7 @@ public function update_encode_transfer(){
                 }
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
+                    'return_remarks'=>$det->return_remarks,
                     'qty'=>$qty,
                     'date_issued'=>$date_issued,
                     'asset_control_no'=>$asset_control_no,
@@ -7321,6 +7328,7 @@ public function update_encode_transfer(){
         $checked =count($edid);
         $date = $this->input->post('date');
         $remarks = $this->input->post('remarks');
+        $ret_remarks = $this->input->post('ret_remarks');
         $ars_no = $this->input->post('ars_no');
         $received_by = $this->input->post('rec_id');
         if(!empty($this->input->post('location_id'))){
@@ -7477,7 +7485,8 @@ public function update_encode_transfer(){
                             'et_id'=>$ret->et_id,
                             'ed_id'=>$edid[$y],
                             'return_id'=>$return_id,
-                            'date_issued'=>$date_issued
+                            'date_issued'=>$date_issued,
+                            'return_remarks'=>$ret_remarks[$y],
                         );
                         $this->super_model->insert_into("return_details", $returndet_data);
                         $new_qty = $q-$val;
@@ -7501,7 +7510,8 @@ public function update_encode_transfer(){
                                     'et_id'=>$ret->et_id,
                                     'ed_id'=>$edid[$x],
                                     'return_id'=>$return_id,
-                                    'date_issued'=>$date_issued
+                                    'date_issued'=>$date_issued,
+                                    'return_remarks'=>$ret_remarks[$x],
                                 );
                                 $this->super_model->insert_into("return_details", $returndet_data);
                                 foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){

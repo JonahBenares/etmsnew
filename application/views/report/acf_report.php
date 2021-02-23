@@ -64,7 +64,7 @@
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
                         <td class="main-tab" align="center"><?php echo ($det['lost']==0) ? $return_date : '';?></td>
-                        <td class="main-tab" align="center"></td>
+                        <td class="main-tab" align="center"><?php echo $det['return_remarks'];?></td>
                     </tr>
                     <?php  
                         break;

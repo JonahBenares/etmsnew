@@ -68,6 +68,7 @@
                                                         <td width="60%">Item Desc:</td>
                                                         <td width="30%">S/N</td>
                                                         <td width="10%">Cost</td>
+                                                        <td width="10%">Remarks</td>
                                                     </tr>
                                                 </thead>
                                                 <?php 
@@ -79,6 +80,7 @@
                                                     <td><?php echo $det['item'];?></td>
                                                     <td><?php echo $det['serial'];?></td>
                                                     <td><?php echo $det['price'];?></td>
+                                                    <td><?php echo $det['return_remarks'];?></td>
                                                 </tr>
                                                 <?php 
                                                         break;

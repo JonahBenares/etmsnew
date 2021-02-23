@@ -52,6 +52,7 @@
                                     <th width="10%">Brand</th>
                                     <th width="10%">Model</th>
                                     <th width="10%">Type</th>
+                                    <th width="10%">Remarks</th>
                                 </thead>
                                 <?php $x=0; foreach($details AS $det){ ?>
                                 <tr>       
@@ -62,6 +63,7 @@
                                     <td><?php echo $det['brand'];?></td>
                                     <td><?php echo $det['model'];?></td>
                                     <td><?php echo $det['type'];?></td>
+                                    <td><textarea name="ret_remarks[]" placeholder="Remarks"></textarea></td>
                                 </tr>
                                 <?php $x++; } ?>
                             </table>

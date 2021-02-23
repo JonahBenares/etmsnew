@@ -57,6 +57,7 @@
                     <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                     <td class="main-tab" width="7%" align="center"><strong>Unit Cost</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
+                    <td class="main-tab" width="8%" align="center"><strong>Remarks</strong></td>
                 </tr>
                 <tr>
                 <?php if(!empty($return)){ 
@@ -87,6 +88,7 @@
 
                         <td class="main-tab" align="center"><?php echo number_format($det['total'],2)."<small> ".$det['currency']."</small>"; ?></td>
                         <?php } ?>
+                        <td class="main-tab" align="center"><?php echo $det['return_remarks'];?></td>
                     </tr>
                 <?php   
                     break;
@@ -95,12 +97,12 @@
                     } else { 
                 ?>
                     <tr>
-                        <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
+                        <td class="main-tab" align="center" colspan='10'><center>No Data Available.</center></td>
                     </tr>
                 <?php } ?>
                 </tr>
                 <tr>
-                    <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
+                    <td class="main-tab" colspan="10"><center>***nothing follows***</center></td>
                 </tr>   
             </table>
             <br>
