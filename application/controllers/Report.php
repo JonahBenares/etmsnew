@@ -5628,7 +5628,7 @@ public function update_encode_transfer(){
                             'et_id'=>$et_id,
                             'return_id'=>$return_id,
                             'date_issued'=>$date_issued,
-                            'return_remarks'=>$ret_remarks,
+                            'return_remarks'=>$ret_remarks[$x],
                         );
                         $this->super_model->insert_into("return_details", $returndet_data);
                     }
