@@ -118,7 +118,7 @@
                     <td width="10%"></td>
                     <td width="26%" class="main-tab">Prepared/Received by:</td>
                     <td width="10%"></td>
-                    <td width="26%" class="main-tab">Return by:</td>
+                    <td width="26%" class="main-tab">Returned by:</td>
                     <td width="10%"></td>
                 </tr>
                 <tr>
