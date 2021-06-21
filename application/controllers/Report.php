@@ -569,7 +569,7 @@ class Report extends CI_Controller {
                 $num++;
             }
         }else {
-            foreach($this->super_model->select_all_order_by("et_head",'et_desc','ASC') AS $ss){
+            foreach($this->super_model->select_custom_where("et_head","cancelled='0' ORDER BY et_desc ASC") AS $ss){
                 foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $ss->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $ss->subcat_id);
@@ -753,7 +753,7 @@ class Report extends CI_Controller {
                 );
             }
         }else {
-            foreach($this->super_model->select_all_order_by("et_head",'et_desc','ASC') AS $ss){
+            foreach($this->super_model->select_custom_where("et_head","cancelled = '0' ORDER BY et_desc ASC") AS $ss){
                 foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
                     $data['user_id'] =$_SESSION['fullname'];
                     $category = $this->super_model->select_column_where("category","category_name","category_id",$ss->category_id);
