@@ -138,7 +138,7 @@ class Report extends CI_Controller {
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         if($row!=0){
-            foreach($this->super_model->select_all_order_by("et_head",'et_desc','ASC') AS $ss){
+            foreach($this->super_model->select_custom_where("et_head","cancelled='0' ORDER BY et_desc ASC") AS $ss){
                 foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
                     $category = $this->super_model->select_column_where("category","category_name","category_id",$ss->category_id);
                     $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$ss->subcat_id);
@@ -368,7 +368,7 @@ class Report extends CI_Controller {
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
-        foreach ($this->super_model->custom_query("SELECT * FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE ".$query) AS $et){
+        foreach ($this->super_model->custom_query("SELECT * FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.cancelled='0' AND ".$query) AS $et){
             $category = $this->super_model->select_column_where("category","category_name","category_id",$et->category_id);
             $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$et->subcat_id);
             $employee = $this->super_model->select_column_where("employees","employee_name","employee_id",$et->accountability_id);
@@ -528,7 +528,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filters=substr($filter, 0, -2);
         if($filters!=''){
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE ".$query) AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE cancelled='0' AND ".$query) AS $et){
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -726,7 +726,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filters=substr($filter, 0, -2);
         if($filters!=''){
-           foreach($this->super_model->custom_query("SELECT * FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE ".$query) AS $et){
+           foreach($this->super_model->custom_query("SELECT * FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE cancelled='0' AND ".$query) AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $category = $this->super_model->select_column_where("category","category_name","category_id",$et->category_id);
                 $subcategory = $this->super_model->select_column_where("subcategory","subcat_name","subcat_id",$et->subcat_id);
