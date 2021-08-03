@@ -1099,6 +1099,7 @@ class Report extends CI_Controller {
         if($row!=0){
             foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
+                $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
                 $department =$et->department;
@@ -1111,6 +1112,7 @@ class Report extends CI_Controller {
                     'cat'=>$category,
                     'subcat'=>$subcat,
                     'unit'=>$unit,
+                    'asset_control_no'=>$asset_control_no,
                     'department'=>$department,
                     'et_desc'=>$et->et_desc,
                     'qty'=>$et->qty,
@@ -2232,6 +2234,7 @@ class Report extends CI_Controller {
         if($row_avail!=0){
             foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0'","et_id") as $et){
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -2245,6 +2248,7 @@ class Report extends CI_Controller {
                         'ed_id'=>$ed_id,
                         'empid'=>$empid,
                         'unit'=>$unit,
+                        'asset_control_no'=>$asset_control_no,
                         'damaged'=>$damage,
                         'department'=>$et->department,
                         'et_desc'=>$et->et_desc,
@@ -2339,6 +2343,7 @@ class Report extends CI_Controller {
         if($row!=0){
             foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE cancelled='0' AND save_temp='0' AND lost='0' AND change_location='1' GROUP BY eh.et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
+                $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -2349,6 +2354,7 @@ class Report extends CI_Controller {
                     'ed_id'=>$et->ed_id,
                     'cat'=>$category,
                     'subcat'=>$subcat,
+                    'asset_control_no'=>$asset_control_no,
                     'unit'=>$unit,
                     'department'=>$et->department,
                     'location'=>$location,
@@ -3335,6 +3341,7 @@ class Report extends CI_Controller {
                             'ed_id'=>$det->ed_id,
                             'empid'=>$et->accountability_id,
                             'unit'=>$unit,
+                            'asset_control_no'=>$det->asset_control_no,
                             'damaged'=>$det->damage,
                             'department'=>$et->department,
                             'et_desc'=>$et->et_desc,

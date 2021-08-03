@@ -122,6 +122,7 @@
                                         <th width="20%">Category</th>
                                         <th width="20%">Subcategory</th>
                                         <th width="20%">Item</th>
+                                        <th width="20%">Asset Control No.</th>
                                         <th>Unit</th>
                                         <th>Quantity</th>
                                         <th width="3%" class="text-center"><span class="fa fa-bars"></span></th>
@@ -138,6 +139,7 @@
                                              </a>
                                             
                                         </td>
+                                        <td ><?php echo $a['asset_control_no']; ?></td>
                                         <td align="center"><?php echo $a['unit']; ?></td>
                                         <td align="center"><?php echo $a['qty']; ?></td>
                                         <td >  

@@ -226,6 +226,7 @@
                                     <th>Category</th>
                                     <th>Sub Category</th>
                                     <th width="20%">Item</th>
+                                    <th>Asset Control No.</th>
                                     <th>Unit</th>
                                     <th>Quantity</th>
                                     <th>Location</th>
@@ -245,6 +246,7 @@
                                             <?php echo $m['et_desc']; ?>
                                         </a>   
                                     </td>
+                                    <td><?php echo $m['asset_control_no']; ?></td>
                                     <td><?php echo $m['unit']; ?></td>
                                     <td><?php echo $m['qty']; ?></td>
                                     <td><?php echo $m['location']; ?></td>
