@@ -81,6 +81,7 @@
                                     <th>Category</th>
                                     <th>Subcategory</th>
                                     <th>Item</th>
+                                    <th>Asset Control No.</th>
                                     <th>Unit</th>
                                     <th>Quantity</th>
                                     <th>Set Name</th>
@@ -106,6 +107,7 @@
                                          </a>
                                         
                                     </td>
+                                    <td align="center"><?php echo $a['asset_control_no']; ?></td>
                                     <td align="center"><?php echo $a['unit']; ?></td>
                                     <td align="center"><?php echo $a['qty']; ?></td>
                                     <td>
