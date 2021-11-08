@@ -36,6 +36,8 @@
                             <p class="m-b-20 font-medium"><?php echo $v['accountability'];?></p>
                             <p class="m-b-0">Department /Location: </p>
                             <p class="m-b-20 font-medium"><?php echo $v['department'];?></p>
+                            <p class="m-b-0">Employer: </p>
+                            <p class="m-b-20 font-medium"><?php echo $v['company'];?></p>
                         </div>
                         <div class="card-footer "><center><span class="fa fa-ellipsis-h"></span></center></div>
                     </div>

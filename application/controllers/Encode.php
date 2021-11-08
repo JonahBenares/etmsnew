@@ -56,6 +56,8 @@ class Encode extends CI_Controller {
             $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $nxt->unit_id);
             $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
             $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
+            $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $nxt->accountability_id);
+            $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
             $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
             if($rows==0){
                 $next = '1001';
@@ -78,7 +80,8 @@ class Encode extends CI_Controller {
                 'asset_no'=>$asset_no,
                 'unit'=>$unit,
                 'accountability'=>$employee_name,
-                'department'=>$department
+                'department'=>$department,
+                'company'=>$company,
             );
         }
         $this->load->view('encode/encode_next',$data);

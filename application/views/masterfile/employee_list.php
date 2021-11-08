@@ -19,6 +19,16 @@
                         <label for="" class="control-label mb-1">Position:</label>
                         <input name="position" type="text" class="form-control bor-radius5" placeholder="">
 
+                        <label for="" class="control-label mb-1">Employer:</label>
+                        <select name="company_id" class="form-control bor-radius5" id="company_id">
+                            <option>-- Select Employer --</option>
+                            <?php 
+                                foreach ($company AS $com) {
+                            ?>
+                            <option value="<?php echo $com->company_id; ?>"><?php echo $com->company_name;?></option>
+                            <?php } ?>
+                        </select>
+
                         <label for="" class="control-label mb-1">Department:</label>
                         <input name="department" type="text" class="form-control bor-radius5" placeholder="">
 
@@ -84,6 +94,7 @@
                                         <th width="1%"></th>
                                         <th width="12%">Employee No.</th>
                                         <th width="30%">Employee</th>
+                                        <th width="20%">Employer</th>
                                         <th width="20%">Department</th>
                                         <th width="30%">Postition</th>
                                         <th width="10%">Location</th>
@@ -98,6 +109,7 @@
                                         <td><?php echo ($emp['status']==0) ? '<span class="bor-radius20 badge badge-success"><i class="fa fa-check"></i></span>' : '<span class="badge badge-dark"><i class="fa fa-times"></i></span>';?> </td>
                                         <td><?php echo $emp['aaf_no'];?></td>
                                         <td><p class="m-0"><?php echo $emp['name'];?></p></td>
+                                        <td><p class="m-0"><?php echo $emp['company'];?></p></td>
                                         <td><?php echo $emp['department'];?></td>
                                         <td><?php echo $emp['position'];?></td>
                                         <td><?php echo $emp['location'];?></td>

@@ -1683,6 +1683,8 @@ class Report extends CI_Controller {
             $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $nxt->unit_id);
             $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
             $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
+            $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $nxt->accountability_id);
+            $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
             $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
             if(empty($rows)){
                 $next = '1001';
@@ -1705,7 +1707,8 @@ class Report extends CI_Controller {
                 'asset_no'=>$asset_no,
                 'unit'=>$unit,
                 'accountability'=>$employee_name,
-                'department'=>$department
+                'department'=>$department,
+                'company'=>$company,
             );
 
             $row = $this->super_model->count_rows_where('et_details','et_id',$nxt->et_id);
@@ -1763,6 +1766,8 @@ class Report extends CI_Controller {
             $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $nxt->unit_id);
             $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
             $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
+            $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $nxt->accountability_id);
+            $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
             $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
             if(empty($rows)){
                 $next = '1001';
@@ -1785,12 +1790,16 @@ class Report extends CI_Controller {
                 'asset_no'=>$asset_no,
                 'unit'=>$unit,
                 'accountability'=>$employee_name,
-                'department'=>$department
+                'department'=>$department,
+                'company'=>$company
             );
 
             $row = $this->super_model->count_rows_where('et_details','et_id',$nxt->et_id);
             if($row!=0){  
                 foreach($this->super_model->select_row_where('et_details','et_id',$nxt->et_id) AS $det){
+                    $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
+                    $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $accountability_id);
+                    $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
                     $data['details'][] = array(
                         'et_id'=>$det->et_id,
                         'ed_id'=>$det->ed_id,
@@ -1812,6 +1821,7 @@ class Report extends CI_Controller {
                         'picture1'=>$det->picture1,
                         'picture2'=>$det->picture2,
                         'picture3'=>$det->picture3,
+                        'company'=>$company,
                     );
                 }
             }else {
@@ -5396,6 +5406,8 @@ public function update_encode_transfer(){
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $view->category_id);
                 $data['damage'] =$this->super_model->select_column_where("et_details", "damage", "et_id", $view->et_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $view->subcat_id);
+                $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $view->accountability_id);
+                $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
                 $data['view'][] = array(
                     'et_id'=>$view->et_id,
                     'et_desc'=>$view->et_desc,
@@ -5405,6 +5417,7 @@ public function update_encode_transfer(){
                     'department'=>$view->department,
                     'category'=>$category,
                     'subcat'=>$subcat,
+                    'company'=>$company,
                 );
                 foreach($this->super_model->select_row_where('et_details', 'et_id', $view->et_id) AS $det){
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);

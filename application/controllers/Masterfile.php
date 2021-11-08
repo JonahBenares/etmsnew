@@ -97,15 +97,18 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
+        $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $row=$this->super_model->count_rows("employees");
         if($row!=0){
             foreach($this->super_model->select_all_order_by('employees', 'employee_name', 'ASC') AS $emp){
                 $location= $this->super_model->select_column_where('location', 'location_name', 'location_id', $emp->location_id);
+                $company= $this->super_model->select_column_where('company', 'company_name', 'company_id', $emp->company_id);
                 $data['employee'][] = array(
                     'id'=>$emp->employee_id,
                     'name'=>$emp->employee_name,
                     'department'=>$emp->department,
                     'location'=>$location,
+                    'company'=>$company,
                     'position'=>$emp->position,
                     'aaf_no'=>$emp->aaf_no,
                     'type'=>$emp->type,
@@ -193,6 +196,7 @@ class Masterfile extends CI_Controller {
         $position = trim($this->input->post('position')," ");
         $department = trim($this->input->post('department')," ");
         $location = trim($this->input->post('location')," ");
+        $company_id = trim($this->input->post('company_id')," ");
         $aaf_no = trim($this->input->post('aaf_no')," ");
         $status = trim($this->input->post('status')," ");
         $row = $this->super_model->count_rows_where("employees","employee_name",$employee);
@@ -203,6 +207,7 @@ class Masterfile extends CI_Controller {
             $data = array(
                 'employee_name'=>$employee,
                 'location_id'=>$location,
+                'company_id'=>$company_id,
                 'aaf_no'=>$aaf_no,
                 'position'=>$position,
                 'department'=>$department,
@@ -242,6 +247,7 @@ class Masterfile extends CI_Controller {
         $id=$this->uri->segment(3);
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $data['employee'] = $this->super_model->select_row_where('employees', 'employee_id', $id);
+        $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $this->load->view('masterfile/employee_update',$data);
         $this->load->view('template/footer');
     }
@@ -256,6 +262,7 @@ class Masterfile extends CI_Controller {
                     'position'=>$this->input->post('position'),
                     'department'=>$this->input->post('department'),
                     'location_id'=>$this->input->post('location'),
+                    'company_id'=>$this->input->post('company_id'),
                     'status'=>$this->input->post('status'),
                     'aaf_no'=>$aaf_no
                 );

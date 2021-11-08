@@ -33,6 +33,15 @@
                                         <input id="" name="employee" type="text" value = "<?php echo $emp->employee_name;?>"  class="form-control bor-radius5" placeholder="">
                                         <label for="" class="control-label mb-1">Position:</label>
                                         <input id="" name="position" type="text" value = "<?php echo $emp->position;?>"  class="form-control bor-radius5" placeholder="">
+                                        <label for="" class="control-label mb-1">Employer:</label>
+                                        <select name="company_id" class="form-control bor-radius5" id="company_id">
+                                            <option>-- Select Employer --</option>
+                                            <?php 
+                                                foreach ($company AS $com) {
+                                            ?>
+                                            <option value="<?php echo $com->company_id; ?>" <?php echo (($emp->company_id == $com->company_id) ? ' selected' : '');?>><?php echo $com->company_name;?></option>
+                                            <?php } ?>
+                                        </select>
                                         <label for="" class="control-label mb-1">Department:</label>
                                         <input id="" name="department" type="text" value = "<?php echo $emp->department;?>"  class="form-control bor-radius5" placeholder="">
                                         <label for="" class="control-label mb-1">Location:</label>
