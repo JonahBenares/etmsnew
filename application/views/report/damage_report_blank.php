@@ -56,42 +56,42 @@
                     <td width="10%"colspan="2"><p class="pull-right">Specification:</p></td>
                     <td></td>
                     <td></td>
-                </tr>   
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td><p class="pull-right">Date Acquired </p></td>
-                    <td style="border-bottom: 1px solid #999"> : </td>
                 </tr>  
                 <tr>
                     <td></td>
+                    <td  width="5%" colspan="2"><p class="pull-right">Date Acquired </p></td>
+                    <td width="65%" style="border-bottom: 1px solid #999"> : <br></td>
+                    <td width="10%"></td>
+                </tr>    
+                <tr>
+                    <td></td>
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
-                    <td style="border-bottom: 1px solid #999"> : </td>
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
                     <td width="10%"></td>
                 </tr>        
                 <tr>
                     <td></td>
                     <td></td>
                     <td><p class="pull-right">Brand </p></td>
-                    <td style="border-bottom: 1px solid #999"> : </td>
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
                 </tr>  
                 <tr>
                     <td></td>
                     <td></td>
                     <td><p class="pull-right">Model </p></td>
-                    <td style="border-bottom: 1px solid #999"> : </td>
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
                 </tr> 
                 <tr>
                     <td></td>
                     <td></td>
                     <td><p class="pull-right">Serial Number </p></td>
-                    <td style="border-bottom: 1px solid #999"> : </td>
-                </tr> 
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
+                </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td><p class="pull-right">PO/Si Number </p></td>
-                    <td style="border-bottom: 1px solid #999"> : </td>
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
                 </tr> 
             </table>
             <br>

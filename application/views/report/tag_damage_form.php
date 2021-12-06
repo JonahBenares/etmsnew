@@ -102,6 +102,32 @@
                                             <textarea name="recommendation<?php echo $x;?>" class="form-control" id="" cols="30" rows="2" required></textarea>
                                         </div>
                                     </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <table class="table-bordered" width="100%">
+                                                <tr>
+                                                    <td style="padding:10px" colspan="2">Damage History/Repair and Maintenance</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px" width="30%">Date of Incident</td>
+                                                    <td style="padding:10px"> Fully describe the damage done to the equipment</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <table class="table-bordered" width="100%">
+                                                <tr>
+                                                    <td style="padding:10px">Upgrade History</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px" width="30%"></td>
+                                                    <td style="padding:10px"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br>
                                     <div class="row">                                                 
                                         <div class="col-12">
                                             <label for="" class="control-label mb-1">Remarks:</label>
@@ -110,19 +136,25 @@
                                     </div>
                                     <div class="row">                                                 
                                         <div class="col-6">
-                                            <label for="" class="control-label mb-1">Checked By:</label>
+                                            <label for="" class="control-label mb-1">Prepared By:</label>
                                             <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp checked" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "checked<?php echo $x; ?>">
                                             <span id="suggestion-checked<?php echo $x;?>"></span>
                                             <input type="hidden" name="checked_id<?php echo $x;?>" id="checked_id<?php echo $x;?>" >
                                         </div>
+                                        <div class="col-6">
+                                            <label for="x_card_code" class="control-label mb-1">Accountable Person:</label>
+                                            <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp submitted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "submitted<?php echo $x; ?>" required>
+                                            <span id="suggestion-submitted<?php echo $x;?>"></span>
+                                            <input type="hidden" name="submitted_id<?php echo $x;?>" id="submitted_id<?php echo $x;?>">
+                                        </div>
+                                    </div>
+                                    <div class="row"> 
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Submitted By:</label>
                                             <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp submitted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "submitted<?php echo $x; ?>" required>
                                             <span id="suggestion-submitted<?php echo $x;?>"></span>
                                             <input type="hidden" name="submitted_id<?php echo $x;?>" id="submitted_id<?php echo $x;?>">
                                         </div>
-                                    </div>
-                                    <div class="row">                                                 
                                         <div class="col-6">
                                             <label for="" class="control-label mb-1">Noted By:</label>
                                             <input name="noted_by" type="text" class="form-control bor-radius5 cc-exp noted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "noted<?php echo $x; ?>" >

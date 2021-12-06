@@ -204,23 +204,96 @@
                 </tr>
             </table>
             <br>
-            
+            <div class="row">
+                <div class="col-lg-6">
+                    <table class="table-bordered" width="100%">
+                        <tr>
+                            <td style="padding:10px" colspan="2">Damage History/Repair and Maintenance</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px" width="30%">Date of Incident</td>
+                            <td style="padding:10px"> Fully describe the damage done to the equipment</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-6">
+                    <table class="table-bordered" width="100%">
+                        <tr>
+                            <td style="padding:10px" colspan="2">Upgrade History</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px" width="30%"></td>
+                            <td style="padding:10px"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br>
+            <p> Remarks:</p>
+            <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td style="border-bottom: 1px solid #999"><br></td>
+                </tr>
+                <tr>
+                    <td width="10%"></td>
+                    <td><br></td>
+                </tr>
+            </table>
             <center>
                 <p> Note: Tag damaged equipment. Place tag as close as possible to the damage area.</p>
                 <p> Store damaged equipment directly to the repair room to ensure no one else uses it.</p>
             </center>
         </div>
         <div class="col-lg-12">
-            <br>
-             <table width="100%">
+            <br>    
+            <table width="100%">
                 <tr>
-                    <td width="5%"></td>
-                    <td width="20%" class="main-tab">Submitted by:</td>
                     <td width="10%"></td>
-                    <td width="20%" class="main-tab">Checked by:</td>
+                    <td width="30%" class="main-tab">Prepared by:</td>
+                    <td width="20%" class="main-tab"></td>
+                    <td width="30%" class="main-tab">Accountable Person:</td>
                     <td width="10%"></td>
-                    <td width="20%" class="main-tab">Noted by:</td>
-                    <td width="5%"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
+                        <?php if($dam['typec'] == 2){ ?>
+                            <?php foreach($child2 as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
+                        <?php } else { ?>
+                            <input class="select" type="" name="" value="<?php echo $checked_by;?>" style = "pointer-events:none;">
+                        <?php } ?>
+                    </td>
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
+                        Accountable Person
+                    </td>
+                    <td></td>
+                </tr>
+                 <tr>
+                    <td></td>
+                    <td>
+                        <p></p>
+                    </td> 
+                    <td></td>
+                    <td>
+                        <center><p><!-- Asset Management Assistant --></p></center>
+                    </td>
+                    <td></td>
+                    <td>
+                        <center><p><!-- Plant Manager --></p></center>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <br>
+            <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td width="30%" class="main-tab">Submitted by:</td>
+                    <td width="20%" class="main-tab"></td>
+                    <td width="30%" class="main-tab">Noted by:</td>
+                    <td width="10%"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -231,14 +304,6 @@
                             <input class="select" type="" name="" value="<?php echo $submitted_by;?>" style = "pointer-events:none;">
                         <?php } ?>
                     </td> 
-                    <td></td>
-                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        <?php if($dam['typec'] == 2){ ?>
-                            <?php foreach($child2 as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
-                        <?php } else { ?>
-                            <input class="select" type="" name="" value="<?php echo $checked_by;?>" style = "pointer-events:none;">
-                        <?php } ?>
-                    </td>
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
                         <?php if($dam['typen'] == 2){ ?>
