@@ -168,9 +168,9 @@
                             foreach($damageview AS $damv){ 
                            if($damv['method']=='Damaged'){     
                     ?>
-                        <span><?php echo $damv['date']." - ".$damv['remarks']." - Damaged, ";?></span>
+                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Damaged, " : '';?></span>
                     <?php }else if($damv['method']=='Repaired'){ ?>
-                        <span><?php echo $damv['date']." - ".$damv['remarks']." - Repaired, ";?></span>
+                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Repaired, " : '';?></span>
                     <?php } } }?>
                 </div>
                 <div class="col-lg-5">
