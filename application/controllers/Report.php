@@ -6340,7 +6340,7 @@ public function update_encode_transfer(){
             }
             $incident_date="";
             $dam_date="";
-            foreach($this->super_model->custom_query("SELECT * FROM damage_info WHERE et_id = '$dam->et_id'") AS $damv){
+            foreach($this->super_model->custom_query("SELECT * FROM damage_info WHERE et_id = '$dam->et_id' AND damage_id!='$damage_id'") AS $damv){
                 $dam_date.=date("Y-m-d",strtotime($damv->incident_date));
                 $incident_date.=date("Y-m-d",strtotime($damv->incident_date))." ".$damv->equip_damage.", ";
                 $data['damageview'][]=array(
@@ -6449,7 +6449,7 @@ public function update_encode_transfer(){
 
             $incident_date="";
             $dam_date="";
-            foreach($this->super_model->custom_query("SELECT * FROM damage_info WHERE et_id = '$dam->et_id'") AS $damv){
+            foreach($this->super_model->custom_query("SELECT * FROM damage_info WHERE et_id = '$dam->et_id' AND damage_id!='$damage_id'") AS $damv){
                 $dam_date.=date("Y-m-d",strtotime($damv->incident_date));
                 $incident_date.=date("Y-m-d",strtotime($damv->incident_date))." ".$damv->equip_damage.", ";
                 $data['damageview'][]=array(

@@ -82,7 +82,6 @@ class Repair extends CI_Controller {
                 $data['rep'][]=array(
                     'repair_id'=>$det->repair_id,
                     'ed_id'=>$det->ed_id,
-                    'damage_id'=>$det->damage_id,
                 );
                 foreach($this->super_model->select_custom_where("et_details", "ed_id='$det->ed_id'") AS $dets){
                     foreach($this->super_model->select_custom_where("et_head", "et_id='$dets->et_id'") AS $et){
