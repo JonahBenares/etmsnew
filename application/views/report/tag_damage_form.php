@@ -123,9 +123,9 @@
                                                     foreach($damage AS $dam){ 
                                                    if($dam['method']=='Damaged'){     
                                             ?>
-                                                <span><?php echo ($damv['remarks']!='') ? $dam['date']." - ".$dam['remarks']." - Damaged, " : '';?></span>
+                                                <span><?php echo ($dam['remarks']!='') ? $dam['date']." - ".$dam['remarks']." - Damaged, " : '';?></span>
                                             <?php }else if($dam['method']=='Repaired'){ ?>
-                                                <span><?php echo ($damv['remarks']!='') ? $dam['date']." - ".$dam['remarks']." - Repaired, " : '';?></span>
+                                                <span><?php echo ($dam['remarks']!='') ? $dam['date']." - ".$dam['remarks']." - Repaired, " : '';?></span>
                                             <?php } } }?>
                                         </div>
                                         <div class="col-lg-5">
