@@ -82,6 +82,7 @@ class Repair extends CI_Controller {
                 $data['rep'][]=array(
                     'repair_id'=>$det->repair_id,
                     'ed_id'=>$det->ed_id,
+                    'damage_id'=>$det->damage_id,
                 );
                 foreach($this->super_model->select_custom_where("et_details", "ed_id='$det->ed_id'") AS $dets){
                     foreach($this->super_model->select_custom_where("et_head", "et_id='$dets->et_id'") AS $et){
@@ -94,6 +95,7 @@ class Repair extends CI_Controller {
                     $brand =$this->super_model->select_column_where("et_details", "brand", "ed_id", $dets->ed_id);
                     $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $dets->ed_id);
                     $data['details'][]=array(
+                        'repair_id'=>$det->repair_id,
                         'ed_id'=>$dets->ed_id,
                         'item'=>$item,
                         'category'=>$category,
@@ -129,9 +131,13 @@ class Repair extends CI_Controller {
         $edid = $this->input->post('edid');
         $checked =count($edid);
         for($x=0;$x<$checked;$x++){
+            /*$exp=explode("/", $edid[$x]);
+            $ed_id= $exp[0];
+            $damage_id= $exp[1];*/
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $rep){
                 $rep_data = array(
                     'ed_id'=>$edid[$x],
+                    //'damage_id'=>$damage_id,
                     'unsaved'=>1,
                 );
                 $this->super_model->insert_into("repair_details", $rep_data);
@@ -143,7 +149,9 @@ class Repair extends CI_Controller {
     public function insert_repair(){
         $count = $this->input->post('count');
         for($x=0;$x<$count;$x++){
+            $repair_id = $this->input->post('repair_id'.$x);
             $edid = $this->input->post('ed_id'.$x);
+            //$damage_id = $this->input->post('damage_id'.$x);
             $date = $this->input->post('date'.$x);
             $price = $this->input->post('price'.$x);
             $jo = $this->input->post('jo'.$x);
@@ -166,7 +174,7 @@ class Repair extends CI_Controller {
                     'saved'=>1,
                     'unsaved'=>0,
                 );
-                $this->super_model->update_where("repair_details", $rep_data, "ed_id", $edid);
+                $this->super_model->update_where("repair_details", $rep_data, "repair_id", $repair_id);
             }
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
                 if($radio=='1'){

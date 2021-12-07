@@ -74,6 +74,7 @@
                                 <tbody>
                                     <?php if(!empty($damage)){ $x=0; foreach($damage as $d){ ?>
                                     <tr>
+                                        <!-- <td class="p-b-10 p-t-10" align="center"><input type="checkbox" class="multi m-0" name="edid[]" value=<?php echo $d['ed_id']."/".$d['damage_id']; ?>></td> -->
                                         <td class="p-b-10 p-t-10" align="center"><input type="checkbox" class="multi m-0" name="edid[]" value=<?php echo $d['ed_id']; ?>></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['asset_control'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['et_desc'];?></td>
