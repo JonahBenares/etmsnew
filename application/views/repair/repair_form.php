@@ -108,6 +108,8 @@
                                     </td>
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                     <input type="hidden" name="ed_id<?php echo $z;?>" value = "<?php echo $d['ed_id'];?>">
+                                    <input type="hidden" name="repair_id<?php echo $z;?>" value = "<?php echo $r['repair_id'];?>">
+                                    <!-- <input type="hidden" name="damage_id<?php echo $z;?>" value = "<?php echo $d['damage_id'];?>"> -->
                                     <input type="hidden" name="user_id<?php echo $z;?>" value = "<?php echo $_SESSION['user_id'];?>">
                                 </tr>
                             </table>
