@@ -192,34 +192,34 @@
                 </tr>
             </table>
             <br>
-            <p> Remarks</p>
-            <table width="100%">
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['remarks'];?><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td><br></td>
-                </tr>
-            </table>
-            <br>
             <div class="row">
-                <div class="col-lg-6">
-                    <table class="table-bordered" width="100%">
-                        <tr>
-                            <td style="padding:10px" colspan="2">Damage History/Repair and Maintenance</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:10px" width="30%">Date of Incident</td>
-                            <td style="padding:10px"> Fully describe the damage done to the equipment</td>
-                        </tr>
-                    </table>
+                <div class="col-lg-7">
+                    <b for="" class="control-label mb-1">Damage History/Repair and Maintenance:</b>
+                    <br>
+                    <?php
+                        function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+                            $sort_col = array();
+                            foreach ($arr as $key=> $row) {
+                                $sort_col[$key] = $row[$col];
+                            }
+
+                            array_multisort($sort_col, $dir, $arr);
+                        }
+                        
+                        if(!empty($damageview)){ 
+                            array_sort_by_column($damageview, 'date');
+                            foreach($damageview AS $damv){ 
+                           if($damv['method']=='Damaged'){     
+                    ?>
+                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Damaged, " : '';?></span>
+                    <?php }else if($damv['method']=='Repaired'){ ?>
+                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Repaired, " : '';?></span>
+                    <?php } } }?>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <table class="table-bordered" width="100%">
                         <tr>
-                            <td style="padding:10px" colspan="2">Upgrade History</td>
+                            <td style="padding:10px">Upgrade History</td>
                         </tr>
                         <tr>
                             <td style="padding:10px" width="30%"></td>
@@ -229,11 +229,11 @@
                 </div>
             </div>
             <br>
-            <p> Remarks:</p>
+            <p> Remarks: </p>
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><br></td>
+                    <td style="border-bottom: 1px solid #999"><?php echo $dam['remarks'];?><br></td>
                 </tr>
                 <tr>
                     <td width="10%"></td>
@@ -266,7 +266,7 @@
                     </td>
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        Accountable Person
+                         <input class="select" type="" name="" value="<?php echo $accountable;?>" style = "pointer-events:none;">
                     </td>
                     <td></td>
                 </tr>

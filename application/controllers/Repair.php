@@ -29,13 +29,16 @@ class Repair extends CI_Controller {
     public function repair_list(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        $row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
-        foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
+        //$row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
+        $row_avail=$this->super_model->select_all_order_by("et_head",'et_id','ASC');
+        //foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
+        foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0' AND et_id = '$check->et_id'");           
         }
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_avail!=0){
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $et){
                 foreach($this->super_model->select_custom_where("et_details", "damage='1' AND et_id ='$et->et_id'") AS $det){
                     $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -94,6 +97,7 @@ class Repair extends CI_Controller {
                     $brand =$this->super_model->select_column_where("et_details", "brand", "ed_id", $dets->ed_id);
                     $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $dets->ed_id);
                     $data['details'][]=array(
+                        'repair_id'=>$det->repair_id,
                         'ed_id'=>$dets->ed_id,
                         'item'=>$item,
                         'category'=>$category,
@@ -129,9 +133,13 @@ class Repair extends CI_Controller {
         $edid = $this->input->post('edid');
         $checked =count($edid);
         for($x=0;$x<$checked;$x++){
+            /*$exp=explode("/", $edid[$x]);
+            $ed_id= $exp[0];
+            $damage_id= $exp[1];*/
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $rep){
                 $rep_data = array(
                     'ed_id'=>$edid[$x],
+                    //'damage_id'=>$damage_id,
                     'unsaved'=>1,
                 );
                 $this->super_model->insert_into("repair_details", $rep_data);
@@ -143,7 +151,9 @@ class Repair extends CI_Controller {
     public function insert_repair(){
         $count = $this->input->post('count');
         for($x=0;$x<$count;$x++){
+            $repair_id = $this->input->post('repair_id'.$x);
             $edid = $this->input->post('ed_id'.$x);
+            //$damage_id = $this->input->post('damage_id'.$x);
             $date = $this->input->post('date'.$x);
             $price = $this->input->post('price'.$x);
             $jo = $this->input->post('jo'.$x);
@@ -166,7 +176,7 @@ class Repair extends CI_Controller {
                     'saved'=>1,
                     'unsaved'=>0,
                 );
-                $this->super_model->update_where("repair_details", $rep_data, "ed_id", $edid);
+                $this->super_model->update_where("repair_details", $rep_data, "repair_id", $repair_id);
             }
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
                 if($radio=='1'){

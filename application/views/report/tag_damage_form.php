@@ -8,6 +8,7 @@
             <div class="col-lg-12">
                 <form action="<?php echo base_url(); ?>report/insert_damage_form" method="POST">
                 <?php 
+
                 foreach($head AS $h){  
                     $x = 1;
                     foreach($details AS $det){     
@@ -104,18 +105,30 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <table class="table-bordered" width="100%">
-                                                <tr>
-                                                    <td style="padding:10px" colspan="2">Damage History/Repair and Maintenance</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px" width="30%">Date of Incident</td>
-                                                    <td style="padding:10px"> Fully describe the damage done to the equipment</td>
-                                                </tr>
-                                            </table>
+                                        <div class="col-lg-7">
+                                            <b for="" class="control-label mb-1">Damage History/Repair and Maintenance:</b>
+                                            <br>
+                                            <?php
+                                                function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+                                                    $sort_col = array();
+                                                    foreach ($arr as $key=> $row) {
+                                                        $sort_col[$key] = $row[$col];
+                                                    }
+
+                                                    array_multisort($sort_col, $dir, $arr);
+                                                }
+                                                
+                                                if(!empty($damage)){ 
+                                                    array_sort_by_column($damage, 'date');
+                                                    foreach($damage AS $dam){ 
+                                                   if($dam['method']=='Damaged'){     
+                                            ?>
+                                                <span><?php echo ($dam['remarks']!='') ? $dam['date']." - ".$dam['remarks']." - Damaged, " : '';?></span>
+                                            <?php }else if($dam['method']=='Repaired'){ ?>
+                                                <span><?php echo ($dam['remarks']!='') ? $dam['date']." - ".$dam['remarks']." - Repaired, " : '';?></span>
+                                            <?php } } }?>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-5">
                                             <table class="table-bordered" width="100%">
                                                 <tr>
                                                     <td style="padding:10px">Upgrade History</td>
@@ -135,6 +148,13 @@
                                         </div>
                                     </div>
                                     <div class="row">                                                 
+                                        <div class="col-12">
+                                            <label for="" class="control-label mb-1">Remove Accountability:</label>
+                                             <input type="radio" name="remove_accountability<?php echo $x;?>" value="1" required>Yes</input>
+                                            <input type="radio" name="remove_accountability<?php echo $x;?>" value="2" required>No</input>
+                                        </div>
+                                    </div>
+                                    <div class="row">                                                 
                                         <div class="col-6">
                                             <label for="" class="control-label mb-1">Prepared By:</label>
                                             <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp checked" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "checked<?php echo $x; ?>">
@@ -143,9 +163,9 @@
                                         </div>
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Accountable Person:</label>
-                                            <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp submitted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "submitted<?php echo $x; ?>" required>
-                                            <span id="suggestion-submitted<?php echo $x;?>"></span>
-                                            <input type="hidden" name="submitted_id<?php echo $x;?>" id="submitted_id<?php echo $x;?>">
+                                            <input type="text" class="form-control bor-radius5 cc-exp accountable" data-trigger="<?php echo $x;?>"  value = "<?php echo $h['accountability'];?>" style = "pointer-events:none;" autocomplete = "off"  id = "accountable<?php echo $x; ?>">
+                                            <!--<span id="suggestion-accountable<?php echo $x;?>"></span>-->
+                                            <input type="hidden" name="accountable<?php echo $x;?>" value="<?php echo $id; ?>">
                                         </div>
                                     </div>
                                     <div class="row"> 
