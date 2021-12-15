@@ -148,6 +148,13 @@
                                         </div>
                                     </div>
                                     <div class="row">                                                 
+                                        <div class="col-12">
+                                            <label for="" class="control-label mb-1">Remove Accountability:</label>
+                                             <input type="radio" name="remove_accountability<?php echo $x;?>" value="1" required>Yes</input>
+                                            <input type="radio" name="remove_accountability<?php echo $x;?>" value="2" required>No</input>
+                                        </div>
+                                    </div>
+                                    <div class="row">                                                 
                                         <div class="col-6">
                                             <label for="" class="control-label mb-1">Prepared By:</label>
                                             <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp checked" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "checked<?php echo $x; ?>">
@@ -156,9 +163,9 @@
                                         </div>
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Accountable Person:</label>
-                                            <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp submitted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "submitted<?php echo $x; ?>" required>
-                                            <span id="suggestion-submitted<?php echo $x;?>"></span>
-                                            <input type="hidden" name="submitted_id<?php echo $x;?>" id="submitted_id<?php echo $x;?>">
+                                            <input type="text" class="form-control bor-radius5 cc-exp accountable" data-trigger="<?php echo $x;?>"  value = "<?php echo $h['accountability'];?>" style = "pointer-events:none;" autocomplete = "off"  id = "accountable<?php echo $x; ?>">
+                                            <!--<span id="suggestion-accountable<?php echo $x;?>"></span>-->
+                                            <input type="hidden" name="accountable<?php echo $x;?>" value="<?php echo $id; ?>">
                                         </div>
                                     </div>
                                     <div class="row"> 

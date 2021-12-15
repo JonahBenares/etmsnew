@@ -6066,6 +6066,8 @@ public function update_encode_transfer(){
             $location = $this->input->post('location'.$x);
             $damage_done = $this->input->post('damage_done'.$x);
             $receipt = $this->input->post('receipt'.$x);
+            $accountable = $this->input->post('accountable'.$x);
+            $remove_accountability = $this->input->post('remove_accountability'.$x);
             $recommendation = $this->input->post('recommendation'.$x);
             $remarks = $this->input->post('remarks'.$x);
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
@@ -6143,10 +6145,20 @@ public function update_encode_transfer(){
                 'submitted_by'=>$submitted_by,
                 'checked_by'=>$checked_by,
                 'noted_by'=>$noted_by,
+                'accountable'=>$accountable,
+                'remove_accountability'=>$remove_accountability,
                 'create_date'=>date("Y-m-d H:i:s"),
                 'user_id'=>$this->input->post('user_id'),
             ); 
-            $this->super_model->insert_into("damage_info", $data_damage); 
+            if($this->super_model->insert_into("damage_info", $data_damage)){
+                if($remove_accountability==2){
+                    $remove_data = array(
+                        'accountability_id'=>$accountable,
+                    );
+                    $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
+                }
+            }
+
             $date_issued = $this->super_model->select_column_where("et_details", "date_issued", "ed_id", $edid);
             $returndet_data = array(
                 'et_id'=>$et_id,
@@ -6156,6 +6168,8 @@ public function update_encode_transfer(){
             );
             $this->super_model->insert_into("return_details", $returndet_data);
         }
+
+
 
         $atf_format = date("Y");
         $ret_prefix=$location1."-".$atf_format;
@@ -6282,6 +6296,7 @@ public function update_encode_transfer(){
         foreach($this->super_model->select_row_where('damage_info', 'damage_id', $damage_id) AS $dam){
             foreach($this->super_model->select_row_where('et_head', 'et_id', $dam->et_id) AS $head){ 
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id);
+                $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
             }
             $data['type'] = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'"); 
             $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'");
@@ -6317,6 +6332,7 @@ public function update_encode_transfer(){
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
             $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->submitted_by);
             $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->noted_by);
+            $data['accountable'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->accountable);
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $dam->ed_id) AS $det){
                 $data['details'][]=array(
                     'ed_id'=>$det->ed_id,
@@ -6356,6 +6372,7 @@ public function update_encode_transfer(){
                 'etdr_no'=> $dam->etdr_no,
                 'po_si_no'=> $dam->po_si_no,
                 'item'=> $item,
+                'accountable'=> $accountable,
                 'types'=> $types,
                 'typec'=> $typec,
                 'typen'=> $typen,
@@ -6382,6 +6399,7 @@ public function update_encode_transfer(){
         foreach($this->super_model->select_row_where('damage_info', 'damage_id', $damage_id) AS $dam){
             foreach($this->super_model->select_row_where('et_head', 'et_id', $dam->et_id) AS $head){ 
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id);
+                $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
             }
             $data['type'] = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'"); 
             $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'");
@@ -6425,6 +6443,7 @@ public function update_encode_transfer(){
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
             $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->submitted_by);
             $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->noted_by);
+            $data['accountable'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->accountable);
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $dam->ed_id) AS $det){
                 $data['details'][]=array(
                     'ed_id'=>$det->ed_id,
@@ -6464,6 +6483,7 @@ public function update_encode_transfer(){
                 'etdr_no'=> $dam->etdr_no,
                 'po_si_no'=> $dam->po_si_no,
                 'item'=> $item,
+                'accountable'=> $accountable,
                 'types'=> $types,
                 'typec'=> $typec,
                 'typen'=> $typen,

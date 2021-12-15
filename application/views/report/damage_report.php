@@ -266,7 +266,7 @@
                     </td>
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        Accountable Person
+                         <input class="select" type="" name="" value="<?php echo $accountable;?>" style = "pointer-events:none;">
                     </td>
                     <td></td>
                 </tr>
