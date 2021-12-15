@@ -6150,14 +6150,14 @@ public function update_encode_transfer(){
                 'create_date'=>date("Y-m-d H:i:s"),
                 'user_id'=>$this->input->post('user_id'),
             ); 
-            /*if($this->super_model->insert_into("damage_info", $data_damage)){
-                if($remove_accountability==2){
+            if($this->super_model->insert_into("damage_info", $data_damage)){
+                /*if($remove_accountability==2){
                     $remove_data = array(
                         'accountability_id'=>$accountable,
                     );
                     $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
-                }
-            }*/
+                }*/
+            }
 
             $date_issued = $this->super_model->select_column_where("et_details", "date_issued", "ed_id", $edid);
             $returndet_data = array(
