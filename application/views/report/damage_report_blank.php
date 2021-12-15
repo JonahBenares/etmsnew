@@ -178,29 +178,51 @@
         </div>
         <div class="col-lg-12">
             <br>
-             <table width="100%">
+            <table width="100%">
                 <tr>
-                    <td width="5%"></td>
-                    <td width="20%" class="main-tab">Submitted by:</td>
                     <td width="10%"></td>
-                    <td width="20%" class="main-tab">Checked by:</td>
+                    <td width="30%" class="main-tab">Prepared by:</td>
+                    <td width="20%" class="main-tab"></td>
+                    <td width="30%" class="main-tab">Accountable Person:</td>
                     <td width="10%"></td>
-                    <td width="20%" class="main-tab">Noted by:</td>
-                    <td width="5%"></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
-                        <br>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom"><br></td>
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom"><br></td>
+                    <td></td>
+                </tr>
+                 <tr>
+                    <td></td>
+                    <td>
+                        <p></p>
                     </td> 
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
-                        <br>
+                    <td>
+                        <center><p><!-- Asset Management Assistant --></p></center>
                     </td>
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
-                        <br>
+                    <td>
+                        <center><p><!-- Plant Manager --></p></center>
                     </td>
+                    <td></td>
+                </tr>
+            </table>
+            <br>
+            <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td width="30%" class="main-tab">Submitted by:</td>
+                    <td width="20%" class="main-tab"></td>
+                    <td width="30%" class="main-tab">Noted by:</td>
+                    <td width="10%"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom"><br></td> 
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom"><br></td>
                     <td></td>
                 </tr>
                  <tr>
