@@ -156,6 +156,7 @@ class Repair extends CI_Controller {
             $jo = $this->input->post('jo'.$x);
             $supplier = $this->input->post('supplier'.$x);
             $radio = $this->input->post('repair'.$x);
+            $method = $this->input->post('method'.$x);
             $remarks = $this->input->post('remarks'.$x);
             $user_id = $this->input->post('user_id'.$x);
             $received_by = $this->input->post('rec_id'.$x);
@@ -178,7 +179,7 @@ class Repair extends CI_Controller {
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
                 if($radio=='1'){
                     $det_data = array(
-                        'damage'=>0
+                        'damage'=>0,
                     ); 
                 }else {
                     $det_data = array(
@@ -186,6 +187,17 @@ class Repair extends CI_Controller {
                     ); 
                 }
                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
+                
+                if($method=='1'){
+                    $method_data = array(
+                        'method'=>1,
+                    ); 
+                }else {
+                    $method_data = array(
+                        'method'=>2
+                    ); 
+                }
+                $this->super_model->update_where("et_details", $method_data, "ed_id", $edid);
             }
         }
         if($radio=='1'){

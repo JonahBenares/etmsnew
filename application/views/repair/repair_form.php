@@ -83,9 +83,14 @@
                                         </table>
                                     </td>
                                     <td>
-                                        <label for="" class="control-label mb-1">Repair Date:</label>
+                                        <label for="" class="control-label mb-1">Select Method:</label>
+                                        <br>
+                                        <p><input id="method1" name="method<?php echo $z;?>" type="radio" value="1" required> Repair</p>
+                                        <p><input id="method2" name="method<?php echo $z;?>" type="radio" value="2" required> Upgrade</p>
+                                        <br>
+                                        <label for="" class="control-label mb-1" id="rep_date">Repair Date:</label>
                                         <input id="date" name="date<?php echo $z;?>" type="date"  class="form-control bor-radius5 cc-exp" required>
-                                        <label for="" class="control-label mb-1">Repair Price:</label>
+                                        <label for="" class="control-label mb-1" id="rep_price">Repair Price:</label>
                                         <input id="price" name="price<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp" onkeypress="return isNumberKey(event,this)">
                                         <label for="" class="control-label mb-1">JO No.:</label>
                                         <input id="date" name="jo<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
@@ -129,3 +134,17 @@
         </form> 
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#method1").click(function(){
+            document.getElementById("rep_date").innerHTML = 'Repair Date:';
+            document.getElementById("rep_price").innerHTML = 'Repair Price:';
+        });
+
+        $("#method2").click(function(){
+            document.getElementById("rep_date").innerHTML = 'Upgrade Date:';
+            document.getElementById("rep_price").innerHTML = 'Upgrade Price:';
+        });
+    });
+</script>
