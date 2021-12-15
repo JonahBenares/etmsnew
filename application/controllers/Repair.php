@@ -29,13 +29,16 @@ class Repair extends CI_Controller {
     public function repair_list(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        $row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
-        foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
+        //$row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
+        $row_avail=$this->super_model->select_all_order_by("et_head",'et_id','ASC');
+        //foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
+        foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0' AND et_id = '$check->et_id'");           
         }
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_avail!=0){
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $et){
                 foreach($this->super_model->select_custom_where("et_details", "damage='1' AND et_id ='$et->et_id'") AS $det){
                     $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
