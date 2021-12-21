@@ -80,6 +80,7 @@ class Repair extends CI_Controller {
     public function repair_form(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
+        $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id='0' ORDER BY et_desc ASC");
         foreach($this->super_model->select_all("repair_details") AS $det){
             if($det->saved == 0 AND $det->unsaved==1){
                 $data['rep'][]=array(
@@ -163,6 +164,7 @@ class Repair extends CI_Controller {
             $remarks = $this->input->post('remarks'.$x);
             $user_id = $this->input->post('user_id'.$x);
             $received_by = $this->input->post('rec_id'.$x);
+            $et_id = $this->input->post('upgrade_itm'.$x);
             foreach($this->super_model->select_row_where('repair_details', 'ed_id', $edid) AS $rep){
                 $rep_data = array(
                     'repair_date'=>$date,
@@ -193,14 +195,20 @@ class Repair extends CI_Controller {
                 
                 if($method=='1'){
                     $method_data = array(
-                        'method'=>1,
+                        'method'=>0,
                     ); 
                 }else {
                     $method_data = array(
-                        'method'=>2
+                        'method'=>1,
+                        'et_id'=>$et_id,
+                    );
+
+                    $updgrade_data = array(
+                        'upgrade'=>1,
                     ); 
                 }
-                $this->super_model->update_where("et_details", $method_data, "ed_id", $edid);
+                $this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid);
+                $this->super_model->update_where("repair_details", $method_data, "repair_id", $repair_id);
             }
         }
         if($radio=='1'){

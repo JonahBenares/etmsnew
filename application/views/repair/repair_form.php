@@ -13,6 +13,14 @@
         return true;
     }
 </script>
+<style type="text/css">
+    .select2 .select2-container .select2-container--default{
+        width:243px!important;
+    }
+    .select2-container--default .select2-selection--single {
+        width: 390px!important;
+    }
+</style>
  <!-- MAIN CONTENT-->
 <div class="page-wrapper">
     <div class="container-fluid">
@@ -88,6 +96,13 @@
                                         <p><input id="method1" name="method<?php echo $z;?>" type="radio" value="1" required> Repair</p>
                                         <p><input id="method2" name="method<?php echo $z;?>" type="radio" value="2" required> Upgrade</p>
                                         <br>
+                                        <label style="display: none" for="" class="control-label mb-1 upgrade_label" id="upgrade_label">Upgrade Item:</label>
+                                        <select id="upgrade_itm" name="upgrade_itm<?php echo $z;?>"class="form-control bor-radius5 cc-exp select2" required>
+                                            <option value=''>--Select Item--</option>
+                                            <?php foreach($et_head AS $eh){ ?>
+                                            <option value="<?php echo $eh->et_id;?>"><?php echo $eh->et_desc." | ".$eh->serial_no." | ".$eh->asset_control_no;?></option>
+                                            <?php } ?>
+                                        </select>
                                         <label for="" class="control-label mb-1" id="rep_date">Repair Date:</label>
                                         <input id="date" name="date<?php echo $z;?>" type="date"  class="form-control bor-radius5 cc-exp" required>
                                         <label for="" class="control-label mb-1" id="rep_price">Repair Price:</label>
@@ -137,14 +152,19 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.select2').hide();
         $("#method1").click(function(){
             document.getElementById("rep_date").innerHTML = 'Repair Date:';
             document.getElementById("rep_price").innerHTML = 'Repair Price:';
+            $('.select2').hide();
+            $('.upgrade_label').hide();
         });
 
         $("#method2").click(function(){
             document.getElementById("rep_date").innerHTML = 'Upgrade Date:';
             document.getElementById("rep_price").innerHTML = 'Upgrade Price:';
+            $('.select2').show();
+            $('.upgrade_label').show();
         });
     });
 </script>
