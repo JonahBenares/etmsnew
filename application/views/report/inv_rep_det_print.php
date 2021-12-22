@@ -18,19 +18,23 @@
                 <tbody>
                     <?php 
                         foreach($item AS $i){ 
-                        if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0){
-                            $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
-                        }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0){
-                            $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
-                        }else if($i['accountability_id']==0 && $i['change_location']==1){
-                            $status = "Moved to ".$i['location'];
-                        }else if($i['borrowed']==1){
-                            $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
-                        }else if($i['damaged']==1){
-                            $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
-                        }else if($i['lost']==1){
-                            $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$i['accountability'].'</span>';
-                        }
+                                    if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
+                                    }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0 && $i['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
+                                    }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0 && $i['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available / Upgraded</span>';
+                                    }else if($i['accountability_id']==0 && $i['change_location']==1){
+                                        $status = "Moved to ".$i['location'];
+                                    }else if($i['borrowed']==1){
+                                        $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
+                                    }else if($i['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($i['lost']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$i['accountability'].'</span>';
+                                    }
                     ?>
                     <tr>
                         <td><?php echo $i['item'];?></td>

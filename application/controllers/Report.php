@@ -1036,6 +1036,14 @@ class Report extends CI_Controller {
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
+                $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);                     
+                $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id); 
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id); 
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id); 
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+                $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et->et_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'ed_id'=>$et->ed_id,
@@ -1046,7 +1054,15 @@ class Report extends CI_Controller {
                     'et_desc'=>$et->et_desc,
                     'qty'=>$et->qty,
                     'accountability'=>$accountability,
+                    'accountability_id'=>$et->accountability_id,
                     'empid'=>$empid,
+                    'damaged'=>$damaged,
+                    'borrowed'=>$borrowed,
+                    'upgrade'=>$upgrade,
+                    'location'=>$location,
+                    'change_location'=>$change_location,
+                    'lost'=>$lost,
+
                 );
             }
             foreach($this->super_model->select_all_order_by("employees", "employee_name", "ASC") AS $emp){
@@ -1217,6 +1233,13 @@ class Report extends CI_Controller {
                 $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
                 $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
                 $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
+                $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $det->ed_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "ed_id", $det->ed_id); 
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "ed_id", $det->ed_id); 
+                $lost = $this->super_model->select_column_where("et_details", "lost", "ed_id", $det->ed_id); 
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "ed_id", $det->ed_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+                $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "ed_id", $det->ed_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                 $qty = '1';
                 $total = $qty * $price;
@@ -1241,7 +1264,14 @@ class Report extends CI_Controller {
                     'model'=>$model,
                     'price'=>$price,
                     'total'=>$total,
-                    'unit'=>$unit
+                    'unit'=>$unit,
+                    'damaged'=>$damaged,
+                    'borrowed'=>$borrowed,
+                    'location'=>$location,
+                    'change_location'=>$change_location,
+                    'lost'=>$lost,
+                    'upgrade'=>$upgrade,
+                    'accountability_id'=>$et->accountability_id,
                 );
                 foreach($this->super_model->select_row_where("et_details", "ed_id", $det->ed_id) AS $et_rem){
                     $data['remarks_it'][] = array(
@@ -1407,6 +1437,7 @@ class Report extends CI_Controller {
                     'borrowed'=>$et->borrowed,
                     'damaged'=>$et->damage,
                     'lost'=>$et->lost,
+                    'upgrade'=>$et->upgrade,
                     'change_location'=>$et->change_location,
                     'location'=>$location,
                 );
@@ -1454,6 +1485,7 @@ class Report extends CI_Controller {
                     'borrowed'=>$et->borrowed,
                     'damaged'=>$et->damage,
                     'lost'=>$et->lost,
+                    'upgrade'=>$et->upgrade,
                     'change_location'=>$et->change_location,
                     'location'=>$location,
                 );
@@ -3948,6 +3980,7 @@ public function update_encode_transfer(){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
+                    $location = $this->super_model->select_column_where("location", "location_name", "location_id", $sub->location_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
                         if($rep_et==$s->et_id){
@@ -3977,6 +4010,12 @@ public function update_encode_transfer(){
                         'damaged'=>'',
                         'incident_description'=>'',
                         'replacement'=>$replacement,
+                        'borrowed'=>$s->borrowed,
+                        'damaged'=>$s->damage,
+                        'lost'=>$s->lost,
+                        'upgrade'=>$s->upgrade,
+                        'change_location'=>$s->change_location,
+                        'location'=>$location,
                     );
                 }
             }
@@ -3989,6 +4028,7 @@ public function update_encode_transfer(){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
+                    $location = $this->super_model->select_column_where("location", "location_name", "location_id", $sub->location_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
                         if($lo->ed_id==$s->ed_id){
@@ -4018,6 +4058,12 @@ public function update_encode_transfer(){
                         'damaged'=>'',
                         'incident_description'=>'',
                         'replacement'=>$replacement,
+                        'borrowed'=>$s->borrowed,
+                        'damaged'=>$s->damage,
+                        'lost'=>$s->lost,
+                        'upgrade'=>$s->upgrade,
+                        'change_location'=>$s->change_location,
+                        'location'=>$location,
                     );
                 }
             }
@@ -4052,6 +4098,14 @@ public function update_encode_transfer(){
                     $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
                     $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
                     $counts = $this->super_model->count_custom_where("et_head","et_id='$r->et_id' AND accountability_id='$id'");
+                    $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $r->et_id);                     
+                    $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $r->et_id); 
+                    $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $r->et_id); 
+                    $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id); 
+                    $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $r->et_id); 
+                    $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $r->et_id); 
+                    $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+
                     if($damaged==0 && $rep_edid==0 && $counts==0){
                         $data['sub'][] = array(
                             'et_id'=>$r->et_id,
@@ -4076,6 +4130,11 @@ public function update_encode_transfer(){
                             'damaged'=>'',
                             'incident_description'=>'',
                             'replacement'=>'',
+                            'borrowed'=>$borrowed,
+                            'location'=>$location,
+                            'change_location'=>$change_location,
+                            'lost'=>$lost,
+                            'upgrade'=>$upgrade,
                         );
                     }
                 
@@ -4098,6 +4157,13 @@ public function update_encode_transfer(){
                             $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $dam->et_id);
                             $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $dam->et_id);
+                            $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $dam->et_id);                     
+                            $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $dam->et_id); 
+                            $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $dam->et_id); 
+                            $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $dam->et_id); 
+                            $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $dam->et_id); 
+                            $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $dam->et_id); 
+                            $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
                             $data['sub'][] = array(
                                 'et_id'=>$dam->et_id,
                                 'ed_id'=>$dam->ed_id,
@@ -4121,6 +4187,11 @@ public function update_encode_transfer(){
                                 'damaged'=>$damaged,
                                 'incident_description'=>$dam->incident_description,
                                 'replacement'=>'',
+                                'borrowed'=>$borrowed,
+                                'location'=>$location,
+                                'change_location'=>$change_location,
+                                'lost'=>$lost,
+                                'upgrade'=>$upgrade,
                             );
                         }
                     }
@@ -4145,6 +4216,13 @@ public function update_encode_transfer(){
                             $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et_id);
                             $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
+                            $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et_id);                     
+                            $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et_id); 
+                            $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et_id); 
+                            $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et_id); 
+                            $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et_id); 
+                            $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et_id); 
+                            $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
                             $data['sub'][] = array(
                                 'et_id'=>$et_id,
                                 'ed_id'=>$rep->ed_id,
@@ -4168,6 +4246,12 @@ public function update_encode_transfer(){
                                 'damaged'=>'',
                                 'incident_description'=>'',
                                 'replacement'=>'',
+                                'damaged'=>$damaged,
+                                'borrowed'=>$borrowed,
+                                'location'=>$location,
+                                'change_location'=>$change_location,
+                                'lost'=>$lost,
+                                'upgrade'=>$upgrade,
                             );
                         }
                     }
@@ -5120,6 +5204,7 @@ public function update_encode_transfer(){
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $sub->set_id);
+                $location = $this->super_model->select_column_where("location", "location_name", "location_id", $sub->location_id);
                 $data['sub'][] = array(
                     'et_id'=>$sub->et_id,
                     'ed_id'=>$sub->ed_id,
@@ -5133,7 +5218,13 @@ public function update_encode_transfer(){
                     'qty'=>$sub->qty,
                     'accountability'=>$accountability,
                     'empid'=>$sub->accountability_id,
+                    'accountability_id'=>$sub->accountability_id,
+                    'borrowed'=>$sub->borrowed,
+                    'damaged'=>$sub->damage,
                     'lost'=>$sub->lost,
+                    'upgrade'=>$sub->upgrade,
+                    'change_location'=>$sub->change_location,
+                    'location'=>$location,
                 );
             }
         }else {
@@ -8998,11 +9089,13 @@ public function update_encode_transfer(){
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
-                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);                     
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+                $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $t->et_id);                     
                 $data['item'][]=array(
                     'item'=>$t->et_desc,
                     'damaged'=>$damaged,
                     'borrowed'=>$borrowed,
+                    'upgrade'=>$upgrade,
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,

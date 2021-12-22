@@ -65,6 +65,7 @@
                         <td class="main-tab" width="4%" align="center"><strong>U/M</strong></td>
                         <td class="main-tab" width="8%" align="center"><strong>Cost</strong></td>
                         <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
+                        <td class="main-tab" width="8%" align="center"><strong>Status</strong></td>
                     </tr>
                     <tr>
                         <?php 
@@ -73,6 +74,24 @@
                                     foreach($details AS $det){ 
                                         switch($det){
                                             case($head['et_id'] == $det['et_id']):
+
+                                    if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0){
+                                        $status = 'Assigned';
+                                    }else if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
+                                        $status = 'Assigned / Upgraded';
+                                    }else if($det['accountability_id']==0 && $det['damaged']==0 && $det['change_location']==0 && $det['upgrade']==0){
+                                        $status = 'Available';
+                                    }else if($det['accountability_id']==0 && $det['damaged']==0 && $det['change_location']==0 && $det['upgrade']!=0){
+                                        $status = 'Available / Upgraded';
+                                    }else if($det['accountability_id']==0 && $det['change_location']==1){
+                                        $status = "Moved to ".$det['location'];
+                                    }else if($det['borrowed']==1){
+                                        $status = 'Borrowed';
+                                    }else if($det['damaged']==1){
+                                        $status = '>Damaged';
+                                    }else if($det['lost']==1){
+                                        $status = 'Lost Item / '.$det['accountability'].'</span>';
+                                    }
                         ?>
                         <tr>
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['acn_no'];?></td>
@@ -85,6 +104,7 @@
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit'];?></td>
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $status;?></td>
                         </tr>
                         <?php   
                             break;

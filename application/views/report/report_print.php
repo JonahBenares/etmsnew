@@ -33,19 +33,23 @@
                 <tbody>
                     <?php 
                         foreach($report AS $r){ 
-                            if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0){
-                                $status = 'Assigned';
-                            }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0){
-                                $status = '<span style = "color:green;">Available</span>';
-                            }else if($r['accountability_id']==0 && $r['change_location']==1){
-                                $status = "Moved to ".$r['location'];
-                            }else if($r['borrowed']==1){
-                                $status = '<span style = "color:blue;">Borrowed</span>';
-                            }else if($r['damaged']==1){
-                                $status = '<span style = "color:red;">Damaged</span>';
-                            }else if($r['lost']==1){
-                                $status = '<span style = "color:orange;">Lost Item / '.$r['accountability']."</span>";
-                            }
+                                    if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
+                                    }else if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0 && $r['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
+                                    }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0 && $r['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available / Upgraded</span>';
+                                    }else if($r['accountability_id']==0 && $r['change_location']==1){
+                                        $status = "Moved to ".$r['location'];
+                                    }else if($r['borrowed']==1){
+                                        $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
+                                    }else if($r['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($r['lost']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$r['accountability'].'</span>';
+                                    }
                     ?>
                     <tr>
                         <td><?php echo $r['category'];?></td>

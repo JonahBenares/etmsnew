@@ -123,6 +123,7 @@
                                     <th width="%">Quantity</th>
                                     <th width="%">Unit Price</th>
                                     <th width="15%">Remarks</th>
+                                    <th width="15%">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -130,6 +131,23 @@
                                     if(!empty($sub)){
                                     $x = 1;
                                     foreach($sub AS $s){
+                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
+                                    }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($s['empid']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
+                                    }else if($s['empid']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available / Upgraded</span>';
+                                    }else if($s['empid']==0 && $s['change_location']==1){
+                                        $status = "Moved to ".$s['location'];
+                                    }else if($s['borrowed']==1){
+                                        $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
+                                    }else if($s['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($s['lost']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
+                                    }
                                 ?>
                                 <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#1e2128!important;color:#fff" : ''; ?>">
                                     <td><?php echo $s['date_returned']; ?></td>
@@ -157,6 +175,7 @@
                                         
                                         <?php } ?>
                                     </td>
+                                    <td><?php echo $status; ?></td>
                                 </tr>
                                 <?php $x++; } ?>
                                 <input type="hidden" name = "count" id = "count" value = "<?php echo $x ?>">

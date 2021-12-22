@@ -231,13 +231,32 @@
                                     <th>Unit</th>
                                     <th>Quantity</th>
                                     <th>Department</th>
+                                    <th>Status</th>
                                     <th width="5%" class="text-center"><span class="fa fa-bars"></span></th>
                                 </tr>
                             </thead>
                             <tbody>
                             <?php 
                             if(!empty($main)){
-                            foreach($main AS $m){ ?>
+                            foreach($main AS $m){ 
+                                    if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
+                                    }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']==0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
+                                    }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available / Upgraded</span>';
+                                    }else if($m['accountability_id']==0 && $m['change_location']==1){
+                                        $status = "Moved to ".$m['location'];
+                                    }else if($m['borrowed']==1){
+                                        $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
+                                    }else if($m['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($m['lost']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$m['accountability'].'</span>';
+                                    }
+                                ?>
                                 <tr>                                        
                                     <td><?php echo $m['accountability']; ?></td>
                                     <td><?php echo $m['cat']; ?></td>
@@ -250,6 +269,7 @@
                                     <td><?php echo $m['unit']; ?></td>
                                     <td><?php echo $m['qty']; ?></td>
                                     <td><?php echo $m['department']; ?></td>
+                                    <td><?php echo $status;?></td>
                                     <td>                                            
                                         <div class="btn-group">
                                             <?php if($_SESSION['usertype'] == 1){ ?>
