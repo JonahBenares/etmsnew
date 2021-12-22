@@ -22406,7 +22406,7 @@ a.rep_names:hover{
 .img-item{
   width:200px; 
   height: 200px; 
-  background: #fff;
+  /*background: #fff;*/
   position: absolute;
   top:50px;
   left:-100px;

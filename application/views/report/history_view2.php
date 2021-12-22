@@ -22,8 +22,10 @@
                            
                             <?php if($damage == '1'){ ?>
                                 <button class="btn btn-danger-alt btn-block btn-sm animated headShake bor-radius20">Damaged</button>
-                            <?php }else if($ids==0 && $changeloc==0){ ?>
+                            <?php }else if($ids==0 && $changeloc==0 && $upgrade==0){ ?>
                                 <button class="btn btn-success-alt btn-block btn-sm animated headShake bor-radius20">Available</button>
+                            <?php }else if($ids==0 && $changeloc==0 && $upgrade!=0){ ?>
+                                <button class="btn btn-success-alt btn-block btn-sm animated headShake bor-radius20">Available / Upgraded</button>
                             <?php } else if($borrowed=='1'){ ?>
                                 <button class="btn btn-warning-alt btn-block btn-sm animated headShake text-white bor-radius20">Borrowed</button>
                             <?php } else if($ids==0 && $changeloc=='1'){ ?>
@@ -48,14 +50,16 @@
                             <?php if($hist['method'] == 'Current') {  ?>
                             <p style="font-weight: 500;font-size: 13px">Employee Name: <span style="font-weight: 600"><?php echo $hist['employee']; ?></span></p>
                             <p style="font-weight: 500;font-size: 13px">Date Issued: <span style="font-weight: 600"><?php echo (!empty($hist['trdate']) ? date('F d, Y', strtotime($hist['trdate'])) : ""); ?></span></p> 
-                            <?php } ?>
-                        </div>               
+                            <?php } } ?>
+                        </div>  
+                        <?php foreach($history AS $hist2){ ?>             
                         <div class="img-item animated fadeInLeft" >
-                            <?php if(empty($hist['picture'])){ ?>
+                            <?php if($hist2['method'] == 'Current') {  ?>
+                            <?php if(empty($hist2['picture'])){ ?>
                                 <img src="<?php echo base_url(); ?>assets/images/placeholder2.jpg" width="100%" style="border-radius: 20px">
                             <?php } else { ?>
-                                <img src="<?php echo base_url(); ?>uploads/<?php echo $hist['picture'];?>" width="100%" style="border-radius: 20px;height: 100%">
-                            <?php } ?>
+                                <img src="<?php echo base_url(); ?>uploads/<?php echo $hist2['picture'];?>" width="100%" style="border-radius: 20px;height: 100%">
+                            <?php } } ?>
                         </div>
                         <?php } ?>
                     </div>
@@ -105,6 +109,9 @@
                 $bg = 'bg-danger-alt';
                 $border = "border-danger";
             } else if($his['method'] == 'Repaired'){
+                $bg = 'bg-primary-alt';
+                $border = "border-primary";
+            }else if($his['method'] == 'Upgraded'){
                 $bg = 'bg-primary-alt';
                 $border = "border-primary";
             } else if($his['method'] == 'Borrowed'){
@@ -169,6 +176,19 @@
                     <p class="font-bold">JO No.:</p>
                     <p class="m-b-10"><?php echo $his['jo_no']; ?></p>
                     <p class="font-bold">Repair Price:</p>
+                    <p class="m-b-10"><?php echo number_format($his['repair_price'],2); ?></p>
+                    <p class="font-bold">Supplier:</p>
+                    <p class="m-b-10"><?php echo $his['supplier']; ?></p>
+                    <p class="font-bold">Received By :</p>
+                    <p class="m-b-10"><?php echo $his['received_by']; ?></p>
+                <?php } else if($his['method'] == 'Upgraded'){ ?>
+                    <p class="font-bold">Upgrade Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('F d, Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">Upgraded Item:</p>
+                    <p class="m-b-10"><?php echo $his['item']; ?></p>
+                    <p class="font-bold">JO No.:</p>
+                    <p class="m-b-10"><?php echo $his['jo_no']; ?></p>
+                    <p class="font-bold">Upgrade Price:</p>
                     <p class="m-b-10"><?php echo number_format($his['repair_price'],2); ?></p>
                     <p class="font-bold">Supplier:</p>
                     <p class="m-b-10"><?php echo $his['supplier']; ?></p>

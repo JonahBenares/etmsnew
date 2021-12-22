@@ -28,6 +28,7 @@
                                     <th>Brand</th>
                                     <th>Model</th>
                                     <th>S/N</th>                                        
+                                    <th>Accountability / Status</th>                                        
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,6 +37,24 @@
                                         foreach($details AS $det){ 
                                             switch($det){
                                                 case($i['et_id'] == $det['et_id']):
+
+                                                    if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0){
+                                                        $status = $i['employee'];
+                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
+                                                        $status = $i['employee']." / Upgraded";
+                                                    }else if($i['accountability_id']==0 && $det['damage']==0 && $det['change_location']==0 && $det['upgrade']==0){
+                                                        $status = '<span style = "color:green;">Available</span>';
+                                                    }else if($i['accountability_id']==0 && $det['damage']==0 && $det['change_location']==0 && $det['upgrade']!=0){
+                                                        $status = '<span style = "color:green;">Available / Upgraded</span>';
+                                                    }else if($i['accountability_id']==0 && $det['change_location']==1){
+                                                        $status = "Moved to ".$det['location'];
+                                                    }else if($det['borrowed']==1){
+                                                        $status = '<span style = "color:blue;">Borrowed</span>';
+                                                    }else if($det['damage']==1){
+                                                        $status = '<span style = "color:red;">Damaged</span>';
+                                                    }else if($det['lost']==1){
+                                                        $status = '<span style = "color:orange;">Lost Item / '.$i['employee']."</span>";
+                                                    }
                                 ?>
                                 <tr >
                                     <td>
@@ -46,6 +65,7 @@
                                     <td><?php echo $det['brand']; ?></td>                                     
                                     <td><?php echo $det['model']; ?></td>                                     
                                     <td><?php echo $det['serial']; ?></td>                                     
+                                    <td><?php echo $status; ?></td>                                     
                                 </tr>
                                 <?php  
                                     break;

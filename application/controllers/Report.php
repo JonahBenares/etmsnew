@@ -158,6 +158,7 @@ class Report extends CI_Controller {
                         'subcategory'=>$subcategory,
                         'borrowed'=>$r->borrowed,
                         'damaged'=>$r->damage,
+                        'upgrade'=>$r->upgrade,
                         'change_location'=>$r->change_location,
                         'lost'=>$r->lost,
                         'location'=>$location,
@@ -746,6 +747,7 @@ class Report extends CI_Controller {
                     'subcategory'=>$subcategory,
                     'borrowed'=>$et->borrowed,
                     'damaged'=>$et->damage,
+                    'upgrade'=>$et->upgrade,
                     'lost'=>$et->lost,
                     'change_location'=>$et->change_location,
                     'location'=>$location,
@@ -774,6 +776,7 @@ class Report extends CI_Controller {
                         'subcategory'=>$subcategory,
                         'borrowed'=>$r->borrowed,
                         'damaged'=>$r->damage,
+                        'upgrade'=>$r->upgrade,
                         'lost'=>$r->lost,
                         'change_location'=>$r->change_location,
                         'location'=>$location,
@@ -832,6 +835,7 @@ class Report extends CI_Controller {
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
+                $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $t->et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);                     
                 $data['item'][]=array(
                     'item'=>$t->et_desc,
@@ -840,6 +844,7 @@ class Report extends CI_Controller {
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,
+                    'upgrade'=>$upgrade,
                     'accountability'=>$employee,
                     'accountability_id'=>$t->accountability_id,
                     'qty'=>$t->qty,
@@ -997,7 +1002,7 @@ class Report extends CI_Controller {
         if(!empty($this->input->post('set')) && empty($this->input->post('item'))){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query." GROUP BY set_name") AS $ss){
 
-                $count_set = $this->super_model->count_custom("SELECT DISTINCT(ed.set_id) FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query);
+                $count_set = $this->super_model->count_custom("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query);
                 foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
                     $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
                     $set_id = $r->set_id;
@@ -2370,16 +2375,26 @@ public function update_encode_transfer(){
         $row=$this->super_model->count_rows("et_head");
         if($row!=0){
             foreach($this->super_model->select_all_order_by('et_head', 'et_desc', 'ASC') AS $itm){
+                $employee=$this->super_model->select_column_where("employees","employee_name","employee_id",$itm->accountability_id);
                 $data['item'][] = array(
+                    'employee'=>$employee,
+                    'accountability_id'=>$itm->accountability_id,
                     'et_id'=>$itm->et_id,
                     'item'=>$itm->et_desc
                 );
                 foreach($this->super_model->select_row_where('et_details', 'et_id',$itm->et_id) AS $det){
+                    $location=$this->super_model->select_column_where("location","location_name","location_id",$det->location_id);
                     $data['details'][] = array(
                         'et_id'=>$det->et_id,
                         'ed_id'=>$det->ed_id,
                         'brand'=>$det->brand,
                         'model'=>$det->model,
+                        'damage'=>$det->damage,
+                        'upgrade'=>$det->upgrade,
+                        'lost'=>$det->lost,
+                        'borrowed'=>$det->borrowed,
+                        'change_location'=>$det->change_location,
+                        'location'=>$location,
                         'serial'=>$det->serial_no
                     );
                 }
@@ -8503,6 +8518,7 @@ public function update_encode_transfer(){
             $data['damage'] =$this->super_model->select_column_where("et_details", "damage", "ed_id", $cur->ed_id);
             $data['borrowed'] =$this->super_model->select_column_where("et_details", "borrowed", "ed_id", $cur->ed_id);
             $data['changeloc'] =$this->super_model->select_column_where("et_details", "change_location", "ed_id", $cur->ed_id);
+            $data['upgrade'] =$this->super_model->select_column_where("et_details", "upgrade", "ed_id", $cur->ed_id);
             $data['lost'] =$this->super_model->select_column_where("et_details", "lost", "ed_id", $cur->ed_id);
             $location_id=$this->super_model->select_column_where("et_details", "location_id", "ed_id", $cur->ed_id);
             $data['location'] =$this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
@@ -8518,6 +8534,7 @@ public function update_encode_transfer(){
             $data['history'][] = array(
                 "id"=>$ids,
                 "employee"=>$employee,
+                "item"=>"",
                 "trdate"=>$date_issued,
                 "picture"=>$picture1,
                 "date_desc"=>"Date Issued",
@@ -8559,6 +8576,7 @@ public function update_encode_transfer(){
                      $data['history'][]  = array(
                         "id"=>$ret->return_id,
                         "employee"=>$employee,
+                        "item"=>"",
                         "trdate"=>$ret->return_date,
                         "date_desc"=>"Return Date",
                         "return_date"=>"",
@@ -8606,6 +8624,7 @@ public function update_encode_transfer(){
                      $data['history'][] = array(
                         "id"=>$ret->bh_id,
                         "employee"=>$borrowed_by,
+                        "item"=>"",
                         "trdate"=>$borrowed_date,
                         "date_desc"=>"Borrow Date",
                         "return_date"=>$d->returned_date,
@@ -8641,19 +8660,67 @@ public function update_encode_transfer(){
             $data['borrow']=array();
         }
 
-        $row_repair=$this->super_model->count_rows_where("repair_details", "ed_id",$id);
+        $row_repair=$this->super_model->count_custom_where("repair_details", "ed_id='$id' AND method='0'");
         if($row_repair!=0){
-            foreach($this->super_model->select_row_where('repair_details', 'ed_id', $id) AS $d){
+            foreach($this->super_model->select_custom_where('repair_details', "ed_id='$id' AND method='0'") AS $d){
                 $receive_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->received_by);
-                $row_repair=$this->super_model->count_rows_where("repair_details", "ed_id",$d->ed_id);
+                $row_repair=$this->super_model->count_custom_where("repair_details", "ed_id='$d->ed_id' AND method='0'");
                 if($row_repair!=0){
                       $data['history'][] = array(
                         "id"=>$d->repair_id,
                         "employee"=>"",
+                        "item"=>"",
                         "trdate"=>$d->repair_date,
                         "date_desc"=>"Repair Date",
                         "return_date"=>"",
                         "method"=>"Repaired",
+                        "received_by"=>$receive_by,
+                        "returned_by"=>"",
+                        "jo_no"=>$d->jo_no,
+                        "qty"=>1,
+                        "repair_price"=>$d->repair_price,
+                        "supplier"=>$d->supplier,
+                         "remarks"=>"",
+                        "replacement"=>"",
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
+                    );
+
+                        $data['repair'][] = array(
+                            "repair_id"=>$d->repair_id,
+                            "receive_by"=>$receive_by,
+                            "jo_no"=>$d->jo_no,
+                            "supplier"=>$d->supplier,
+                            "repair_price"=>$d->repair_price,
+                            "repair_date"=>$d->repair_date,
+                            "qty"=>1,
+                        );
+                    
+                }else {
+                    $data['repair']=array();
+                }
+            }
+            
+        } else {
+            $data['repair']=array();
+        }
+
+        $row_upgrade=$this->super_model->count_custom_where("repair_details", "ed_id='$id' AND method='1'");
+        if($row_upgrade!=0){ 
+            foreach($this->super_model->select_custom_where('repair_details', "ed_id='$id' AND method='1'") AS $d){
+                $receive_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->received_by);
+                $row_upgrade=$this->super_model->count_custom_where("repair_details", "ed_id='$d->ed_id' AND method='1'");
+                $item=$this->super_model->select_column_where("et_head","et_desc","et_id",$d->et_id);
+                if($row_upgrade!=0){
+                      $data['history'][] = array(
+                        "id"=>$d->repair_id,
+                        "employee"=>"",
+                        "item"=>$item,
+                        "trdate"=>$d->repair_date,
+                        "date_desc"=>"Repair Date",
+                        "return_date"=>"",
+                        "method"=>"Upgraded",
                         "received_by"=>$receive_by,
                         "returned_by"=>"",
                         "jo_no"=>$d->jo_no,
@@ -8699,6 +8766,7 @@ public function update_encode_transfer(){
             $data['history'][]  = array(
                         "id"=>$l->lost_id,
                         "employee"=>$accountable,
+                        "item"=>"",
                         "trdate"=>$l->lost_date,
                         "date_desc"=>"Lost Date",
                         "return_date"=>"",
@@ -8735,6 +8803,7 @@ public function update_encode_transfer(){
             $data['history'][]  = array(
                 "id"=>$di->damage_id,
                 "employee"=>'',
+                "item"=>"",
                 "trdate"=>$di->incident_date,
                 "date_desc"=>"Damage Date",
                 "return_date"=>"",

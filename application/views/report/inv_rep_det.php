@@ -46,10 +46,14 @@
                             <tbody>
                                 <?php 
                                     foreach($item AS $i){ 
-                                    if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0){
+                                    if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
-                                    }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0){
+                                    }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0 && $i['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
+                                    }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0 && $i['upgrade']!=0){
+                                        $status = '<span class="badge badge-pill bg-success-alt uppercase">Available / Upgraded</span>';
                                     }else if($i['accountability_id']==0 && $i['change_location']==1){
                                         $status = "Moved to ".$i['location'];
                                     }else if($i['borrowed']==1){
