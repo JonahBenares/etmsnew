@@ -87,8 +87,10 @@
                                         $status = "Moved to ".$det['location'];
                                     }else if($det['borrowed']==1){
                                         $status = 'Borrowed';
-                                    }else if($det['damaged']==1){
+                                    }else if($det['damaged']==1 && $det['accountability_id']==0){
                                         $status = '>Damaged';
+                                    }else if($det['damaged']==1 && $det['accountability_id']!=0){
+                                        $status = '>Damaged / '.$det['accountability'].'</span>';
                                     }else if($det['lost']==1){
                                         $status = 'Lost Item / '.$det['accountability'].'</span>';
                                     }

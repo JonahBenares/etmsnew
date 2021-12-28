@@ -155,8 +155,10 @@
                                         $status = "Moved to ".$s['location'];
                                     }else if($s['borrowed']==1){
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
-                                    }else if($s['damaged']==1){
+                                    }else if($s['damaged']==1 && $s['accountability_id']==0){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($s['damaged']==1 && $s['accountability_id']!=0){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$s['accountability'].'</span>';
                                     }else if($s['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
                                     }

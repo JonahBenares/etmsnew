@@ -4028,7 +4028,8 @@ public function update_encode_transfer(){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
-                    $location = $this->super_model->select_column_where("location", "location_name", "location_id", $sub->location_id);
+                    $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $sub->et_id);
+                    $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
                         if($lo->ed_id==$s->ed_id){

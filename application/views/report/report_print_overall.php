@@ -33,10 +33,12 @@
                                 $status = "Moved to ".$i['location'];
                             }else if($i['borrowed']==1){
                                 $status = '<span style = "color:blue;">Borrowed</span>';
-                            }else if($i['damaged']==1){
+                            }else if($i['damaged']==1 && $i['accountability_id']==0){
                                 $status = '<span style = "color:red;">Damaged</span>';
+                            }else if($i['damaged']==1 && $i['accountability_id']!=0){
+                                $status = '<span style = "color:red;">Damaged / '.$i['employee'].'</span>';
                             }else if($i['lost']==1){
-                                $status = '<span style = "color:orange;">Lost Item / '.$i['employee']."</span>";
+                                $status = '<span style = "color:orange;">Lost Item / '.$i['employee'].'</span>';
                             }
                     ?>
                     <tr>

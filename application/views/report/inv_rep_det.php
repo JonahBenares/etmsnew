@@ -58,8 +58,10 @@
                                         $status = "Moved to ".$i['location'];
                                     }else if($i['borrowed']==1){
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
-                                    }else if($i['damaged']==1){
+                                    }else if($i['damaged']==1 && $i['accountability_id']==0){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($i['damaged']==1 && $i['accountability_id']!=0){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$i['accountability'].'</span>';
                                     }else if($i['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$i['accountability'].'</span>';
                                     }
