@@ -79,6 +79,8 @@
                                         $status = 'Assigned';
                                     }else if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
                                         $status = 'Assigned / Upgraded';
+                                    }else if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damaged']==1){
+                                        $status = 'Assigned / Damaged';
                                     }else if($det['accountability_id']==0 && $det['damaged']==0 && $det['change_location']==0 && $det['upgrade']==0){
                                         $status = 'Available';
                                     }else if($det['accountability_id']==0 && $det['damaged']==0 && $det['change_location']==0 && $det['upgrade']!=0){
