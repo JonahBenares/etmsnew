@@ -239,7 +239,7 @@
                             <?php 
                             if(!empty($main)){
                             foreach($main AS $m){ 
-                                    if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0){
+                                    if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0 && $m['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
