@@ -244,7 +244,7 @@
                                     }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
                                     }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0 && $m['damaged']==1){
-                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Damaged</span>';
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
                                     }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']!=0){
