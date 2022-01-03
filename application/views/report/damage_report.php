@@ -217,15 +217,16 @@
                     <?php } } }?>
                 </div>
                 <div class="col-lg-5">
-                    <table class="table-bordered" width="100%">
-                        <tr>
-                            <td style="padding:10px">Upgrade History</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:10px" width="30%"></td>
-                            <td style="padding:10px"></td>
-                        </tr>
-                    </table>
+                    <b for="" class="control-label mb-1">Upgrade History:</b>
+                    <br>
+                    <?php
+                        
+                        if(!empty($upgrade)){ 
+                            array_sort_by_column($upgrade, 'date');
+                            foreach($upgrade AS $upg){    
+                    ?>
+                        <span><?php echo $upg['date']." - ".$upg['upgrade_item']." - ".$upg['remarks'].', ';?></span>
+                    <?php } }?>
                 </div>
             </div>
             <br>

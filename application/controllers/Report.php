@@ -6118,13 +6118,26 @@ public function update_encode_transfer(){
                 );
                 $repair_remarks="";  
                 $rep_date="";  
-                foreach($this->super_model->select_row_where("repair_details","ed_id",$det->ed_id) AS $rep){
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$det->ed_id' AND method='0'") AS $rep){
                     $rep_date.=date("Y-m-d",strtotime($rep->repair_date));
                     $repair_remarks.=date("Y-m-d",strtotime($rep->repair_date))." ".$rep->remarks.", ";
                     $data['damage'][]=array(
                         "date"=>$rep->repair_date,
                         "remarks"=>$rep->remarks,
                         "method"=>'Repaired',
+                    );
+                }
+
+                $upgrade_remarks="";  
+                $upg_date="";  
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$det->ed_id' AND method='1'") AS $upg){
+                    $upg_date.=date("Y-m-d",strtotime($upg->repair_date));
+                    $upgrade_remarks.=date("Y-m-d",strtotime($upg->repair_date))." ".$upg->remarks.", ";
+                    $upgrade_item=$this->super_model->select_column_where("et_head","et_desc","et_id",$upg->et_id);
+                    $data['upgrade'][]=array(
+                        "date"=>$upg->repair_date,
+                        "remarks"=>$upg->remarks,
+                        "upgrade_item"=>$upgrade_item,
                     );
                 }
             }
@@ -6451,13 +6464,26 @@ public function update_encode_transfer(){
                 );
                 $repair_remarks="";  
                 $rep_date="";  
-                foreach($this->super_model->select_row_where("repair_details","ed_id",$det->ed_id) AS $rep){
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$det->ed_id' AND method='0'") AS $rep){
                     $rep_date.=date("Y-m-d",strtotime($rep->repair_date));
                     $repair_remarks.=date("Y-m-d",strtotime($rep->repair_date))." ".$rep->remarks.", ";
                     $data['damageview'][]=array(
                         "date"=>$rep->repair_date,
                         "remarks"=>$rep->remarks,
                         "method"=>'Repaired',
+                    );
+                }
+
+                $upgrade_remarks="";  
+                $upg_date="";  
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$det->ed_id' AND method='1'") AS $upg){
+                    $upg_date.=date("Y-m-d",strtotime($upg->repair_date));
+                    $upgrade_remarks.=date("Y-m-d",strtotime($upg->repair_date))." ".$upg->remarks.", ";
+                    $upgrade_item=$this->super_model->select_column_where("et_head","et_desc","et_id",$upg->et_id);
+                    $data['upgrade'][]=array(
+                        "date"=>$upg->repair_date,
+                        "remarks"=>$upg->remarks,
+                        "upgrade_item"=>$upgrade_item,
                     );
                 }
             }
@@ -6562,13 +6588,26 @@ public function update_encode_transfer(){
                 );
                 $repair_remarks="";  
                 $rep_date="";  
-                foreach($this->super_model->select_row_where("repair_details","ed_id",$det->ed_id) AS $rep){
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$det->ed_id' AND method='0'") AS $rep){
                     $rep_date.=date("Y-m-d",strtotime($rep->repair_date));
                     $repair_remarks.=date("Y-m-d",strtotime($rep->repair_date))." ".$rep->remarks.", ";
                     $data['damageview'][]=array(
                         "date"=>$rep->repair_date,
                         "remarks"=>$rep->remarks,
                         "method"=>'Repaired',
+                    );
+                }
+
+                $upgrade_remarks="";  
+                $upg_date="";  
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$det->ed_id' AND method='1'") AS $upg){
+                    $upg_date.=date("Y-m-d",strtotime($upg->repair_date));
+                    $upgrade_remarks.=date("Y-m-d",strtotime($upg->repair_date))." ".$upg->remarks.", ";
+                    $upgrade_item=$this->super_model->select_column_where("et_head","et_desc","et_id",$upg->et_id);
+                    $data['upgrade'][]=array(
+                        "date"=>$upg->repair_date,
+                        "remarks"=>$upg->remarks,
+                        "upgrade_item"=>$upgrade_item,
                     );
                 }
             }
