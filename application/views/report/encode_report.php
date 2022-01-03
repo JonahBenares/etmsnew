@@ -75,7 +75,7 @@
                                         switch($det){
                                             case($head['et_id'] == $det['et_id']):
 
-                                    if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0){
+                                    if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damaged']==0){
                                         $status = 'Assigned';
                                     }else if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
                                         $status = 'Assigned / Upgraded';

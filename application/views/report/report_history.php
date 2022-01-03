@@ -131,12 +131,12 @@
                                     if(!empty($sub)){
                                     $x = 1;
                                     foreach($sub AS $s){
-                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0){
+                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
                                     }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==1){
-                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Damaged</span>';
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($s['empid']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
                                     }else if($s['empid']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']!=0){
