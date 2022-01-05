@@ -6743,7 +6743,7 @@ public function update_encode_transfer(){
         $currency=$this->input->post('currency');
         $total=$this->input->post('price')*$this->input->post('qty');
         $ed_id=$this->input->post('edid');
-        $data['list'][] = array(
+        $data['list'] = array(
             'et_id'=>$this->input->post('itemid'),
             'ed_id'=>$this->input->post('edid'),
             'set_id'=>$this->input->post('setid'),
@@ -6762,7 +6762,7 @@ public function update_encode_transfer(){
             'total'=>$total
         );  
 
-        $count=1;
+        $cup = $this->super_model->count_custom_where("repair_details", "method='1' AND ed_id = '$ed_id'");
         foreach($this->super_model->custom_query("SELECT * FROM repair_details WHERE method='1' AND ed_id = '$ed_id'") AS $upg){
             $item=$this->super_model->select_column_where('et_head',"et_desc","et_id",$upg->et_id);
             $set_id=$this->super_model->select_column_where("et_details","set_id","et_id",$upg->et_id);
@@ -6779,7 +6779,7 @@ public function update_encode_transfer(){
             $currency_id=$this->super_model->select_column_where("et_details","currency_id","et_id",$upg->et_id);
             $currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$currency_id);
             $total=$price * $qty;
-            $data['list'][] = array(
+            $data['upgrade'] = array(
                 'et_id'=>$upg->et_id,
                 'ed_id'=>$upg->ed_id,
                 'set_id'=>$set_id,
@@ -6794,12 +6794,14 @@ public function update_encode_transfer(){
                 'qty'=>$qty,
                 'currency'=>$currency,
                 'item'=>$item,
-                'count'=>$count,
+                'count'=>$cup,
                 'total'=>$total
             );
-            $count++;
-            $this->load->view('report/row_item',$data);
+            
+           
         }
+
+         $this->load->view('report/row_item',$data);
     }
 
     public function insert_assign(){
