@@ -42,7 +42,7 @@
             <input type = "submit" class="btn btn-warning btn-sm text-white" id="back" value = "Back">
         </form>
         
-        <form method = "POST" action = "<?php echo base_url(); ?>repair/insert_repair">
+        <form method = "POST" action = "<?php echo base_url(); ?>repair/insert_repair" novalidate>
             <!-- LOOP HERE -->
             <?php 
 
@@ -97,7 +97,7 @@
                                         <p><input id="method2" name="method<?php echo $z;?>" type="radio" value="2" required> Upgrade</p>
                                         <br>
                                         <label style="display: none" for="" class="control-label mb-1 upgrade_label" id="upgrade_label">Upgrade Item:</label>
-                                        <select id="upgrade_itm" name="upgrade_itm<?php echo $z;?>"class="form-control bor-radius5 cc-exp select2" required>
+                                        <select id="upgrade_itm" name="upgrade_itm<?php echo $z;?>" class="form-control bor-radius5 cc-exp select2" required>
                                             <option value=''>--Select Item--</option>
                                             <?php foreach($et_head AS $eh){ ?>
                                             <option value="<?php echo $eh->et_id;?>"><?php echo $eh->et_desc." | ".$eh->serial_no." | ".$eh->asset_control_no;?></option>
@@ -142,9 +142,10 @@
                     default: 
                     } $z++; } $counter = $z-1; }  ?>
             <!-- LOOP HERE -->
+            <center><div id='alt' style="font-weight:bold"></div></center>
             <div class="row">
                     <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $z;?>">
-                    <input type="submit" name="submit" class="btn btn-success btn-block  btn-md" value = "Save" onclick="confirmationSave(this);return false;">
+                    <input type="submit" id="saved" name="submit" class="btn btn-success btn-block  btn-md" value = "Save" onclick="confirmationSave(this);return false;">
             </div>
         </form> 
     </div>

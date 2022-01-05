@@ -206,14 +206,15 @@ class Repair extends CI_Controller {
                     $updgrade_data = array(
                         'upgrade'=>1,
                     ); 
+                    $this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid);
 
                     $accountable = $this->super_model->select_column_where("damage_info","accountable","ed_id",$edid);
                     $update_accountable = array(
                         'accountability_id'=>$accountable,
                     ); 
+                    $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
                 }
-                $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
-                $this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid);
+                
                 $this->super_model->update_where("repair_details", $method_data, "repair_id", $repair_id);
             }
         }

@@ -6742,7 +6742,8 @@ public function update_encode_transfer(){
         $price=$this->input->post('price');
         $currency=$this->input->post('currency');
         $total=$this->input->post('price')*$this->input->post('qty');
-        $data['list'] = array(
+        $ed_id=$this->input->post('edid');
+        $data['list'][] = array(
             'et_id'=>$this->input->post('itemid'),
             'ed_id'=>$this->input->post('edid'),
             'set_id'=>$this->input->post('setid'),
@@ -6760,7 +6761,45 @@ public function update_encode_transfer(){
             'count'=>$this->input->post('count'),
             'total'=>$total
         );  
-        $this->load->view('report/row_item',$data);
+
+        $count=1;
+        foreach($this->super_model->custom_query("SELECT * FROM repair_details WHERE method='1' AND ed_id = '$ed_id'") AS $upg){
+            $item=$this->super_model->select_column_where('et_head',"et_desc","et_id",$upg->et_id);
+            $set_id=$this->super_model->select_column_where("et_details","set_id","et_id",$upg->et_id);
+            $brand=$this->super_model->select_column_where("et_details","brand","et_id",$upg->et_id);
+            $type=$this->super_model->select_column_where("et_details","type","et_id",$upg->et_id);
+            $serial=$this->super_model->select_column_where("et_details","serial_no","et_id",$upg->et_id);
+            $model=$this->super_model->select_column_where("et_details","model","et_id",$upg->et_id);
+            $price=$this->super_model->select_column_where("et_details","unit_price","et_id",$upg->et_id);
+            $unit_id=$this->super_model->select_column_where("et_head","unit_id","et_id",$upg->et_id);
+            $unit=$this->super_model->select_column_where("unit","unit_name","unit_id",$unit_id);
+            $acn=$this->super_model->select_column_where("et_details","asset_control_no","et_id",$upg->et_id);
+            $acq_date=$this->super_model->select_column_where("et_details","acquisition_date","et_id",$upg->et_id);
+            $qty=$this->super_model->select_column_where("et_head","qty","et_id",$upg->et_id);
+            $currency_id=$this->super_model->select_column_where("et_details","currency_id","et_id",$upg->et_id);
+            $currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$currency_id);
+            $total=$price * $qty;
+            $data['list'][] = array(
+                'et_id'=>$upg->et_id,
+                'ed_id'=>$upg->ed_id,
+                'set_id'=>$set_id,
+                'brand'=>$brand,
+                'type'=>$type,
+                'serial'=>$serial,
+                'model'=>$model,
+                'price'=>$price,
+                'unit'=>$unit,
+                'acn'=>$acn,
+                'acq_date'=>$acq_date,
+                'qty'=>$qty,
+                'currency'=>$currency,
+                'item'=>$item,
+                'count'=>$count,
+                'total'=>$total
+            );
+            $count++;
+            $this->load->view('report/row_item',$data);
+        }
     }
 
     public function insert_assign(){
