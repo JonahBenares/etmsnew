@@ -35,8 +35,10 @@
                         foreach($report AS $r){ 
                                     if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']==0 && $r['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
-                                    }else if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']!=0){
+                                    }else if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']!=0 && $r['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']!=0 && $r['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded / Damaged</span>';
                                     }else if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0 && $r['upgrade']==0 && $r['damaged']==1){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0 && $r['upgrade']==0){

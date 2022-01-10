@@ -40,8 +40,10 @@
 
                                                     if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damage']==0){
                                                         $status = $i['employee'];
-                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
+                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0 && $det['damage']==0){
                                                         $status = $i['employee']." / Upgraded";
+                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0 && $det['damage']==1){
+                                                        $status = $i['employee']." / Upgraded / Damaged";
                                                     }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damage']==1){
                                                         $status = $i['employee']." / Damaged";
                                                     }else if($i['accountability_id']==0 && $det['damage']==0 && $det['change_location']==0 && $det['upgrade']==0){

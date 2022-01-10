@@ -195,8 +195,10 @@
                                     foreach($details AS $i){ 
                                     if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0 && $i['damaged']==0){
                                         $status = $i['employee'];
-                                    }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0){
+                                    }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0 && $i['damaged']==0){
                                         $status = $i['employee']." / Upgraded";
+                                    }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0 && $i['damaged']==1){
+                                        $status = $i['employee']." / Upgraded / Damaged";
                                     }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0 && $i['damaged']==1){
                                         $status = $i['employee']." / Damaged";
                                     }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0 && $i['upgrade']!=0){

@@ -56,7 +56,9 @@
                                 </thead>
                                 <?php $x=0; foreach($details AS $det){ ?>
                                 <tr>       
-                                    <td><input type="checkbox" name="edid[]" value="<?php echo $det['ed_id']; ?>" class="multi" style="margin: 0px"></td>
+                                    <td> 
+                                        <input type="checkbox" name="edid[]" value="<?php echo $det['ed_id']; ?>" class="multi" style="margin: 0px">
+                                    </td>
                                     <td><?php echo $det['item'];?></td>
                                     <td><?php echo $det['serial_no'];?></td>
                                     <td><?php echo $det['asset_control_no'];?></td>
