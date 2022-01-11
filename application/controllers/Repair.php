@@ -208,7 +208,7 @@ class Repair extends CI_Controller {
                     ); 
                     $this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid);
 
-                    $accountable = $this->super_model->select_column_where("damage_info","accountable","ed_id",$edid);
+                    $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0'");
                     $update_accountable = array(
                         'accountability_id'=>$accountable,
                     ); 
