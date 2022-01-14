@@ -6828,7 +6828,7 @@ public function update_encode_transfer(){
             $currency_id=$this->super_model->select_column_where("et_details","currency_id","et_id",$upg->et_id);
             $currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$currency_id);
             $total=$price * $qty;
-            $data['upgrade'] = array(
+            $data['upgrade'][] = array(
                 'et_id'=>$upg->et_id,
                 'ed_id'=>$upg->ed_id,
                 'set_id'=>$set_id,
