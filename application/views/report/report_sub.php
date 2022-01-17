@@ -148,7 +148,7 @@
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==1){
-                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded / Damaged</span>';
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Upgraded / Damaged</span>';
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==1){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($s['accountability_id']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']==0){
@@ -190,7 +190,7 @@
                                             <a class="btn btn-success-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
                                                 <i class="fa fa-refresh"></i>
                                             </a>                                                        
-                                            <a class="btn btn-danger-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Tag as Damage" onClick="tagAsDamage(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
+                                            <a class="btn btn-danger-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Tag as Damage" onClick="tagAsDamage(<?php echo $id;?>,<?php echo $s['et_id'];?>)" <?php echo ($s['damaged']!=0 && $s['accountability_id']!=0) ? 'style="pointer-events:none;background: #ada9a9;"' : ''; ?>>
                                                 <i class="fa fa-times"></i>
                                             </a>
                                             <span  data-toggle="tooltip" data-placement="top" title="Lost">

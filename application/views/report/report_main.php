@@ -244,7 +244,7 @@
                                     }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0 && $m['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
                                     }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0 && $m['damaged']==1){
-                                        $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded / Damaged</span>';
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Upgraded / Damaged</span>';
                                     }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0 && $m['damaged']==1){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']==0){
@@ -297,7 +297,7 @@
                                                 <i class="fa fa-print"></i>
                                             </a>                                            
                                             <?php if($_SESSION['usertype'] == 1){ ?>
-                                            <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
+                                            <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage" <?php echo ($m['damaged']!=0 && $m['accountability_id']!=0) ? 'style="pointer-events:none;background: #ada9a9;"' : ''; ?>>
                                                 <i class="fa fa-times"></i>
                                             </a>
                                             <?php } ?>

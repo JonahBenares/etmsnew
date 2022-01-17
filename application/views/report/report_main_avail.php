@@ -164,7 +164,11 @@
                                                     <i class="fa fa-times"></i>
                                                 </a>
                                                 <?php } ?> 
-                                            <?php } ?> 
+                                                <?php if($a['method']==1 && $a['upgrade_rem']!=0){ ?>
+                                                <a href="<?php echo base_url(); ?>report/remove_upgrade_avail/<?php echo $a['et_id']; ?>/<?php echo $a['rep_edid']; ?>" onclick="confirmationRemove(this);return false;" class="btn btn-warning-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Remove Upgrade">
+                                                    <i class="fa fa-eraser"></i>
+                                                </a>  
+                                            <?php } }?> 
                                             </div>
                                         </td>
                                     </tr>

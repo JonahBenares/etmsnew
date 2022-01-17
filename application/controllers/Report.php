@@ -1045,6 +1045,7 @@ class Report extends CI_Controller {
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et->et_id);
+                $remove_accountability = $this->super_model->select_column_where("damage_info", "remove_accountability", "ed_id", $et->ed_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'ed_id'=>$et->ed_id,
@@ -1063,6 +1064,7 @@ class Report extends CI_Controller {
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,
+                    'remove_accountability'=>$remove_accountability,
 
                 );
             }
@@ -2602,6 +2604,10 @@ public function update_encode_transfer(){
                 $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et->et_id);
                 $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et->et_id);
                 $ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
+                $method = $this->super_model->select_column_where("repair_details", "method", "et_id", $et->et_id);
+                $rep_edid = $this->super_model->select_column_where("repair_details", "ed_id", "et_id", $et->et_id);
+                $repair_edid = $this->super_model->select_column_custom_where("repair_details", "ed_id", "ed_id = '$rep_edid' AND method = '1'");
+                $upgrade_rem = $this->super_model->select_column_where("et_details", "upgrade", "ed_id", $repair_edid);
                 if($damage==0){
                     $data['avail'][] = array(
                         'et_id'=>$et->et_id,
@@ -2615,6 +2621,9 @@ public function update_encode_transfer(){
                         'category'=>$category,
                         'subcat'=>$subcat,
                         'qty'=>$qty,
+                        'method'=>$method,
+                        'rep_edid'=>$rep_edid,
+                        'upgrade_rem'=>$upgrade_rem,
                         'accountability'=>'',
                     );
                 }
@@ -5219,6 +5228,7 @@ public function update_encode_transfer(){
                     'unit'=>$unit,
                     'department'=>$sub->department,
                     'et_desc'=>$sub->et_desc,
+                    'damaged'=>$sub->damage,
                     'qty'=>$sub->qty,
                     'accountability'=>$accountability,
                     'empid'=>$sub->accountability_id,
@@ -5253,6 +5263,22 @@ public function update_encode_transfer(){
             ); 
             if($this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id)){
                 echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_sub/".$accountability_id."';</script>";
+            }
+        }
+    }
+
+    public function remove_upgrade_avail(){
+        $et_id = $this->uri->segment(3);
+        $ed_id = $this->uri->segment(4);
+        $data_head = array(
+            'accountability_id'=>0,
+        ); 
+        if($this->super_model->update_where("et_head", $data_head, "et_id", $et_id)){
+            $det_data = array(
+                'upgrade'=>0,
+            ); 
+            if($this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id)){
+                echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_main_avail/';</script>";
             }
         }
     }
