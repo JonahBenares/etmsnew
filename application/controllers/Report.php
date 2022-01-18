@@ -5262,7 +5262,12 @@ public function update_encode_transfer(){
                 'upgrade'=>0,
             ); 
             if($this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id)){
-                echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_sub/".$accountability_id."';</script>";
+                $rep_data = array(
+                    'remove_upgrade'=>1,
+                ); 
+                if($this->super_model->update_where("repair_details", $rep_data, "et_id", $et_id)){
+                    echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_sub/".$accountability_id."';</script>";
+                }
             }
         }
     }
@@ -5278,7 +5283,12 @@ public function update_encode_transfer(){
                 'upgrade'=>0,
             ); 
             if($this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id)){
-                echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_main_avail/';</script>";
+                $rep_data = array(
+                    'remove_upgrade'=>1,
+                ); 
+                if($this->super_model->update_where("repair_details", $rep_data, "et_id", $et_id)){
+                    echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_main_avail/';</script>";
+                }
             }
         }
     }
@@ -5806,7 +5816,7 @@ public function update_encode_transfer(){
                             'return_remarks'=>$ret_remarks[$x],
                         );
                         if($this->super_model->insert_into("return_details", $returndet_data)){
-                            foreach($this->super_model->select_custom_where("repair_details","ed_id='$edid[$x]' AND method='1'") AS $upg){
+                            foreach($this->super_model->select_custom_where("repair_details","ed_id='$edid[$x]' AND method='1' AND remove_upgrade='0'") AS $upg){
                                 $returnupg_data = array(
                                     'ed_id'=>$upg->ed_id,
                                     'et_id'=>$upg->et_id,
@@ -5854,7 +5864,7 @@ public function update_encode_transfer(){
                             'return_remarks'=>$ret_remarks[$x],
                         );
                         if($this->super_model->insert_into("return_details", $returndet_data)){
-                            foreach($this->super_model->select_custom_where("repair_details","ed_id='$edid[$x]' AND method='1'") AS $upg){
+                            foreach($this->super_model->select_custom_where("repair_details","ed_id='$edid[$x]' AND method='1'  AND remove_upgrade='0'") AS $upg){
                                 $returnupg_data = array(
                                     'ed_id'=>$upg->ed_id,
                                     'et_id'=>$upg->et_id,
@@ -6838,7 +6848,7 @@ public function update_encode_transfer(){
         );  
 
         $cup = $this->super_model->count_custom_where("repair_details", "method='1' AND ed_id = '$ed_id'");
-        foreach($this->super_model->custom_query("SELECT * FROM repair_details WHERE method='1' AND ed_id = '$ed_id'") AS $upg){
+        foreach($this->super_model->custom_query("SELECT * FROM repair_details WHERE method='1' AND remove_upgrade='0' AND ed_id = '$ed_id'") AS $upg){
             $item=$this->super_model->select_column_where('et_head',"et_desc","et_id",$upg->et_id);
             $set_id=$this->super_model->select_column_where("et_details","set_id","et_id",$upg->et_id);
             $brand=$this->super_model->select_column_where("et_details","brand","et_id",$upg->et_id);
