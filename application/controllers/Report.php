@@ -6286,7 +6286,19 @@ public function update_encode_transfer(){
                 $rep_data = array(
                     'damage'=>1
                 ); 
-                $this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id);
+                if($this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id)){
+                    if($remove_accountability==1){
+                        $remove_data = array(
+                            'accountability_id'=>0,
+                        );
+                        $this->super_model->update_where("et_head", $remove_data, "et_id",$rep->et_id);
+                    }else{
+                        $remove_data = array(
+                            'accountability_id'=>$accountable,
+                        );
+                        $this->super_model->update_where("et_head", $remove_data, "et_id",$rep->et_id);
+                    }
+                }
             }
 
             if($id!=0){ 
