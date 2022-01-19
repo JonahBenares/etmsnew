@@ -198,7 +198,7 @@
                                                     <i class="fa fa-minus-circle"></i>
                                                 </a>  
                                             </span>
-                                            <?php if($s['method']==1){ ?>
+                                            <?php if($s['method']==1 && $s['upgrade']==0){ ?>
                                             <a href="<?php echo base_url(); ?>report/remove_upgrade/<?php echo $s['et_id']; ?>/<?php echo $s['rep_edid']; ?>/<?php echo $id; ?>" onclick="confirmationRemove(this);return false;" class="btn btn-warning-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Remove Upgrade">
                                                 <i class="fa fa-eraser"></i>
                                             </a>  
