@@ -6960,7 +6960,7 @@ public function update_encode_transfer(){
                             $this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id[$x]);
                         }
 
-                        foreach($this->super_model->select_custom_where("repair_details","ed_id='$ed_id[$x]' AND method='1'") AS $upg){
+                        foreach($this->super_model->select_custom_where("repair_details","ed_id='$ed_id[$x]' AND method='1' AND remove_upgrade='0'") AS $upg){
                             $department = $this->super_model->select_column_where("et_head","department","et_id",$upg->et_id);
                             $data_upg = array(
                                 'accountability_id'=>$assign,
