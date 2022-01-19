@@ -6282,6 +6282,13 @@ public function update_encode_transfer(){
                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
             }
 
+            foreach($this->super_model->select_custom_where('repair_details', "ed_id='$edid' AND method='1' AND remove_upgrade='0'") AS $rep){
+                $rep_data = array(
+                    'damage'=>1
+                ); 
+                $this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id);
+            }
+
             if($id!=0){ 
                 foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
                     $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
@@ -6371,7 +6378,17 @@ public function update_encode_transfer(){
                 'return_id'=>$return_id,
                 'date_issued'=>$date_issued
             );
-            $this->super_model->insert_into("return_details", $returndet_data);
+            if($this->super_model->insert_into("return_details", $returndet_data)){
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$edid' AND method='1' AND remove_upgrade='0'") AS $upg){
+                    $returnupg_data = array(
+                        'ed_id'=>$upg->ed_id,
+                        'et_id'=>$upg->et_id,
+                        'return_id'=>$return_id,
+                        'date_issued'=>$date_issued,
+                    );
+                    $this->super_model->insert_into("return_details", $returnupg_data);
+                }
+            }
         }
 
 

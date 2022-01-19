@@ -207,9 +207,16 @@ class Repair extends CI_Controller {
                     $updgrade_data = array(
                         'upgrade'=>1,
                     ); 
-                    $this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid);
+                    if($this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid)){
+                        foreach($this->super_model->select_custom_where('repair_details', "ed_id='$edid' AND method='1' AND remove_upgrade='0'") AS $rep){
+                            $rep_data = array(
+                                'damage'=>0
+                            ); 
+                            $this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id);
+                        }
+                    }
 
-                    $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0'");
+                    $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0' ORDER BY create_date DESC");
                     $update_accountable = array(
                         'accountability_id'=>$accountable,
                     ); 
