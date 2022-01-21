@@ -216,11 +216,19 @@ class Repair extends CI_Controller {
                         }
                     }
 
-                    $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0' ORDER BY create_date DESC");
-                    $update_accountable = array(
-                        'accountability_id'=>$accountable,
-                    ); 
-                    $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    $remove_accountability = $this->super_model->select_column_custom_where("damage_info","remove_accountability","ed_id='$edid' AND accountable!='0' ORDER BY create_date DESC");
+                    if($remove_accountability==1){
+                        $update_accountable = array(
+                            'accountability_id'=>0,
+                        ); 
+                        $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    }else{
+                        $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0' ORDER BY create_date DESC");
+                        $update_accountable = array(
+                            'accountability_id'=>$accountable,
+                        ); 
+                        $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    }
                 }
                 
                 $this->super_model->update_where("repair_details", $method_data, "repair_id", $repair_id);

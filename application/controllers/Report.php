@@ -3973,9 +3973,19 @@ public function update_encode_transfer(){
         $this->load->view('template/footer');
     }
 
+    public function like($str, $searchTerm) {
+        $searchTerm = strtolower($searchTerm);
+        $str = strtolower($str);
+        $pos = strpos($str, $searchTerm);
+        if ($pos === false)
+            return false;
+        else
+            return true;
+    }
+
     public function report_history(){  
         $this->load->view('template/header');
-        $this->load->view('template/navbar',$this->dropdown);
+        //$this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -3990,7 +4000,7 @@ public function update_encode_transfer(){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
-                    $location = $this->super_model->select_column_where("location", "location_name", "location_id", $sub->location_id);
+                    $location = $this->super_model->select_column_where("location", "location_name", "location_id", $s->location_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
                         if($rep_et==$s->et_id){
@@ -4038,7 +4048,7 @@ public function update_encode_transfer(){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
-                    $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $sub->et_id);
+                    $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $s->et_id);
                     $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
                     foreach($this->super_model->select_row_where("lost_items","ed_id",$s->ed_id) AS $lo){
                         $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
@@ -4086,6 +4096,7 @@ public function update_encode_transfer(){
                             $accountabilitys=$this->super_model->select_column_where("employees","employee_name","employee_id",$sab->accountability_id);
                         }
                     }
+                    $accountability_id = $this->super_model->select_column_where("et_head", "accountability_id", "et_id", $r->et_id);
                     $et_id = $this->super_model->select_column_where("return_details", "et_id", "return_id", $ret->return_id);
                     $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $r->et_id);
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
@@ -4107,7 +4118,7 @@ public function update_encode_transfer(){
                     $remarks = $ret->return_remarks;
                     $remarks_all = "Turn over to";
                     $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
-                    $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
+                    $rep_edid = $this->super_model->select_column_custom_where("repair_details","ed_id","ed_id='$r->ed_id' AND method='0'");
                     $counts = $this->super_model->count_custom_where("et_head","et_id='$r->et_id' AND accountability_id='$id'");
                     $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $r->et_id);                     
                     $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $r->et_id); 
@@ -4116,8 +4127,8 @@ public function update_encode_transfer(){
                     $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $r->et_id); 
                     $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $r->et_id); 
                     $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
-
-                    if($damaged==0 && $rep_edid==0 && $counts==0){
+                    $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+                    if($damaged==0 && $count_return!=0){
                         $data['sub'][] = array(
                             'et_id'=>$r->et_id,
                             'ed_id'=>$r->ed_id,
@@ -4131,7 +4142,7 @@ public function update_encode_transfer(){
                             'qty'=>$qty,
                             'accountability'=>$accountability,
                             'accountabilitys'=>$accountabilitys,
-                            'empid'=>$ret->accountability_id,
+                            'empid'=>$accountability_id,
                             'unit_price'=>$unit_price,
                             'lost'=>$lost,
                             'date_issued'=>$date_issued,
@@ -4150,7 +4161,7 @@ public function update_encode_transfer(){
                     }
                 
                     $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$et_id);
-                    if($et_id == $dam_etid && $damaged==1){
+                    if($damaged==1){
                         foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
                             $remarks="Damaged - ".$dam->incident_date;
                             $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
@@ -4207,66 +4218,130 @@ public function update_encode_transfer(){
                         }
                     }
 
-                    if($edid == $rep_edid && $damaged==0){
-                        foreach($this->super_model->select_row_where("repair_details","ed_id",$rep_edid) AS $rep){
-                            $remarks=$rep->remarks;
-                            $remarks_all="Repaired - ".$rep->repair_date;
-                            $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
-                            $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
-                            $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $et_id);
-                            $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);
-                            $department =$this->super_model->select_column_where("et_head", "department", "et_id", $et_id);
-                            $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
-                            $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et_id);
-                            $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $accountability_id);
-                            $category_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $et_id);
-                            $category =$this->super_model->select_column_where("category", "category_name", "category_id", $category_id);
-                            $subcat_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $et_id);
-                            $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
-                            $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $et_id);
-                            $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et_id);
-                            $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
-                            $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
-                            $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et_id);                     
-                            $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et_id); 
-                            $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et_id); 
-                            $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et_id); 
-                            $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et_id); 
-                            $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et_id); 
-                            $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
-                            $data['sub'][] = array(
-                                'et_id'=>$et_id,
-                                'ed_id'=>$rep->ed_id,
-                                'set_id'=>$set_id,
-                                'set_name'=>$set_name,
-                                'cat'=>$category,
-                                'subcat'=>$subcat,
-                                'unit'=>$unit,
-                                'department'=>$department,
-                                'et_desc'=>$et_desc,
-                                'qty'=>$qty,
-                                'accountability'=>$accountability,
-                                'accountabilitys'=>'',
-                                'empid'=>$accountability_id,
-                                'unit_price'=>$unit_price,
-                                'lost'=>$lost,
-                                'date_issued'=>'',
-                                'date_returned'=>'',
-                                'remarks'=>$remarks,
-                                'remarks_all'=>$remarks_all,
-                                'damaged'=>'',
-                                'incident_description'=>'',
-                                'replacement'=>'',
-                                'damaged'=>$damaged,
-                                'borrowed'=>$borrowed,
-                                'location'=>$location,
-                                'change_location'=>$change_location,
-                                'lost'=>$lost,
-                                'upgrade'=>$upgrade,
-                            );
-                        }
-                    }
                 } 
+            }
+            $count_repair = $this->super_model->count_custom_where("repair_details","ed_id='$r->ed_id' AND method='0'");
+            if($damaged==0 && $count_repair!=0){
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$r->ed_id' AND method='0'") AS $rep){
+                    $remarks=$rep->remarks;
+                    $remarks_all="Repaired - ".$rep->repair_date;
+                    $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
+                    $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+                    $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $et_id);
+                    $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);
+                    $department =$this->super_model->select_column_where("et_head", "department", "et_id", $et_id);
+                    $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
+                    $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et_id);
+                    $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $accountability_id);
+                    $category_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $et_id);
+                    $category =$this->super_model->select_column_where("category", "category_name", "category_id", $category_id);
+                    $subcat_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $et_id);
+                    $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
+                    $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $et_id);
+                    $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et_id);
+                    $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                    $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
+                    $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et_id);                     
+                    $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et_id); 
+                    $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et_id); 
+                    $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et_id); 
+                    $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et_id); 
+                    $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et_id); 
+                    $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
+                    $data['sub'][] = array(
+                        'et_id'=>$et_id,
+                        'ed_id'=>$rep->ed_id,
+                        'set_id'=>$set_id,
+                        'set_name'=>$set_name,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$department,
+                        'et_desc'=>$et_desc,
+                        'qty'=>$qty,
+                        'accountability'=>$accountability,
+                        'accountabilitys'=>'',
+                        'empid'=>$accountability_id,
+                        'unit_price'=>$unit_price,
+                        'lost'=>$lost,
+                        'date_issued'=>'',
+                        'date_returned'=>'',
+                        'remarks'=>$remarks,
+                        'remarks_all'=>$remarks_all,
+                        'damaged'=>'',
+                        'incident_description'=>'',
+                        'replacement'=>'',
+                        'damaged'=>$damaged,
+                        'borrowed'=>$borrowed,
+                        'location'=>$location,
+                        'change_location'=>$change_location,
+                        'lost'=>$lost,
+                        'upgrade'=>$upgrade,
+                    );
+                }
+            }
+
+            $count_upgrade = $this->super_model->count_custom_where("repair_details","ed_id='$r->ed_id' AND method='1' AND remove_upgrade='0'");
+            if($damaged==0 && $count_upgrade!=0){
+                foreach($this->super_model->select_custom_where("repair_details","ed_id='$r->ed_id' AND method='1' AND remove_upgrade='0'") AS $rep){
+                    $remarks=$rep->remarks;
+                    $remarks_all="Upgraded - ".$rep->repair_date;
+                    $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
+                    $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep->et_id);
+                    $upgrade_item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+                    $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $rep->et_id);
+                    $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $rep->et_id);
+                    $department =$this->super_model->select_column_where("et_head", "department", "et_id", $rep->et_id);
+                    $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
+                    $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $rep->et_id);
+                    $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $accountability_id);
+                    $category_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $rep->et_id);
+                    $category =$this->super_model->select_column_where("category", "category_name", "category_id", $category_id);
+                    $subcat_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $rep->et_id);
+                    $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
+                    $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $rep->et_id);
+                    $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $rep->et_id);
+                    $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                    $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $rep->et_id);
+                    $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $rep->et_id);                     
+                    $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $rep->et_id); 
+                    $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $rep->et_id); 
+                    $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $rep->et_id); 
+                    $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $rep->et_id); 
+                    $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $rep->et_id); 
+                    $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
+                    $data['sub'][] = array(
+                        'et_id'=>$et_id,
+                        'ed_id'=>$rep->ed_id,
+                        'set_id'=>$set_id,
+                        'set_name'=>$set_name,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$department,
+                        'et_desc'=>$et_desc,
+                        'upgrade_item'=>$upgrade_item,
+                        'qty'=>$qty,
+                        'accountability'=>$accountability,
+                        'accountabilitys'=>'',
+                        'empid'=>$accountability_id,
+                        'unit_price'=>$unit_price,
+                        'lost'=>$lost,
+                        'date_issued'=>'',
+                        'date_returned'=>'',
+                        'remarks'=>$remarks,
+                        'remarks_all'=>$remarks_all,
+                        'damaged'=>'',
+                        'incident_description'=>'',
+                        'replacement'=>'',
+                        'damaged'=>$damaged,
+                        'borrowed'=>$borrowed,
+                        'location'=>$location,
+                        'change_location'=>$change_location,
+                        'lost'=>$lost,
+                        'upgrade'=>$upgrade,
+                    );
+                }
             }
         }
         $this->load->view('report/report_history',$data);
@@ -5264,6 +5339,7 @@ public function update_encode_transfer(){
             if($this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id)){
                 $rep_data = array(
                     'remove_upgrade'=>1,
+                    'remove_date'=>date("Y-m-d H:i:s")
                 ); 
                 if($this->super_model->update_where("repair_details", $rep_data, "et_id", $et_id)){
                     echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_sub/".$accountability_id."';</script>";
@@ -5285,6 +5361,7 @@ public function update_encode_transfer(){
             if($this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id)){
                 $rep_data = array(
                     'remove_upgrade'=>1,
+                    'remove_date'=>date("Y-m-d H:i:s")
                 ); 
                 if($this->super_model->update_where("repair_details", $rep_data, "et_id", $et_id)){
                     echo "<script>alert('Successfully remove upgraded item.');window.location = '".base_url()."report/report_main_avail/';</script>";
@@ -9052,9 +9129,56 @@ public function update_encode_transfer(){
                         "employee"=>"",
                         "item"=>$item,
                         "trdate"=>$d->repair_date,
-                        "date_desc"=>"Repair Date",
+                        "date_desc"=>"Upgrade Date",
                         "return_date"=>"",
                         "method"=>"Upgraded",
+                        "received_by"=>$receive_by,
+                        "returned_by"=>"",
+                        "jo_no"=>$d->jo_no,
+                        "qty"=>1,
+                        "repair_price"=>$d->repair_price,
+                        "supplier"=>$d->supplier,
+                         "remarks"=>"",
+                        "replacement"=>"",
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
+                    );
+
+                        $data['repair'][] = array(
+                            "repair_id"=>$d->repair_id,
+                            "receive_by"=>$receive_by,
+                            "jo_no"=>$d->jo_no,
+                            "supplier"=>$d->supplier,
+                            "repair_price"=>$d->repair_price,
+                            "repair_date"=>$d->repair_date,
+                            "qty"=>1,
+                        );
+                    
+                }else {
+                    $data['repair']=array();
+                }
+            }
+            
+        } else {
+            $data['repair']=array();
+        }
+
+        $row_removeupgrade=$this->super_model->count_custom_where("repair_details", "ed_id='$id' AND method='1' AND remove_upgrade='1'");
+        if($row_removeupgrade!=0){ 
+            foreach($this->super_model->select_custom_where('repair_details', "ed_id='$id' AND method='1' AND remove_upgrade='1'") AS $d){
+                $receive_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $d->received_by);
+                $row_removeupgrade=$this->super_model->count_custom_where("repair_details", "ed_id='$d->ed_id' AND method='1'");
+                $item=$this->super_model->select_column_where("et_head","et_desc","et_id",$d->et_id);
+                if($row_removeupgrade!=0){
+                      $data['history'][] = array(
+                        "id"=>$d->repair_id,
+                        "employee"=>"",
+                        "item"=>$item,
+                        "trdate"=>$d->remove_date,
+                        "date_desc"=>"Remove Upgraded Date",
+                        "return_date"=>"",
+                        "method"=>"Removed Upgrade",
                         "received_by"=>$receive_by,
                         "returned_by"=>"",
                         "jo_no"=>$d->jo_no,

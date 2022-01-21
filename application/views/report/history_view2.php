@@ -114,6 +114,9 @@
             }else if($his['method'] == 'Upgraded'){
                 $bg = 'bg-primary-alt';
                 $border = "border-primary";
+            }else if($his['method'] == 'Removed Upgrade'){
+                $bg = 'bg-primary-alt';
+                $border = "border-primary";
             } else if($his['method'] == 'Borrowed'){
                 $bg = 'bg-warning-alt';
                 $border = "border-warning";
@@ -189,6 +192,19 @@
                     <p class="font-bold">JO No.:</p>
                     <p class="m-b-10"><?php echo $his['jo_no']; ?></p>
                     <p class="font-bold">Upgrade Price:</p>
+                    <p class="m-b-10"><?php echo number_format($his['repair_price'],2); ?></p>
+                    <p class="font-bold">Supplier:</p>
+                    <p class="m-b-10"><?php echo $his['supplier']; ?></p>
+                    <p class="font-bold">Received By :</p>
+                    <p class="m-b-10"><?php echo $his['received_by']; ?></p>
+                <?php } else if($his['method'] == 'Removed Upgrade'){ ?>
+                    <p class="font-bold">Removed Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('F d, Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">Removed Item:</p>
+                    <p class="m-b-10"><?php echo $his['item']; ?></p>
+                    <p class="font-bold">JO No.:</p>
+                    <p class="m-b-10"><?php echo $his['jo_no']; ?></p>
+                    <p class="font-bold">Remove Upgraded Price:</p>
                     <p class="m-b-10"><?php echo number_format($his['repair_price'],2); ?></p>
                     <p class="font-bold">Supplier:</p>
                     <p class="m-b-10"><?php echo $his['supplier']; ?></p>
