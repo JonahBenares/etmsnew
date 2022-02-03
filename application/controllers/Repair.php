@@ -85,7 +85,7 @@ class Repair extends CI_Controller {
         /*$data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");*/
         foreach($this->super_model->select_all("repair_details") AS $det){
         $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$det->ed_id' AND accountable!='0' ORDER BY create_date DESC");
-        $data['et_head_accountable']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.et_id NOT IN (SELECT et_id FROM repair_details WHERE method='1' AND remove_upgrade='0') AND accountability_id='$accountable' AND accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");
+        $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.et_id NOT IN (SELECT et_id FROM repair_details WHERE method='1' AND remove_upgrade='0') AND accountability_id='$accountable' || accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");
             if($det->saved == 0 AND $det->unsaved==1){
                 $data['rep'][]=array(
                     'repair_id'=>$det->repair_id,
