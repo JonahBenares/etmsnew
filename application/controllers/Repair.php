@@ -46,6 +46,7 @@ class Repair extends CI_Controller {
                     $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $det->et_id);
                     $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
                     $repair =$this->super_model->select_column_where("repair_details", "assessment", "ed_id", $det->ed_id);
+                    $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $det->et_id);
                     foreach($this->super_model->select_custom_where("damage_info","ed_id='$det->ed_id' ORDER BY ed_id DESC") AS $dam){
                         $damage_id =$dam->damage_id;
                         $count_ed_id = $this->super_model->count_rows_where("damage_info","ed_id",$dam->ed_id);
@@ -63,6 +64,7 @@ class Repair extends CI_Controller {
                         'model'=>$det->model,
                         'et_desc'=>$item,
                         'category'=>$category,
+                        'accountable'=>$accountable,
                         'subcat'=>$subcat,
                         'qty'=>$qty,
                         'brand'=>$det->brand,
@@ -81,7 +83,7 @@ class Repair extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
         /*$data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");*/
-        $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.et_id NOT IN (SELECT et_id FROM repair_details WHERE method='1' AND remove_upgrade='0') AND accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");
+        $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.et_id NOT IN (SELECT et_id FROM repair_details WHERE method='1' AND remove_upgrade='0') AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");
         foreach($this->super_model->select_all("repair_details") AS $det){
             if($det->saved == 0 AND $det->unsaved==1){
                 $data['rep'][]=array(
