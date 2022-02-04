@@ -104,6 +104,8 @@ class Report extends CI_Controller {
             foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no","et_id",$ss->et_id);
+                $serial_no = $this->super_model->select_column_where("et_details","serial_no","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
                     $avcount = $av->av;
@@ -116,6 +118,8 @@ class Report extends CI_Controller {
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'item'=>$ss->et_desc,
                     'set'=>$sets,
                     'count'=>$counts,
@@ -890,11 +894,15 @@ class Report extends CI_Controller {
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);   
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id);   
+                $asset_control_no = $this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $t->et_id);   
+                $serial_no = $this->super_model->select_column_where("et_details", "serial_no", "et_id", $t->et_id);   
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$t->location_id);                  
                 $data['itema'][]=array(
                     'item'=>$item,
                     'damaged'=>$damaged,
                     'lost'=>$lost,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'borrowed'=>$borrowed,
                     'location'=>$location,
                     'change_location'=>$t->change_location,
@@ -949,6 +957,8 @@ class Report extends CI_Controller {
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no","et_id",$ss->et_id);
+                $serial_no = $this->super_model->select_column_where("et_details","serial_no","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
@@ -964,6 +974,8 @@ class Report extends CI_Controller {
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'item'=>$ss->et_desc,
                     'set'=>$sets,
                     'count'=>$counts,
@@ -976,6 +988,8 @@ class Report extends CI_Controller {
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no","et_id",$ss->et_id);
+                $serial_no = $this->super_model->select_column_where("et_details","serial_no","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
@@ -990,6 +1004,8 @@ class Report extends CI_Controller {
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'item'=>$ss->et_desc,
                     'set'=>$sets,
                     'count'=>$counts,
@@ -1049,6 +1065,8 @@ class Report extends CI_Controller {
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'ed_id'=>$et->ed_id,
+                    'serial_no'=>$et->serial_no,
+                    'asset_control_no'=>$et->asset_control_no,
                     'cat'=>$category,
                     'subcat'=>$subcat,
                     'unit'=>$unit,
@@ -1124,6 +1142,7 @@ class Report extends CI_Controller {
             foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
+                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
                 $department =$et->department;
@@ -1137,6 +1156,7 @@ class Report extends CI_Controller {
                     'subcat'=>$subcat,
                     'unit'=>$unit,
                     'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'department'=>$department,
                     'et_desc'=>$et->et_desc,
                     'qty'=>$et->qty,
@@ -2597,6 +2617,7 @@ public function update_encode_transfer(){
             foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0'","et_id") as $et){
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
                 $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
+                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -2615,6 +2636,7 @@ public function update_encode_transfer(){
                         'empid'=>$empid,
                         'unit'=>$unit,
                         'asset_control_no'=>$asset_control_no,
+                        'serial_no'=>$serial_no,
                         'damaged'=>$damage,
                         'department'=>$et->department,
                         'et_desc'=>$et->et_desc,
@@ -2713,6 +2735,7 @@ public function update_encode_transfer(){
             foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE cancelled='0' AND save_temp='0' AND lost='0' AND change_location='1' GROUP BY eh.et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
+                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -2724,6 +2747,7 @@ public function update_encode_transfer(){
                     'cat'=>$category,
                     'subcat'=>$subcat,
                     'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'unit'=>$unit,
                     'department'=>$et->department,
                     'location'=>$location,
@@ -5297,6 +5321,8 @@ public function update_encode_transfer(){
                     'et_id'=>$sub->et_id,
                     'ed_id'=>$sub->ed_id,
                     'set_id'=>$sub->set_id,
+                    'serial_no'=>$sub->serial_no,
+                    'asset_control_no'=>$sub->asset_control_no,
                     'set_name'=>$set_name,
                     'cat'=>$category,
                     'subcat'=>$subcat,
@@ -9343,6 +9369,8 @@ public function update_encode_transfer(){
                 foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
                     $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                     $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                    $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no","et_id",$ss->et_id);
+                    $serial_no = $this->super_model->select_column_where("et_details","serial_no","et_id",$ss->et_id);
                     $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                     $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
                     $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
@@ -9358,6 +9386,8 @@ public function update_encode_transfer(){
                     $data['itema'][]= array(
                         'item_id'=>$ss->et_id,
                         'set_id'=>$set_id,
+                        'asset_control_no'=>$asset_control_no,
+                        'serial_no'=>$serial_no,
                         'item'=>$ss->et_desc,
                         'set'=>$sets,
                         'count'=>$counts,
@@ -9373,6 +9403,8 @@ public function update_encode_transfer(){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no","et_id",$ss->et_id);
+                $serial_no = $this->super_model->select_column_where("et_details","serial_no","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
@@ -9388,6 +9420,8 @@ public function update_encode_transfer(){
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'item'=>$ss->et_desc,
                     'set'=>$sets,
                     'count'=>$counts,
@@ -9400,6 +9434,8 @@ public function update_encode_transfer(){
             foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id, ed.set_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
                 $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no","et_id",$ss->et_id);
+                $serial_no = $this->super_model->select_column_where("et_details","serial_no","et_id",$ss->et_id);
                 $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
@@ -9414,6 +9450,8 @@ public function update_encode_transfer(){
                 $data['itema'][]= array(
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
                     'item'=>$ss->et_desc,
                     'set'=>$sets,
                     'count'=>$counts,

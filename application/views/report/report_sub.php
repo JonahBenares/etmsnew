@@ -124,7 +124,8 @@
                         <table class="table dataTable table-striped ">
                             <thead>
                                 <tr>
-                                    <th width="15%" >Category</th>
+                                    <th width="15%" >Asset Control No.</th>
+                                    <th width="15%" >Serial No.</th>
                                     <th width="15%" >Sub Category</th>
                                     <th width="40%" >Item</th>
                                     <th width="5%" >Unit</th>
@@ -168,7 +169,8 @@
                                     }
                                 ?>
                                 <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#ec7070 !important" : ''; ?>">
-                                    <td><?php echo $s['cat']; ?></td>
+                                    <td><?php echo $s['asset_control_no']; ?></td>
+                                    <td><?php echo $s['serial_no']; ?></td>
                                     <td><?php echo $s['subcat']; ?></td>
                                     <td>
                                         <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More" style="white-space: normal!important;text-align: left">

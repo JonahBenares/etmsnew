@@ -70,7 +70,7 @@
                         <table class="table table-borderless table-striped table-earning table-hover" id="myTable_peret">
                             <thead>
                                 <tr>
-                                    <th>Employee Name</th>
+                                    <th>Employee Name / Department Name</th>
                                     <th>Number of Accountable Items</th>
                                     <th class="text-center" width="2%"><span class="fa fa-bars"></span></th>
                                 </tr>

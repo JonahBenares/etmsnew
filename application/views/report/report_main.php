@@ -225,7 +225,8 @@
                             <thead>
                                 <tr>
                                     <th>Employee Name</th>
-                                    <th>Category</th>
+                                    <th>Asset Control No.</th>
+                                    <th>Serial No.</th>
                                     <th>Sub Category</th>
                                     <th width="20%">Item</th>
                                     <th>Unit</th>
@@ -265,7 +266,8 @@
                                 ?>
                                 <tr>                                        
                                     <td><?php echo $m['accountability']; ?></td>
-                                    <td><?php echo $m['cat']; ?></td>
+                                    <td><?php echo $m['asset_control_no']; ?></td>
+                                    <td><?php echo $m['serial_no']; ?></td>
                                     <td><?php echo $m['subcat']; ?></td>
                                     <td>
                                         <a href="<?php echo base_url(); ?>report/view_more/<?php echo $m['et_id'];?>" class=""  data-toggle="tooltip" data-placement="left" title="View" style="word-wrap: break-word;">

@@ -34,6 +34,8 @@
                             <thead>
                                 <tr>
                                     <th>Item Description</th>
+                                    <th>Asset Control No.</th>
+                                    <th>Serial No.</th>
                                     <th>Accountability</th>
                                     <th>Status</th>
                                     <th width="10%">Qty</th>
@@ -68,6 +70,8 @@
                                     ?>
                                     <tr>
                                         <td><?php echo $i['item'];?></td>
+                                        <td><?php echo $i['asset_control_no'];?></td>
+                                        <td><?php echo $i['serial_no'];?></td>
                                         <td><?php echo $i['accountability'];?></td>
                                         <td><?php echo $status;?></td>
                                         <td><?php echo '1';?></td>

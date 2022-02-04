@@ -50,6 +50,9 @@ class Repair extends CI_Controller {
                         $damage_id =$dam->damage_id;
                         $count_ed_id = $this->super_model->count_rows_where("damage_info","ed_id",$dam->ed_id);
                     }
+                    $accountable_id = $this->super_model->select_column_where("damage_info","accountable","ed_id",$det->ed_id);
+                    $accountable = $this->super_model->select_column_where("employees","employee_name","employee_id",$accountable_id);
+                    $accountability = $this->super_model->select_column_where("damage_info","accountability","ed_id",$det->ed_id);
                     $data['damage'][] = array(
                         'damage_id'=>$damage_id,
                         'ed_id'=>$det->ed_id,
@@ -67,6 +70,9 @@ class Repair extends CI_Controller {
                         'qty'=>$qty,
                         'brand'=>$det->brand,
                         'count_ed_id'=>$count_ed_id,
+                        'accountable_id'=>$accountable_id,
+                        'accountable'=>$accountable,
+                        'accountability'=>$accountability,
                     );
                 }
             }
