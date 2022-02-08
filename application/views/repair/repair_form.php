@@ -64,7 +64,7 @@
                                         <table width="100%">
                                             
                                             <tr>
-                                                <td class="pad-5" width="29%"><small>Asset Control No</small></td>
+                                                <td class="pad-5" width="29%"><small>Asset Control No.</small></td>
                                                 <td class="pad-5">: <?php echo $r['acn'];?></td>
                                             </tr>
                                             <tr>
@@ -107,7 +107,7 @@
                                         <input id="date" name="date<?php echo $z;?>" type="date"  class="form-control bor-radius5 cc-exp" required>
                                         <label for="" class="control-label mb-1" id="rep_price">Repair Price:</label>
                                         <input id="price" name="price<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp" onkeypress="return isNumberKey(event,this)">
-                                        <label for="" class="control-label mb-1">JO No.:</label>
+                                        <label for="" class="control-label mb-1">JO No. / PR No.:</label>
                                         <input id="date" name="jo<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
                                         <label for="" class="control-label mb-1">Supplier:</label>
                                         <input id="date" name="supplier<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">

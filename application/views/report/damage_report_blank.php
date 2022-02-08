@@ -68,7 +68,13 @@
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
                     <td style="border-bottom: 1px solid #999"> : <br></td>
                     <td width="10%"></td>
-                </tr>        
+                </tr>   
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">Asset Conrtol No. </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
+                </tr>     
                 <tr>
                     <td></td>
                     <td></td>

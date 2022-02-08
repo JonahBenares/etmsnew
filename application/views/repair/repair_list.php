@@ -67,7 +67,6 @@
                                         <th width="%">Brand</th>
                                         <th width="15%">Model</th>
                                         <th width="%">Serial No.</th>
-                                        <th width="%">Accountability</th>
                                         <th width="%">Status</th>
                                         <th width="%">Action</th>
                                     </tr>
@@ -83,7 +82,6 @@
                                         <td class="p-b-10 p-t-10"><?php echo $d['brand'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['model'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['serial_no'];?></td>
-                                        <td class="p-b-10 p-t-10"><?php echo $d['accountable'];?></td>
                                         <td class="p-b-10 p-t-10"><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else if($d['repair']==1 && $d['count_ed_id'] < 1){ echo 'Repaired'; }?></td>
                                         <td class="p-b-10 p-t-10"  align="center">
                                             <a href="<?php echo base_url(); ?>report/damage_report_nav/<?php echo $d['damage_id']?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">

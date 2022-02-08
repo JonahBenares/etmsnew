@@ -117,7 +117,13 @@
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $dam['item'];?></td>
                     <td width="10%"></td>
-                </tr>        
+                </tr> 
+                 <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">Asset Control No. </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <?php echo $det['asset_control_no'];?></td>
+                </tr>         
                 <tr>
                     <td></td>
                     <td></td>

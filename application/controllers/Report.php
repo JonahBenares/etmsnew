@@ -6306,6 +6306,7 @@ public function update_encode_transfer(){
                     'model'=> $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id),
                     'brand'=> $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id),
                     'serial' => $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id),
+                    'asset_control_no' => $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $det->ed_id),
                     'acquisition_date' => $this->super_model->select_column_where("et_details", "acquisition_date", "ed_id", $det->ed_id),
                 );
                 $repair_remarks="";  
@@ -6681,6 +6682,7 @@ public function update_encode_transfer(){
                     'model'=> $det->model,
                     'brand'=> $det->brand,
                     'serial' => $det->serial_no,
+                    'asset_control_no' => $det->asset_control_no,
                     'acquisition_date' => $det->acquisition_date,
                 );
                 $repair_remarks="";  
@@ -6805,6 +6807,7 @@ public function update_encode_transfer(){
                     'model'=> $det->model,
                     'brand'=> $det->brand,
                     'serial' => $det->serial_no,
+                    'asset_control_no' => $det->asset_control_no,
                     'acquisition_date' => $det->acquisition_date,
                 );
                 $repair_remarks="";  
