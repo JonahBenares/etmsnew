@@ -179,7 +179,7 @@
                                     </div>
                                     <div class="row"> 
                                         <div class="col-6">
-                                            <label for="x_card_code" class="control-label mb-1">Submitted By:</label>
+                                            <label for="x_card_code" class="control-label mb-1">Verified By:</label>
                                             <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp submitted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "submitted<?php echo $x; ?>" required>
                                             <span id="suggestion-submitted<?php echo $x;?>"></span>
                                             <input type="hidden" name="submitted_id<?php echo $x;?>" id="submitted_id<?php echo $x;?>">

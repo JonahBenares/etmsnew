@@ -254,7 +254,7 @@
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td width="30%" class="main-tab">Submitted by:</td>
+                    <td width="30%" class="main-tab">Verified by:</td>
                     <td width="20%" class="main-tab"></td>
                     <td width="30%" class="main-tab">Noted by:</td>
                     <td width="10%"></td>
