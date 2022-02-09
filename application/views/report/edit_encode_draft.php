@@ -36,7 +36,7 @@
                                 <p class="m-b-0">Department /Location: </p>
                                 <p class="m-b-20 font-medium"><?php echo $h['department'];?></p>
                                 <p class="m-b-0">Employer: </p>
-                                <p class="m-b-20 font-medium"><?php echo $h['company'];?></p>
+                                <p class="m-b-20 font-medium"><?php echo $h['emp_company'];?></p>
                             </div>
                             <div class="card-footer "><center><span class="fa fa-ellipsis-h"></span></center></div>
                         </div>
@@ -173,17 +173,17 @@
                                 </div>                                                
                                 <div class="col-6">
                                     <div class="form-group m-b-10">
-                                        <?php if($d['company']!=0){ ?>
+                                        <?php if($d['company_id']!=0){ ?>
                                         <select name="company[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Company--</option>
-                                            <?php foreach($company AS $c){ ?>
-                                            <option value = "<?php echo $c->company_id; ?>" <?php echo (($d['company'] == $c->company_id) ? ' selected' : '');?>><?php echo $c->company_name;?></option>
+                                            <?php foreach($company_list AS $c){ ?>
+                                            <option value = "<?php echo $c->company_id; ?>" <?php echo (($d['company_id'] == $c->company_id) ? ' selected' : '');?>><?php echo $c->company_name;?></option>
                                             <?php } ?>
                                         </select>
                                         <?php } else { ?>
                                         <select name="company[]" class="form-control form-alt cc-cvc">
                                             <option value = "">--Select Company--</option>
-                                            <?php foreach($company AS $c){ ?>
+                                            <?php foreach($company_list AS $c){ ?>
                                             <option value = "<?php echo $c->company_id; ?>"><?php echo $c->company_name;?></option>
                                             <?php } ?>
                                         </select>

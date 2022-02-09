@@ -1816,7 +1816,7 @@ class Report extends CI_Controller {
         $edid=$this->uri->segment(4); 
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
-        $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
+        $data['company_list'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         $x=1;
@@ -1828,7 +1828,9 @@ class Report extends CI_Controller {
             $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $nxt->unit_id);
             $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
             $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
-            $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $nxt->accountability_id);
+            $emp_company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $nxt->accountability_id);
+            $emp_company =$this->super_model->select_column_where("company", "company_name", "company_id", $emp_company_id);
+            $company_id =$this->super_model->select_column_where("et_details", "company_id", "et_id", $nxt->et_id);
             $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
             $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
             if(empty($rows)){
@@ -1853,15 +1855,15 @@ class Report extends CI_Controller {
                 'unit'=>$unit,
                 'accountability'=>$employee_name,
                 'department'=>$department,
-                'company'=>$company
+                'emp_company'=>$emp_company
             );
 
             $row = $this->super_model->count_rows_where('et_details','et_id',$nxt->et_id);
             if($row!=0){  
                 foreach($this->super_model->select_row_where('et_details','et_id',$nxt->et_id) AS $det){
                     $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
-                    $company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $accountability_id);
-                    $company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
+                    //$company_id =$this->super_model->select_column_where("employees", "company_id", "employee_id", $accountability_id);
+                    //$company =$this->super_model->select_column_where("company", "company_name", "company_id", $company_id);
                     $data['details'][] = array(
                         'et_id'=>$det->et_id,
                         'ed_id'=>$det->ed_id,
@@ -1876,7 +1878,7 @@ class Report extends CI_Controller {
                         'currency'=>$det->currency_id,
                         'physical'=>$det->physical_condition,
                         'rack_id'=>$det->rack_id,
-                        'company'=>$det->company_id,
+                        'company_id'=>$det->company_id,
                         'placement'=>$det->placement_id,
                         'acquired_by'=>$det->acquired_by,
                         'remarks'=>$det->remarks,
