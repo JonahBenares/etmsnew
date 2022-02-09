@@ -124,7 +124,7 @@
                                         <input type="hidden" name="rec_id<?php echo $z;?>" id="rec_id<?php echo $z;?>">
 
                                         <label for="" class="control-label mb-1">Remarks:</label>
-                                        <textarea name="remarks<?php echo $z;?>" id=""  rows="2" class="form-control"></textarea>
+                                        <textarea name="remarks<?php echo $z;?>" id=""  rows="7" class="form-control"></textarea>
                                     </td>
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                     <input type="hidden" name="ed_id<?php echo $z;?>" value = "<?php echo $d['ed_id'];?>">
