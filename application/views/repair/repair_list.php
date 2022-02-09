@@ -63,7 +63,7 @@
                                         <th align="center" width="1%"><input type="checkbox" class="m-0" onClick="toggle_multi(this)"></th>
                                         <th width="25%">Asset Control No.</th>
                                         <th width="40%%">Item Description</th>
-                                        <th width="20%">Category</th>
+                                        <th width="20%">Accountable Person</th>
                                         <th width="%">Brand</th>
                                         <th width="15%">Model</th>
                                         <th width="%">Serial No.</th>
@@ -78,7 +78,7 @@
                                         <td class="p-b-10 p-t-10" align="center"><input type="checkbox" class="multi m-0" name="edid[]" value=<?php echo $d['ed_id']; ?>></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['asset_control'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['et_desc'];?></td>
-                                        <td class="p-b-10 p-t-10"><?php echo $d['category'];?></td>
+                                        <td class="p-b-10 p-t-10"><?php echo ($d['accountable_id']!=0) ? $d['accountable'] : $d['accountability'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['brand'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['model'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['serial_no'];?></td>

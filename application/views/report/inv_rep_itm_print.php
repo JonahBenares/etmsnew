@@ -12,6 +12,8 @@
                 <tr>
                     <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
                     <td class="thead" align="center">Item Name</td>
+                    <td class="thead" align="center">Asset Control No.</td>
+                    <td class="thead" align="center">Serial No.</td>
                     <td class="thead" align="center">Set Name</td>
                     <td class="thead" align="center">Available</td>
                     <td class="thead" align="center">In-Use</td>
@@ -38,8 +40,12 @@
                             </a>           
                         </td>
                         <?php if ($i['set_id']!=0 && ($previousId !== $i['set_id'])) { ?>
+                        <td><?php echo $i['asset_control_no']; ?></td>
+                        <td><?php echo $i['serial_no']; ?></td>
                         <td <?php if($i['set_id']!=0) echo " rowspan='".$i['count_set']."'"; ?>><?php echo $i['set']; ?></td>
                         <?php }else if($i['set_id']==0){ ?>
+                        <td><?php echo $i['asset_control_no']; ?></td>
+                        <td><?php echo $i['serial_no']; ?></td>
                         <td><?php echo $i['set']; ?></td>
                         <?php } ?>
                         <td align="center"><?php echo $i['avcount']; ?></td>
@@ -57,6 +63,8 @@
                                <?php echo $i['item']; ?>
                             </a>           
                         </td>
+                        <td><?php echo $i['asset_control_no']; ?></td>
+                        <td><?php echo $i['serial_no']; ?></td>
                         <td><?php echo $i['set']; ?></td>
                         <td align="center"><?php echo $i['avcount']; ?></td>
                         <td align="center"><?php echo $i['incount']; ?></td>

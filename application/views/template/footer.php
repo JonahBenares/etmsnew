@@ -172,6 +172,11 @@
             if(conf)
             window.location=anchor.attr("href");
         }
+        function confirmationRemove(anchor){
+            var conf = confirm('Are you sure you want to remove this upgraded item?');
+            if(conf)
+            window.location=anchor.attr("href");
+        }
         // 
     </script>
     <script>

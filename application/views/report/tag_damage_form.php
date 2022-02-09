@@ -53,25 +53,33 @@
                                             <input id="" name="item" type="text" class="form-control bor-radius5 cc-exp" value = "<?php echo $h['item'];?>" style = "pointer-events:none;">
                                         </div>
                                     </div>
-                                    <div class="row">                                                 
+                                    <div class="row"> 
+                                        <div class="col-6">
+                                            <label for="x_card_code" class="control-label mb-1">Asset Control No:</label>
+                                            <div class="input-group">
+                                                <input id="" name="asset_control_no" class="form-control bor-radius5 cc-cvc" type="text" value = "<?php echo $det['asset_control_no']; ?>" style = "pointer-events:none;">
+                                            </div>
+                                        </div>                                                
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Model:</label>
                                             <div class="input-group">
                                                 <input id="" name="model" class="form-control bor-radius5 cc-cvc" type="text" value = "<?php echo $det['model']; ?>" style = "pointer-events:none;">
                                             </div>
                                         </div>
-                                         <div class="col-6">
+                                    </div>
+                                    <div class="row">  
+                                        <div class="col-6">
                                             <label for="" class="control-label mb-1">Brand:</label>
                                             <input id="" name="brand" type="text" class="form-control bor-radius5 cc-exp"  value = "<?php echo $det['brand']; ?>" style = "pointer-events:none;">
-                                        </div>
-                                    </div>
-                                    <div class="row">                                                 
+                                        </div>                                               
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Serial Number:</label>
                                             <div class="input-group">
                                                 <input id="" name="serial" class="form-control bor-radius5 cc-cvc" type="text" value = "<?php echo $det['serial']; ?>" style = "pointer-events:none;">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">PO/SI Number</label>
                                             <div class="input-group">
@@ -129,15 +137,16 @@
                                             <?php } } }?>
                                         </div>
                                         <div class="col-lg-5">
-                                            <table class="table-bordered" width="100%">
-                                                <tr>
-                                                    <td style="padding:10px">Upgrade History</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px" width="30%"></td>
-                                                    <td style="padding:10px"></td>
-                                                </tr>
-                                            </table>
+                                            <b for="" class="control-label mb-1">Upgrade History:</b>
+                                            <br>
+                                            <?php
+                                                
+                                                if(!empty($upgrade)){ 
+                                                    array_sort_by_column($upgrade, 'date');
+                                                    foreach($upgrade AS $upg){    
+                                            ?>
+                                                <span><?php echo $upg['date']." - ".$upg['upgrade_item']." - ".$upg['remarks'].', ';?></span>
+                                            <?php } }?>
                                         </div>
                                     </div>
                                     <br>
@@ -170,7 +179,7 @@
                                     </div>
                                     <div class="row"> 
                                         <div class="col-6">
-                                            <label for="x_card_code" class="control-label mb-1">Submitted By:</label>
+                                            <label for="x_card_code" class="control-label mb-1">Verified By:</label>
                                             <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp submitted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "submitted<?php echo $x; ?>" required>
                                             <span id="suggestion-submitted<?php echo $x;?>"></span>
                                             <input type="hidden" name="submitted_id<?php echo $x;?>" id="submitted_id<?php echo $x;?>">

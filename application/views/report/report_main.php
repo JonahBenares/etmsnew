@@ -225,7 +225,8 @@
                             <thead>
                                 <tr>
                                     <th>Employee Name</th>
-                                    <th>Category</th>
+                                    <th>Asset Control No.</th>
+                                    <th>Serial No.</th>
                                     <th>Sub Category</th>
                                     <th width="20%">Item</th>
                                     <th>Unit</th>
@@ -239,10 +240,14 @@
                             <?php 
                             if(!empty($main)){
                             foreach($main AS $m){ 
-                                    if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0){
+                                    if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0 && $m['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
-                                    }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0){
+                                    }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0 && $m['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']!=0 && $m['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Upgraded / Damaged</span>';
+                                    }else if($m['accountability_id']!=0 && $m['borrowed']==0 && $m['lost']==0 && $m['upgrade']==0 && $m['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
                                     }else if($m['accountability_id']==0 && $m['damaged']==0 && $m['change_location']==0 && $m['upgrade']!=0){
@@ -251,15 +256,18 @@
                                         $status = "Moved to ".$m['location'];
                                     }else if($m['borrowed']==1){
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
-                                    }else if($m['damaged']==1){
+                                    }else if($m['damaged']==1 && $m['accountability_id']==0){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($m['damaged']==1 && $m['accountability_id']!=0){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$m['accountability'].'</span>';
                                     }else if($m['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$m['accountability'].'</span>';
                                     }
                                 ?>
                                 <tr>                                        
                                     <td><?php echo $m['accountability']; ?></td>
-                                    <td><?php echo $m['cat']; ?></td>
+                                    <td><?php echo $m['asset_control_no']; ?></td>
+                                    <td><?php echo $m['serial_no']; ?></td>
                                     <td><?php echo $m['subcat']; ?></td>
                                     <td>
                                         <a href="<?php echo base_url(); ?>report/view_more/<?php echo $m['et_id'];?>" class=""  data-toggle="tooltip" data-placement="left" title="View" style="word-wrap: break-word;">
@@ -291,7 +299,7 @@
                                                 <i class="fa fa-print"></i>
                                             </a>                                            
                                             <?php if($_SESSION['usertype'] == 1){ ?>
-                                            <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
+                                            <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage" <?php echo ($m['damaged']!=0 && $m['accountability_id']!=0) ? 'style="pointer-events:none;background: #ada9a9;"' : ''; ?>>
                                                 <i class="fa fa-times"></i>
                                             </a>
                                             <?php } ?>

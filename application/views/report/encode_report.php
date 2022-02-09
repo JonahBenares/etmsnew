@@ -75,10 +75,12 @@
                                         switch($det){
                                             case($head['et_id'] == $det['et_id']):
 
-                                    if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0){
+                                    if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damaged']==0){
                                         $status = 'Assigned';
                                     }else if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
                                         $status = 'Assigned / Upgraded';
+                                    }else if($det['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damaged']==1){
+                                        $status = 'Assigned / Damaged';
                                     }else if($det['accountability_id']==0 && $det['damaged']==0 && $det['change_location']==0 && $det['upgrade']==0){
                                         $status = 'Available';
                                     }else if($det['accountability_id']==0 && $det['damaged']==0 && $det['change_location']==0 && $det['upgrade']!=0){
@@ -87,8 +89,10 @@
                                         $status = "Moved to ".$det['location'];
                                     }else if($det['borrowed']==1){
                                         $status = 'Borrowed';
-                                    }else if($det['damaged']==1){
+                                    }else if($det['damaged']==1 && $det['accountability_id']==0){
                                         $status = '>Damaged';
+                                    }else if($det['damaged']==1 && $det['accountability_id']!=0){
+                                        $status = '>Damaged / '.$det['accountability'].'</span>';
                                     }else if($det['lost']==1){
                                         $status = 'Lost Item / '.$det['accountability'].'</span>';
                                     }

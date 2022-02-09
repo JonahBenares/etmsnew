@@ -125,7 +125,7 @@
                                             <span data-toggle="tooltip" data-placement="top" title="Transfer Item"><a class="btn btn-success-alt item btn-sm text-white" id="itemTransfer" data-id = "<?php echo $a['ed_id'];?>" data-toggle="modal" data-placement="top" title="Transfer Item" data-target="#transferItem">
                                                 <i class="fa fa-forward"></i>
                                             </a></span>
-                                            <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $a['empid'];?>,<?php echo $a['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
+                                            <a class="btn btn-danger-alt item btn-sm text-white" onClick="tagAsDamage(<?php echo $a['empid'];?>,<?php echo $a['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage" <?php echo ($a['damaged']!=0 && $a['empid']!=0) ? 'style="pointer-events:none;background: #ada9a9;"' : ''; ?>>
                                                 <i class="fa fa-times"></i>
                                             </a>
                                             <?php } ?>

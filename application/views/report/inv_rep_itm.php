@@ -58,6 +58,8 @@
                                 <tr>
                                     <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
                                     <th>Item Name</th>
+                                    <th>Asset Control No.</th>
+                                    <th>Serial No.</th>
                                     <th>Set Name</th>
                                     <th align="center">Available</th>
                                     <th align="center">In-Use</th>
@@ -76,6 +78,8 @@
                                            <?php echo $i['item']; ?>
                                         </a>           
                                     </td>
+                                    <td><?php echo $i['asset_control_no']; ?></td>
+                                    <td><?php echo $i['serial_no']; ?></td>
                                     <td><?php echo $i['set']; ?></td>
                                     <td align="center"><?php echo $i['avcount']; ?></td>
                                     <td align="center"><?php echo $i['incount']; ?></td>

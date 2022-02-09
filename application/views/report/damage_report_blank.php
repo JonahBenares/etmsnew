@@ -68,7 +68,13 @@
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
                     <td style="border-bottom: 1px solid #999"> : <br></td>
                     <td width="10%"></td>
-                </tr>        
+                </tr>   
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class="pull-right">Asset Conrtol No. </p></td>
+                    <td style="border-bottom: 1px solid #999"> : <br></td>
+                </tr>     
                 <tr>
                     <td></td>
                     <td></td>
@@ -213,7 +219,7 @@
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td width="30%" class="main-tab">Submitted by:</td>
+                    <td width="30%" class="main-tab">Verified by:</td>
                     <td width="20%" class="main-tab"></td>
                     <td width="30%" class="main-tab">Noted by:</td>
                     <td width="10%"></td>

@@ -119,10 +119,10 @@
                         <table class="table table-striped table-hover" id="myTable_peret">
                             <thead>
                                     <tr>
-                                        <th width="20%">Category</th>
                                         <th width="20%">Subcategory</th>
                                         <th width="20%">Item</th>
                                         <th width="20%">Asset Control No.</th>
+                                        <th width="20%">Serial No.</th>
                                         <th>Unit</th>
                                         <th>Quantity</th>
                                         <th width="3%" class="text-center"><span class="fa fa-bars"></span></th>
@@ -131,7 +131,6 @@
                                 <tbody>
                                 <?php if(!empty($avail)){ foreach($avail AS $a){ ?>
                                     <tr <?php if($a['damaged'] == 1){ echo "class='tr-damage'"; } else { echo ''; }?>>
-                                        <td><?php echo $a['category']; ?></td>
                                         <td><?php echo $a['subcat']; ?></td>
                                         <td>
                                             <a href="<?php echo base_url(); ?>report/view_more/<?php echo $a['et_id']; ?>"  data-toggle="tooltip" data-placement="left" title="View">
@@ -140,6 +139,7 @@
                                             
                                         </td>
                                         <td ><?php echo $a['asset_control_no']; ?></td>
+                                        <td><?php echo $a['serial_no']; ?></td>
                                         <td align="center"><?php echo $a['unit']; ?></td>
                                         <td align="center"><?php echo $a['qty']; ?></td>
                                         <td >  
@@ -164,7 +164,11 @@
                                                     <i class="fa fa-times"></i>
                                                 </a>
                                                 <?php } ?> 
-                                            <?php } ?> 
+                                                <?php if($a['method']==1 && $a['upgrade_rem']!=0){ ?>
+                                                <a href="<?php echo base_url(); ?>report/remove_upgrade_avail/<?php echo $a['et_id']; ?>/<?php echo $a['rep_edid']; ?>" onclick="confirmationRemove(this);return false;" class="btn btn-warning-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Remove Upgrade">
+                                                    <i class="fa fa-eraser"></i>
+                                                </a>  
+                                            <?php } }?> 
                                             </div>
                                         </td>
                                     </tr>

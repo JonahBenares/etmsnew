@@ -124,7 +124,8 @@
                         <table class="table dataTable table-striped ">
                             <thead>
                                 <tr>
-                                    <th width="15%" >Category</th>
+                                    <th width="15%" >Asset Control No.</th>
+                                    <th width="15%" >Serial No.</th>
                                     <th width="15%" >Sub Category</th>
                                     <th width="40%" >Item</th>
                                     <th width="5%" >Unit</th>
@@ -143,10 +144,14 @@
                                     });
                                     $x = 1;
                                     foreach($sub AS $s){ 
-                                    if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0){
+                                    if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
-                                    }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){
+                                    }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Upgraded / Damaged</span>';
+                                    }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($s['accountability_id']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
                                     }else if($s['accountability_id']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']!=0){
@@ -155,14 +160,17 @@
                                         $status = "Moved to ".$s['location'];
                                     }else if($s['borrowed']==1){
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
-                                    }else if($s['damaged']==1){
+                                    }else if($s['damaged']==1 && $s['accountability_id']==0){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($s['damaged']==1 && $s['accountability_id']!=0){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$s['accountability'].'</span>';
                                     }else if($s['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
                                     }
                                 ?>
                                 <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#ec7070 !important" : ''; ?>">
-                                    <td><?php echo $s['cat']; ?></td>
+                                    <td><?php echo $s['asset_control_no']; ?></td>
+                                    <td><?php echo $s['serial_no']; ?></td>
                                     <td><?php echo $s['subcat']; ?></td>
                                     <td>
                                         <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More" style="white-space: normal!important;text-align: left">
@@ -184,7 +192,7 @@
                                             <a class="btn btn-success-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
                                                 <i class="fa fa-refresh"></i>
                                             </a>                                                        
-                                            <a class="btn btn-danger-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Tag as Damage" onClick="tagAsDamage(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
+                                            <a class="btn btn-danger-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Tag as Damage" onClick="tagAsDamage(<?php echo $id;?>,<?php echo $s['et_id'];?>)" <?php echo ($s['damaged']!=0 && $s['accountability_id']!=0) ? 'style="pointer-events:none;background: #ada9a9;"' : ''; ?>>
                                                 <i class="fa fa-times"></i>
                                             </a>
                                             <span  data-toggle="tooltip" data-placement="top" title="Lost">
@@ -192,7 +200,11 @@
                                                     <i class="fa fa-minus-circle"></i>
                                                 </a>  
                                             </span>
-                                            <?php } ?> 
+                                            <?php if($s['method']==1 && $s['upgrade']==0){ ?>
+                                            <a href="<?php echo base_url(); ?>report/remove_upgrade/<?php echo $s['et_id']; ?>/<?php echo $s['rep_edid']; ?>/<?php echo $id; ?>" onclick="confirmationRemove(this);return false;" class="btn btn-warning-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Remove Upgrade">
+                                                <i class="fa fa-eraser"></i>
+                                            </a>  
+                                            <?php } } ?> 
                                         </div>
                                     </td>
                                 </tr>

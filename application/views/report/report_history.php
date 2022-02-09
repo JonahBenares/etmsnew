@@ -1,3 +1,4 @@
+<?php $CI =& get_instance(); ?>
 <script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
 <script type="text/javascript">
@@ -131,10 +132,14 @@
                                     if(!empty($sub)){
                                     $x = 1;
                                     foreach($sub AS $s){
-                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0){
+                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+                                    }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Upgraded / Damaged</span>';
+                                    }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==1){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
                                     }else if($s['empid']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']==0){
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
                                     }else if($s['empid']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']!=0){
@@ -143,11 +148,16 @@
                                         $status = "Moved to ".$s['location'];
                                     }else if($s['borrowed']==1){
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
-                                    }else if($s['damaged']==1){
+                                    }else if($s['damaged']==1 && $s['empid']==0){
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+                                    }else if($s['damaged']==1 && $s['empid']!=0){
+                                        $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$s['accountability'].'</span>';
                                     }else if($s['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
                                     }
+
+                                    $check_upgrade=$CI->like($s['remarks_all'], "Upgraded");
+                                    $check_repaired=$CI->like($s['remarks_all'], "Repaired");
                                 ?>
                                 <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#1e2128!important;color:#fff" : ''; ?>">
                                     <td><?php echo $s['date_returned']; ?></td>
@@ -169,7 +179,11 @@
                                                 <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['accountabilitys'])) ? $s['remarks_all']." ".$s['accountabilitys'] : ''; ?></a>
                                             <?php } else if(!empty($s['replacement'])){ ?>
                                                 <a href="#" data-toggle="popover"  data-placement="bottom" data-trigger="hover"><?php echo (!empty($s['replacement']) && $s['lost']==0) ? "Replacement for lost item ".$s['replacement'] : ''; ?></a>
-                                            <?php } else{ ?>
+                                            <?php } else if($check_upgrade==1){ ?>
+                                                <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo ($check_upgrade==1) ? 'Upgraded item to '.$s['upgrade_item'] : ''; ?></a>
+                                            <?php } else if($check_repaired==1){ ?>
+                                                <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo ($check_repaired==1) ? 'Repaired' : ''; ?></a>
+                                            <?php }else{ ?>
                                                 <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['remarks_all'])) ? 'Returned' : ''; ?></a>
                                             <?php } ?>
                                         

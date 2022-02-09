@@ -38,10 +38,14 @@
                                             switch($det){
                                                 case($i['et_id'] == $det['et_id']):
 
-                                                    if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0){
+                                                    if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damage']==0){
                                                         $status = $i['employee'];
-                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0){
+                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0 && $det['damage']==0){
                                                         $status = $i['employee']." / Upgraded";
+                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0 && $det['damage']==1){
+                                                        $status = $i['employee']." / Upgraded / Damaged";
+                                                    }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damage']==1){
+                                                        $status = $i['employee']." / Damaged";
                                                     }else if($i['accountability_id']==0 && $det['damage']==0 && $det['change_location']==0 && $det['upgrade']==0){
                                                         $status = '<span style = "color:green;">Available</span>';
                                                     }else if($i['accountability_id']==0 && $det['damage']==0 && $det['change_location']==0 && $det['upgrade']!=0){
@@ -50,10 +54,12 @@
                                                         $status = "Moved to ".$det['location'];
                                                     }else if($det['borrowed']==1){
                                                         $status = '<span style = "color:blue;">Borrowed</span>';
-                                                    }else if($det['damage']==1){
+                                                    }else if($det['damage']==1 && $i['accountability_id']==0){
                                                         $status = '<span style = "color:red;">Damaged</span>';
+                                                    }else if($det['damage']==1 && $i['accountability_id']!=0){
+                                                        $status = '<span style = "color:red;">Damaged / '.$i['employee'].'</span>';
                                                     }else if($det['lost']==1){
-                                                        $status = '<span style = "color:orange;">Lost Item / '.$i['employee']."</span>";
+                                                        $status = '<span style = "color:orange;">Lost Item / '.$i['employee'].'</span>';
                                                     }
                                 ?>
                                 <tr >

@@ -46,10 +46,14 @@ class Repair extends CI_Controller {
                     $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $det->et_id);
                     $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
                     $repair =$this->super_model->select_column_where("repair_details", "assessment", "ed_id", $det->ed_id);
+                    $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $det->et_id);
                     foreach($this->super_model->select_custom_where("damage_info","ed_id='$det->ed_id' ORDER BY ed_id DESC") AS $dam){
                         $damage_id =$dam->damage_id;
                         $count_ed_id = $this->super_model->count_rows_where("damage_info","ed_id",$dam->ed_id);
                     }
+                    $accountable_id = $this->super_model->select_column_where("damage_info","accountable","ed_id",$det->ed_id);
+                    $accountable = $this->super_model->select_column_where("employees","employee_name","employee_id",$accountable_id);
+                    $accountability = $this->super_model->select_column_where("damage_info","accountability","ed_id",$det->ed_id);
                     $data['damage'][] = array(
                         'damage_id'=>$damage_id,
                         'ed_id'=>$det->ed_id,
@@ -63,10 +67,14 @@ class Repair extends CI_Controller {
                         'model'=>$det->model,
                         'et_desc'=>$item,
                         'category'=>$category,
+                        'accountable'=>$accountable,
                         'subcat'=>$subcat,
                         'qty'=>$qty,
                         'brand'=>$det->brand,
                         'count_ed_id'=>$count_ed_id,
+                        'accountable_id'=>$accountable_id,
+                        'accountable'=>$accountable,
+                        'accountability'=>$accountability,
                     );
                 }
             }
@@ -80,8 +88,10 @@ class Repair extends CI_Controller {
     public function repair_form(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id='0' ORDER BY et_desc ASC");
+        /*$data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");*/
         foreach($this->super_model->select_all("repair_details") AS $det){
+        $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$det->ed_id' AND accountable!='0' ORDER BY create_date DESC");
+        $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.et_id NOT IN (SELECT et_id FROM repair_details WHERE method='1' AND remove_upgrade='0') AND accountability_id='$accountable' || accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");
             if($det->saved == 0 AND $det->unsaved==1){
                 $data['rep'][]=array(
                     'repair_id'=>$det->repair_id,
@@ -206,8 +216,30 @@ class Repair extends CI_Controller {
                     $updgrade_data = array(
                         'upgrade'=>1,
                     ); 
+                    if($this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid)){
+                        foreach($this->super_model->select_custom_where('repair_details', "ed_id='$edid' AND method='1' AND remove_upgrade='0'") AS $rep){
+                            $rep_data = array(
+                                'damage'=>0
+                            ); 
+                            $this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id);
+                        }
+                    }
+
+                    $remove_accountability = $this->super_model->select_column_custom_where("damage_info","remove_accountability","ed_id='$edid' AND accountable!='0' ORDER BY create_date DESC");
+                    if($remove_accountability==1){
+                        $update_accountable = array(
+                            'accountability_id'=>0,
+                        ); 
+                        $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    }else{
+                        $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0' ORDER BY create_date DESC");
+                        $update_accountable = array(
+                            'accountability_id'=>$accountable,
+                        ); 
+                        $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    }
                 }
-                $this->super_model->update_where("et_details", $updgrade_data, "ed_id", $edid);
+                
                 $this->super_model->update_where("repair_details", $method_data, "repair_id", $repair_id);
             }
         }
