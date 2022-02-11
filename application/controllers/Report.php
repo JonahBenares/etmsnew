@@ -2063,7 +2063,7 @@ public function edit_encode_transfer(){
                         $this->super_model->update_where("et_head", $data_up, "et_id", $id);
 
                         
-                            $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                            /*$assetdetails=explode("-", $this->input->post('acn['.$x.']'));
                             $subcat_prefix1=$assetdetails[0];
                             $subcat_prefix2=$assetdetails[1];
                             $location=$assetdetails[2];
@@ -2074,7 +2074,7 @@ public function edit_encode_transfer(){
                                 'location'=>$location,
                                 'series'=>$series
                             );
-                            $this->super_model->insert_into("asset_series", $asset_data);
+                            $this->super_model->insert_into("asset_series", $asset_data);*/
 
                             echo "<script>alert('Equipment/Tool successfully Updated!'); 
                             window.location ='".base_url()."report/report_main'; </script>";
