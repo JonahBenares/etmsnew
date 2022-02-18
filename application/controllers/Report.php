@@ -4462,6 +4462,8 @@ public function update_encode_transfer(){
                         'set_name'=>$set_name,
                         'set_price'=>$set_price,
                         'set_currency'=>$set_currency,
+                        'asset_control_no'=>$s->asset_control_no,
+                        'serial_no'=>$s->serial_no,
                         'currency'=>$currency,
                         'count_set'=>$count_set,
                         'cat'=>$category,
@@ -4514,6 +4516,8 @@ public function update_encode_transfer(){
                         'set_id'=>$s->set_id,
                         'set_name'=>$set_name,
                         'set_price'=>$set_price,
+                        'asset_control_no'=>$s->asset_control_no,
+                        'serial_no'=>$s->serial_no,
                         'set_currency'=>$set_currency,
                         'currency'=>$currency,
                         'count_set'=>$count_set,
@@ -4589,6 +4593,8 @@ public function update_encode_transfer(){
                             'set_name'=>$set_name,
                             'set_price'=>$set_price,
                             'set_currency'=>$set_currency,
+                            'asset_control_no'=>$sa->asset_control_no,
+                            'serial_no'=>$sa->serial_no,
                             'currency'=>$currency,
                             'count_set'=>$count_set,
                             'cat'=>$category,
@@ -4631,6 +4637,8 @@ public function update_encode_transfer(){
                             $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
                             $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
                             $curid=$this->super_model->select_column_where("et_details","currency_id",'et_id',$dam->et_id);
+                            $asset_control_no=$this->super_model->select_column_where("et_details","asset_control_no",'et_id',$dam->et_id);
+                            $serial_no=$this->super_model->select_column_where("et_details","serial_no",'et_id',$dam->et_id);
                             $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $dam->et_id);
                             foreach($this->super_model->select_custom_where('et_details', "ed_id='$dam->ed_id'") AS $sa){
@@ -4646,6 +4654,8 @@ public function update_encode_transfer(){
                                 'set_name'=>$set_name,
                                 'set_price'=>$set_price,
                                 'set_currency'=>$set_currency,
+                                'serial_no'=>$serial_no,
+                                'asset_control_no'=>$asset_control_no,
                                 'currency'=>$currency,
                                 'count_set'=>$count_set,
                                 'cat'=>$category,
@@ -4689,6 +4699,8 @@ public function update_encode_transfer(){
                             $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
                             $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
                             $curid = $this->super_model->select_column_where("et_details","currency_id",'et_id',$et_id);
+                            $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no",'et_id',$et_id);
+                            $serial_no = $this->super_model->select_column_where("et_details","serial_no",'et_id',$et_id);
                             $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
                             foreach($this->super_model->select_custom_where('et_details', "ed_id='$rep->ed_id'") AS $sa){
@@ -4704,6 +4716,8 @@ public function update_encode_transfer(){
                                 'set_name'=>$set_name,
                                 'set_price'=>$set_price,
                                 'set_currency'=>$set_currency,
+                                'serial_no'=>$serial_no,
+                                'asset_control_no'=>$asset_control_no,
                                 'currency'=>$currency,
                                 'count_set'=>$count_set,
                                 'cat'=>$category,

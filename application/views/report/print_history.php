@@ -36,6 +36,8 @@
                     <tr>                
                         <td class="main-tab" width="10%" align="center"><strong>Date Returned</strong></td>
                         <td class="main-tab" width="10%" align="center"><strong>Date Issued</strong></td>
+                        <td class="main-tab" width="10%" align="center"><strong>Asset Control No.</strong></td>                     
+                        <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                     
                         <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                     
                         <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                         <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
@@ -55,6 +57,8 @@
                         <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
                             <td class="main-tab" align="center"><?php echo ($det['lost']==0) ? $det['date_returned'] : '';?></td>
                             <td class="main-tab" align="center"><?php echo $det['date_issued'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['serial_no'];?></td>
                             <td class="main-tab" align="center"><?php echo ($det['lost']!=0) ? $det['et_desc']." - <b>Lost Item</b>" : $det['et_desc'];;?></td>
                             <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                             <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
