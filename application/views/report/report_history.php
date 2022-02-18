@@ -119,6 +119,8 @@
                                 <tr>
                                     <th width="15%">Date Returned</th>
                                     <th width="15%">Date Issued</th>
+                                    <th width="15%">Asset Control No.</th>
+                                    <th width="15%">Serial No.</th>
                                     <th width="40%">Item</th>
                                     <th width="%">Unit</th>
                                     <th width="%">Quantity</th>
@@ -162,6 +164,8 @@
                                 <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#1e2128!important;color:#fff" : ''; ?>">
                                     <td><?php echo $s['date_returned']; ?></td>
                                     <td><?php echo $s['date_issued']; ?></td>
+                                    <td><?php echo $s['asset_control_no']; ?></td>
+                                    <td><?php echo $s['serial_no']; ?></td>
                                     <td>
                                         <a href="<?php echo base_url(); ?>report/view_more/<?php echo $s['et_id'];?>" class=" p-0" data-toggle="tooltip" data-placement="top" title="View More" style="white-space: normal!important;text-align: left">
                                              <?php echo ($s['lost']!=0) ? $s['et_desc']." - <b>Lost Item</b>" : $s['et_desc']; ?>

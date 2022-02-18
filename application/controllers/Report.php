@@ -4039,6 +4039,8 @@ public function update_encode_transfer(){
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
                         'set_id'=>$s->set_id,
+                        'asset_control_no'=>$s->asset_control_no,
+                        'serial_no'=>$s->serial_no,
                         'set_name'=>$set_name,
                         'cat'=>$category,
                         'subcat'=>$subcat,
@@ -4088,6 +4090,8 @@ public function update_encode_transfer(){
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
                         'set_id'=>$s->set_id,
+                        'asset_control_no'=>$s->asset_control_no,
+                        'serial_no'=>$s->serial_no,
                         'set_name'=>$set_name,
                         'cat'=>$category,
                         'subcat'=>$subcat,
@@ -4136,6 +4140,8 @@ public function update_encode_transfer(){
                     $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $r->et_id);
                     $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id);
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $r->et_id);
+                    $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $r->et_id);
+                    $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $r->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                     $department =$this->super_model->select_column_where("et_head", "department", "et_id", $r->et_id);
                     $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $r->et_id);
@@ -4161,6 +4167,8 @@ public function update_encode_transfer(){
                             'et_id'=>$r->et_id,
                             'ed_id'=>$r->ed_id,
                             'set_id'=>$set_id,
+                            'asset_control_no'=>$asset_control_no,
+                            'serial_no'=>$serial_no,
                             'set_name'=>$set_name,
                             'cat'=>$category,
                             'subcat'=>$subcat,
@@ -4205,6 +4213,8 @@ public function update_encode_transfer(){
                             $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
                             $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $dam->et_id);
                             $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $dam->et_id);
+                            $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $dam->et_id);
+                            $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $dam->et_id);
                             $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $dam->et_id);
                             $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $dam->et_id);                     
@@ -4218,6 +4228,8 @@ public function update_encode_transfer(){
                                 'et_id'=>$dam->et_id,
                                 'ed_id'=>$dam->ed_id,
                                 'set_id'=>$set_id,
+                                'asset_control_no'=>$asset_control_no,
+                                'serial_no'=>$serial_no,
                                 'set_name'=>$set_name,
                                 'cat'=>$category,
                                 'subcat'=>$subcat,
@@ -4267,6 +4279,8 @@ public function update_encode_transfer(){
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
                     $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $et_id);
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et_id);
+                    $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et_id);
+                    $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
                     $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et_id);                     
@@ -4280,6 +4294,8 @@ public function update_encode_transfer(){
                         'et_id'=>$et_id,
                         'ed_id'=>$rep->ed_id,
                         'set_id'=>$set_id,
+                        'asset_control_no'=>$asset_control_no,
+                        'serial_no'=>$serial_no,
                         'set_name'=>$set_name,
                         'cat'=>$category,
                         'subcat'=>$subcat,
@@ -4329,6 +4345,8 @@ public function update_encode_transfer(){
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
                     $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $rep->et_id);
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $rep->et_id);
+                    $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $rep->et_id);
+                    $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $rep->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $rep->et_id);
                     $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $rep->et_id);                     
@@ -4342,6 +4360,8 @@ public function update_encode_transfer(){
                         'et_id'=>$et_id,
                         'ed_id'=>$rep->ed_id,
                         'set_id'=>$set_id,
+                        'asset_control_no'=>$asset_control_no,
+                        'serial_no'=>$serial_no,
                         'set_name'=>$set_name,
                         'cat'=>$category,
                         'subcat'=>$subcat,
@@ -4562,6 +4582,8 @@ public function update_encode_transfer(){
                     $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $r->et_id);
                     $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id);
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $r->et_id);
+                    $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $r->et_id);
+                    $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $r->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                     $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
                     $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
@@ -4593,8 +4615,8 @@ public function update_encode_transfer(){
                             'set_name'=>$set_name,
                             'set_price'=>$set_price,
                             'set_currency'=>$set_currency,
-                            'asset_control_no'=>$sa->asset_control_no,
-                            'serial_no'=>$sa->serial_no,
+                            'asset_control_no'=>$asset_control_no,
+                            'serial_no'=>$serial_no,
                             'currency'=>$currency,
                             'count_set'=>$count_set,
                             'cat'=>$category,
