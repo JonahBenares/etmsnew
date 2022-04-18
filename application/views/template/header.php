@@ -1,11 +1,11 @@
 <?php
-    if (isset($this->session->userdata['logged_in'])) {
+   /* if (isset($this->session->userdata['logged_in'])) {
     $username = ($this->session->userdata['logged_in']['username']);
     $password = ($this->session->userdata['logged_in']['password']);
     } else {
         echo "<script>alert('You are not logged in. Please login to continue.'); 
             window.location ='".base_url()."masterfile/index'; </script>";
-    }
+    }*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
