@@ -7187,7 +7187,7 @@ public function update_encode_transfer(){
                 $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $det->ed_id);
                 $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $det->ed_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
-                $return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
+                //$return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
                 $qty = '1';
                 $total = $qty * $price;
                 $data['lost'] = '0';
@@ -7220,7 +7220,7 @@ public function update_encode_transfer(){
 
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
-                    'return_remarks'=>$return_remarks,
+                    'return_remarks'=>$det->return_remarks,
                     'et_set_id'=>$et_set_id,
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
@@ -7279,7 +7279,7 @@ public function update_encode_transfer(){
                 $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $det->ed_id);
                 $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $det->ed_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
-                $return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
+                //$return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
                 $qty = '1';
                 $total = $qty * $price;
                 $data['lost'] = '0';
@@ -7312,7 +7312,7 @@ public function update_encode_transfer(){
 
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
-                    'return_remarks'=>$return_remarks,
+                    'return_remarks'=>$det->return_remarks,
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
                     'set_price'=>$set_price,
