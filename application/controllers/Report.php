@@ -396,6 +396,7 @@ class Report extends CI_Controller {
                 'lost'=>$et->lost,
                 'location'=>$location,
                 'unit_price'=>$et->unit_price,
+                'upgrade'=>$et->upgrade
             );
         }
         $this->load->view('report/inv_rep_overall',$data);
@@ -5067,6 +5068,17 @@ public function update_encode_transfer(){
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id); 
+
+
+                $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);                     
+                $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id); 
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id); 
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+                $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et->et_id);
+                $remove_accountability = $this->super_model->select_column_where("damage_info", "remove_accountability", "ed_id", $et->ed_id);
                 $data['main'][] = array(
                     'et_id'=>$et->et_id,
                     'ed_id'=>$et->ed_id,
@@ -5075,13 +5087,20 @@ public function update_encode_transfer(){
                     'department'=>$et->department,
                     'unit'=>$unit,
                     'damaged'=>$et->damage,
-                    'asset_control'=>$et->asset_control_no,
+                    'asset_control_no'=>$et->asset_control_no,
+                    'serial_no'=>$et->serial_no,
                     'acquisition_date'=>$et->acquisition_date,
                     'date_issued'=>$et->date_issued,
                     'et_desc'=>$et->et_desc,
                     'qty'=>$et->qty,
                     'accountability'=>$accountability,
+                    'accountability_id'=>$et->accountability_id,
                     'empid'=>$et->accountability_id,
+                    'change_location'=>$change_location,
+                    'borrowed'=>$borrowed,
+                    'damaged'=>$damaged,
+                    'lost'=>$lost,
+                    'upgrade'=>$upgrade
                 );
         }
         foreach($this->super_model->select_all_order_by("employees", "employee_name", "ASC") AS $emp){
@@ -7192,7 +7211,7 @@ public function update_encode_transfer(){
                 $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $det->ed_id);
                 $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $det->ed_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
-                $return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
+                //$return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
                 $qty = '1';
                 $total = $qty * $price;
                 $data['lost'] = '0';
@@ -7225,7 +7244,7 @@ public function update_encode_transfer(){
 
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
-                    'return_remarks'=>$return_remarks,
+                    'return_remarks'=>$det->return_remarks,
                     'et_set_id'=>$et_set_id,
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
@@ -7284,7 +7303,7 @@ public function update_encode_transfer(){
                 $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $det->ed_id);
                 $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $det->ed_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
-                $return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
+                //$return_remarks=$this->super_model->select_column_where("return_head", "return_remarks", "return_id", $det->return_id);
                 $qty = '1';
                 $total = $qty * $price;
                 $data['lost'] = '0';
@@ -7317,7 +7336,7 @@ public function update_encode_transfer(){
 
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
-                    'return_remarks'=>$return_remarks,
+                    'return_remarks'=>$det->return_remarks,
                     'set_id'=>$set_id,
                     'count_set'=>$count_set,
                     'set_price'=>$set_price,

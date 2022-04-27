@@ -1,6 +1,15 @@
 <script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
+<?php 
+    function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+        $sort_col = array();
+        foreach ($arr as $key=> $row) {
+            $sort_col[$key] = $row[$col];
+        }
 
+        array_multisort($sort_col, $dir, $arr);
+    }
+?>
  <!-- MAIN CONTENT-->
 <div class="m-t-20">
     <div class="container-fluid">
@@ -117,14 +126,7 @@
                                             <b for="" class="control-label mb-1">Damage History/Repair and Maintenance:</b>
                                             <br>
                                             <?php
-                                                function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
-                                                    $sort_col = array();
-                                                    foreach ($arr as $key=> $row) {
-                                                        $sort_col[$key] = $row[$col];
-                                                    }
-
-                                                    array_multisort($sort_col, $dir, $arr);
-                                                }
+                                                
                                                 
                                                 if(!empty($damage)){ 
                                                     array_sort_by_column($damage, 'date');

@@ -263,6 +263,21 @@ class super_model extends CI_Model
         }
     }
 
+    public function delete_custom_where($table, $where)
+    {
+        $this->db->trans_begin();
+        $this->db->where($where);
+        $this->db->delete($table);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return 0;
+        } else {
+            $this->db->trans_commit();
+            return 1;
+        }
+    }
+
     public function delete_where($table, $column, $value)
     {
         $this->db->trans_begin();

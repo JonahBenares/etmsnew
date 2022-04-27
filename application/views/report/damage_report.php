@@ -4,6 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print</title>
 </head>
+<?php 
+    function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+        $sort_col = array();
+        foreach ($arr as $key=> $row) {
+            $sort_col[$key] = $row[$col];
+        }
+
+        array_multisort($sort_col, $dir, $arr);
+    }
+?>
 <style type="text/css">
     body{ background-color: #fff }
     .table-main{
@@ -203,15 +213,6 @@
                     <b for="" class="control-label mb-1">Damage History/Repair and Maintenance:</b>
                     <br>
                     <?php
-                        function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
-                            $sort_col = array();
-                            foreach ($arr as $key=> $row) {
-                                $sort_col[$key] = $row[$col];
-                            }
-
-                            array_multisort($sort_col, $dir, $arr);
-                        }
-                        
                         if(!empty($damageview)){ 
                             array_sort_by_column($damageview, 'date');
                             foreach($damageview AS $damv){ 

@@ -167,15 +167,15 @@ class Masterfile extends CI_Controller {
         $id=$this->uri->segment(3);
         $parent=$this->uri->segment(4);
         $child=$this->uri->segment(5);
-        $row = $this->super_model->count_rows_where("et_head","accountability_id",$child);
+        /*$row = $this->super_model->count_rows_where("et_head","accountability_id",$child);
         if($row!=0){
            echo "<script>alert('You cannot delete this record!');window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent';</script>";
-        }else{
-            if($this->super_model->delete_where('employee_inclusion', 'ei_id', $id)){
-                echo "<script>alert('Succesfully Deleted');
-                window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent'; </script>";
-            }
+        }else{*/
+        if($this->super_model->delete_custom_where('employee_inclusion', "ei_id='$id' AND child_id = '$child'")){
+            echo "<script>alert('Succesfully Deleted');
+            window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent'; </script>";
         }
+        //}
     }
 
     public function transfer_dept(){
