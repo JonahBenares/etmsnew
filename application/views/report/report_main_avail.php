@@ -121,10 +121,11 @@
                                     <tr>
                                         <th width="20%">Subcategory</th>
                                         <th width="20%">Item</th>
-                                        <th width="20%">Asset Control No.</th>
-                                        <th width="20%">Serial No.</th>
+                                        <th>Asset Control No.</th>
+                                        <th>Serial No.</th>
                                         <th>Unit</th>
                                         <th>Quantity</th>
+                                        <th>Previous Owner</th>
                                         <th width="3%" class="text-center"><span class="fa fa-bars"></span></th>
                                     </tr>
                                 </thead>
@@ -142,6 +143,7 @@
                                         <td><?php echo $a['serial_no']; ?></td>
                                         <td align="center"><?php echo $a['unit']; ?></td>
                                         <td align="center"><?php echo $a['qty']; ?></td>
+                                        <td><?php echo $a['prev_owner']; ?></td>
                                         <td >  
                                             <div class="btn-group">
                                             <?php if($a['damaged']!=1){ ?>     

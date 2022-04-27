@@ -2617,6 +2617,7 @@ public function update_encode_transfer(){
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
+        $date=date("Y-m-d");
         if($row_avail!=0){
             foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0'","et_id") as $et){
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
@@ -2633,6 +2634,9 @@ public function update_encode_transfer(){
                 $rep_edid = $this->super_model->select_column_where("repair_details", "ed_id", "et_id", $et->et_id);
                 $repair_edid = $this->super_model->select_column_custom_where("repair_details", "ed_id", "ed_id = '$rep_edid' AND method = '1'");
                 $upgrade_rem = $this->super_model->select_column_where("et_details", "upgrade", "ed_id", $repair_edid);
+                $return_id =$this->super_model->select_column_custom_where("return_details", "return_id", "et_id='$et->et_id' AND date_issued < '$date' ORDER BY return_id DESC LIMIT 1");
+                $prev_own =$this->super_model->select_column_custom_where("return_head", "accountability_id", "return_id = '$return_id' ORDER BY return_id DESC LIMIT 1");
+                $previous =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $prev_own);
                 if($damage==0){
                     $data['avail'][] = array(
                         'et_id'=>$et->et_id,
@@ -2650,6 +2654,7 @@ public function update_encode_transfer(){
                         'method'=>$method,
                         'rep_edid'=>$rep_edid,
                         'upgrade_rem'=>$upgrade_rem,
+                        'prev_owner'=>$previous,
                         'accountability'=>'',
                     );
                 }
