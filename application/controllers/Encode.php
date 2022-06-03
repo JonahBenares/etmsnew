@@ -193,7 +193,7 @@ class Encode extends CI_Controller {
                      $img1= basename($_FILES['pic1']['name'][$x]);
                      $ext1= pathinfo($img1, PATHINFO_EXTENSION);
                     
-                    if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                    if($ext1=='php' || ($ext1!='png' && $ext1!='PNG' && $ext1 != 'jpg' && $ext1 != 'JPG' && $ext1!='jpeg' && $ext1!='JPEG')){
                         $error_ext++;
                     } else {
                         $filename1=$serial.'-1.'.$ext1;
@@ -208,7 +208,7 @@ class Encode extends CI_Controller {
                      $img2= basename($_FILES['pic2']['name'][$x]);
                      $ext2= pathinfo($img2, PATHINFO_EXTENSION);
                      
-                    if($ext2=='php' || ($ext2!='png' && $ext2 != 'jpg' && $ext2!='jpeg')){
+                    if($ext2=='php' || ($ext2!='png' && $ext2!='PNG' && $ext2 != 'jpg' && $ext2 != 'JPG' && $ext2!='jpeg' && $ext2!='JPEG')){
                         $error_ext++;
                     } else {
                         $filename2=$serial.'-2.'.$ext2;
@@ -222,7 +222,7 @@ class Encode extends CI_Controller {
                      $img3= basename($_FILES['pic3']['name'][$x]);
                      $ext3= pathinfo($img3, PATHINFO_EXTENSION);
                     
-                    if($ext3=='php' || ($ext3!='png' && $ext3 != 'jpg' && $ext3!='jpeg')){
+                    if($ext3=='php' || ($ext3!='png' && $ext3!='PNG' && $ext3 != 'jpg' && $ext3 != 'JPG' && $ext3!='jpeg' && $ext3!='JPEG')){
                         $error_ext++;
                     } else {
                         $filename3=$serial.'-3.'.$ext3;
