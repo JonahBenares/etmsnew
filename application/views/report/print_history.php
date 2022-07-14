@@ -47,12 +47,44 @@
                     <tr>
                     <?php 
                         if(!empty($sub)){
-                                usort($sub, function($a, $b) {
-                                    return $a['set_id'] - $b['set_id'];
-                                });
-                                $a=0;
-                                $previousId = '';
-                                foreach($sub AS $det){ 
+                            usort($sub, function($a, $b) {
+                                return $a['set_id'] - $b['set_id'];
+                            });
+                            $a=0;
+                            $previousId = '';
+                            foreach($sub AS $value){
+                                $key = $value['et_id'].$value['remarks'];
+                                if(!isset($data2[$key])) {
+                                    $data2[$key]= array(
+                                        'et_id'=>$value['et_id'],
+                                        'ed_id'=>$value['ed_id'],
+                                        'set_id'=>$value['set_id'],
+                                        'set_name'=>$value['set_name'],
+                                        'set_price'=>$value['set_price'],
+                                        'set_currency'=>$value['set_currency'],
+                                        'asset_control_no'=>$value['asset_control_no'],
+                                        'serial_no'=>$value['serial_no'],
+                                        'currency'=>$value['currency'],
+                                        'count_set'=>$value['count_set'],
+                                        'cat'=>$value['cat'],
+                                        'subcat'=>$value['subcat'],
+                                        'unit'=>$value['unit'],
+                                        'department'=>$value['department'],
+                                        'et_desc'=>$value['et_desc'],
+                                        'qty'=>$value['qty'],
+                                        'accountability'=>$value['accountability'],
+                                        'accountabilitys'=>$value['accountabilitys'],
+                                        'empid'=>$value['empid'],
+                                        'unit_price'=>$value['unit_price'],
+                                        'lost'=>$value['lost'],
+                                        'date_issued'=>$value['date_issued'],
+                                        'date_returned'=>$value['date_returned'],
+                                        'remarks'=>$value['remarks'],
+                                        'replacement'=>$value['replacement'],
+                                    );
+                                }
+                            }
+                            foreach($data2 AS $det){ 
                     ?>
                         <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
                             <td class="main-tab" align="center"><?php echo ($det['lost']==0) ? $det['date_returned'] : '';?></td>
@@ -82,7 +114,7 @@
                         <?php } ?>
                     </tr>
                     <tr>
-                        <td class="main-tab" colspan="7"><center>***nothing follows***</center></td>
+                        <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
                     </tr>   
                 </table>
                 <br>

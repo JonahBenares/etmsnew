@@ -133,7 +133,45 @@
                                 <?php
                                     if(!empty($sub)){
                                     $x = 1;
-                                    foreach($sub AS $s){
+                                    foreach($sub AS $value){
+                                        $key = $value['et_id'].$value['remarks'];
+                                        if(!isset($data2[$key])) {
+                                            $data2[$key] = array(
+                                                'et_id'=>$value['et_id'],
+                                                'ed_id'=>$value['ed_id'],
+                                                'set_id'=>$value['set_id'],
+                                                'asset_control_no'=>$value['asset_control_no'],
+                                                'serial_no'=>$value['serial_no'],
+                                                'set_name'=>$value['set_name'],
+                                                'cat'=>$value['cat'],
+                                                'subcat'=>$value['subcat'],
+                                                'unit'=>$value['unit'],
+                                                'department'=>$value['department'],
+                                                'et_desc'=>$value['et_desc'],
+                                                'upgrade_item'=>$value['upgrade_item'],
+                                                'qty'=>$value['qty'],
+                                                'accountability'=>$value['accountability'],
+                                                'accountabilitys'=>$value['accountabilitys'],
+                                                'empid'=>$value['empid'],
+                                                'unit_price'=>$value['unit_price'],
+                                                'lost'=>$value['lost'],
+                                                'date_issued'=>$value['date_issued'],
+                                                'date_returned'=>$value['date_returned'],
+                                                'remarks'=>$value['remarks'],
+                                                'remarks_all'=>$value['remarks_all'],
+                                                'damaged'=>$value['damaged'],
+                                                'incident_description'=>$value['incident_description'],
+                                                'replacement'=>$value['replacement'],
+                                                'damaged'=>$value['damaged'],
+                                                'borrowed'=>$value['borrowed'],
+                                                'location'=>$value['location'],
+                                                'change_location'=>$value['change_location'],
+                                                'lost'=>$value['lost'],
+                                                'upgrade'=>$value['upgrade'],
+                                            );
+                                        }
+                                    }
+                                    foreach($data2 AS $s){
                                     if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){
@@ -160,6 +198,7 @@
 
                                     $check_upgrade=$CI->like($s['remarks_all'], "Upgraded");
                                     $check_repaired=$CI->like($s['remarks_all'], "Repaired");
+                                    $check_damaged=$CI->like($s['remarks_all'], "Damaged");
                                 ?>
                                 <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#1e2128!important;color:#fff" : ''; ?>">
                                     <td><?php echo $s['date_returned']; ?></td>
@@ -175,9 +214,9 @@
                                     <td align="center"><?php echo $s['qty']; ?></td>
                                     <td><?php echo $s['unit_price']; ?></td>
                                     <td>
-                                        <?php if($s['damaged']==1){ ?>
+                                        <!-- <?php if($s['damaged']==1){ ?>
                                             <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['incident_description']; ?>"><?php echo $s['remarks']." - ".$s['accountability']; ?></a>
-                                        <?php } else { ?>
+                                        <?php } else { ?> -->
 
                                             <?php if(!empty($s['accountabilitys'])){ ?>
                                                 <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['accountabilitys'])) ? $s['remarks_all']." ".$s['accountabilitys'] : ''; ?></a>
@@ -187,11 +226,13 @@
                                                 <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo ($check_upgrade==1) ? 'Upgraded item to '.$s['upgrade_item'] : ''; ?></a>
                                             <?php } else if($check_repaired==1){ ?>
                                                 <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo ($check_repaired==1) ? 'Repaired' : ''; ?></a>
+                                            <?php } else if($check_damaged==1){ ?>
+                                                <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['incident_description']; ?>"><?php echo ($check_damaged==1) ? 'Damaged' : ''; ?></a>
                                             <?php }else{ ?>
                                                 <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['remarks_all'])) ? 'Returned' : ''; ?></a>
                                             <?php } ?>
                                         
-                                        <?php } ?>
+                                        <!-- <?php } ?> -->
                                     </td>
                                     <td><?php echo $status; ?></td>
                                 </tr>
