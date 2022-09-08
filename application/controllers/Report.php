@@ -7471,7 +7471,7 @@ public function update_encode_transfer(){
                 $qty = 1;
                 foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
                     $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$det->set_id);
-                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND accountability_id='$aaf->accountability_id' AND cancelled='0' AND damage='0'");
                     $data['count_set']=$count_set;
                     $total=$qty*$det->unit_price;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
