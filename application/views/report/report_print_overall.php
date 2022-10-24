@@ -21,7 +21,7 @@
                 </tr>
                     <?php 
                         foreach($details AS $i){ 
-                            if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0 && $i['damaged']==0){
+                            if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0 && $i['damaged']==0 && $i['obsolete']==0){
                                 $status = $i['employee'];
                             }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0){
                                 $status = $i['employee']." / Upgraded";
@@ -41,6 +41,8 @@
                                 $status = '<span style = "color:red;">Damaged / '.$i['employee'].'</span>';
                             }else if($i['lost']==1){
                                 $status = '<span style = "color:orange;">Lost Item / '.$i['employee'].'</span>';
+                            }else if($i['obsolete']==1){
+                                $status = '<span style = "color:orange;">Obsolete Item / '.$i['employee'].'</span>';
                             }
                     ?>
                     <tr>
