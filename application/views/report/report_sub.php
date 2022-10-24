@@ -115,7 +115,7 @@
                 </div>
                 <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                 <input type="hidden" name="obsolete_accountable" id="obsolete_accountable">
-                <input type="text" name="ed_id" id="oed_id">
+                <input type="hidden" name="ed_id" id="oed_id">
                 <input type="hidden" name="et_id" id="oet_id">
             </form>
         </div>
