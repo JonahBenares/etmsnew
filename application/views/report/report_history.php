@@ -167,12 +167,13 @@
                                                 'location'=>$value['location'],
                                                 'change_location'=>$value['change_location'],
                                                 'lost'=>$value['lost'],
+                                                'obsolete'=>$value['obsolete'],
                                                 'upgrade'=>$value['upgrade'],
                                             );
                                         }
                                     }
                                     foreach($data2 AS $s){
-                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0){
+                                    if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0 && $s['obsolete']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
@@ -194,6 +195,8 @@
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$s['accountability'].'</span>';
                                     }else if($s['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
+                                    }else if($s['obsolete']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Obsolete / '.$s['accountability'].'</span>';
                                     }
 
                                     $check_upgrade=$CI->like($s['remarks_all'], "Upgraded");

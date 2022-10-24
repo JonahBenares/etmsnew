@@ -165,6 +165,7 @@ class Report extends CI_Controller {
                         'upgrade'=>$r->upgrade,
                         'change_location'=>$r->change_location,
                         'lost'=>$r->lost,
+                        'obsolete'=>$r->obsolete,
                         'location'=>$location,
                         'unit_price'=>$r->unit_price,
                     );
@@ -839,6 +840,7 @@ class Report extends CI_Controller {
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id); 
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id); 
+                $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $t->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $t->et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);                     
@@ -849,6 +851,7 @@ class Report extends CI_Controller {
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,
+                    'obsolete'=>$obsolete,
                     'upgrade'=>$upgrade,
                     'accountability'=>$employee,
                     'accountability_id'=>$t->accountability_id,
@@ -895,6 +898,7 @@ class Report extends CI_Controller {
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);   
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id);   
+                $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $t->et_id);   
                 $asset_control_no = $this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $t->et_id);   
                 $serial_no = $this->super_model->select_column_where("et_details", "serial_no", "et_id", $t->et_id);   
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$t->location_id);                  
@@ -902,6 +906,7 @@ class Report extends CI_Controller {
                     'item'=>$item,
                     'damaged'=>$damaged,
                     'lost'=>$lost,
+                    'obsolete'=>$obsolete,
                     'asset_control_no'=>$asset_control_no,
                     'serial_no'=>$serial_no,
                     'borrowed'=>$borrowed,
@@ -1048,7 +1053,7 @@ class Report extends CI_Controller {
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         if($row!=0){
-            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0' GROUP BY eh.et_id") AS $et){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND save_temp='0' AND lost='0' AND obsolete='0' GROUP BY eh.et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
@@ -1125,6 +1130,23 @@ class Report extends CI_Controller {
             if($this->super_model->insert_into("lost_items", $data)){
                 echo "<script>alert('Successfully Tagged as Lost!'); location.replace(document.referrer); </script>";
             }
+        }
+    }
+
+    public function insert_obsolete(){
+        $obsolete_date = trim($this->input->post('obsolete_date')," ");
+        $obsolete_remarks = trim($this->input->post('obsolete_remarks')," ");
+        $obsolete_accountable = trim($this->input->post('obsolete_accountable')," ");
+        $ed_id = trim($this->input->post('ed_id')," ");
+        $data_obsolete = array(
+            'obsolete'=>1,
+            'obsolete_date'=>$obsolete_date,
+            'obsolete_remarks'=>$obsolete_remarks,
+            'obsolete_accountable'=>$obsolete_accountable,
+        );
+
+        if($this->super_model->update_where('et_details', $data_obsolete, 'ed_id', $ed_id)){
+            echo "<script>alert('Successfully Tagged as Obsolete!'); location.replace(document.referrer); </script>";
         }
     }
 
@@ -1469,7 +1491,7 @@ class Report extends CI_Controller {
                 );
             }
         }else {
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND save_temp='0' AND lost='0' GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND save_temp='0' AND lost='0' AND obsolete='0' GROUP BY eh.et_id") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -2452,6 +2474,7 @@ public function update_encode_transfer(){
                         'damage'=>$det->damage,
                         'upgrade'=>$det->upgrade,
                         'lost'=>$det->lost,
+                        'obsolete'=>$det->obsolete,
                         'borrowed'=>$det->borrowed,
                         'change_location'=>$det->change_location,
                         'location'=>$location,
@@ -2620,7 +2643,7 @@ public function update_encode_transfer(){
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $date=date("Y-m-d");
         if($row_avail!=0){
-            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0'","et_id") as $et){
+            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0' AND cancelled = '0' AND obsolete='0'","et_id") as $et){
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
                 $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
                 $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
@@ -3667,7 +3690,7 @@ public function update_encode_transfer(){
     public function report_print_avail(){
         $this->load->view('template/header');
         $data['report']=array();
-        foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND cancelled = '0' GROUP BY eh.et_id") AS $et){
+        foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND cancelled = '0' GROUP BY eh.et_id") AS $et){
             $data['user_id'] = $_SESSION['fullname'];
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
             $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -3735,7 +3758,7 @@ public function update_encode_transfer(){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='0' AND cancelled='0'") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
-                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND change_location = '0' AND set_id!='0' AND et_id ='$et->et_id' ORDER BY set_id ASC") AS $det){
+                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND et_id ='$et->et_id' ORDER BY set_id ASC") AS $det){
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
                         $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
@@ -3956,7 +3979,7 @@ public function update_encode_transfer(){
         foreach($this->super_model->select_custom_where("et_head","accountability_id='0' AND cancelled='0'") AS $a){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
             $set_id = $this->super_model->select_column_where("et_details", "set_id", "et_id", $a->et_id);
-            foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id!='0'  AND damage = '0'") AS $b){
+            foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id!='0'  AND damage = '0' AND lost='0' AND obsolete='0'") AS $b){
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $b->set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$et_set_id' AND damage = '0'");
                 $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$b->set_id);
@@ -4068,6 +4091,7 @@ public function update_encode_transfer(){
                 'borrowed'=>$s->borrowed,
                 'damaged'=>$s->damage,
                 'lost'=>$s->lost,
+                'obsolete'=>$s->obsolete,
                 'upgrade'=>$s->upgrade,
                 'change_location'=>$s->change_location,
                 'location'=>$location,
@@ -4092,6 +4116,7 @@ public function update_encode_transfer(){
             $return_accountability=$this->super_model->select_column_where("employees","employee_name","employee_id",$r->accountability_id);
             $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $r->et_id);
             $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id);
+            $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $r->et_id);
             $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $r->et_id); 
             $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $r->et_id); 
             $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $r->et_id); 
@@ -4132,6 +4157,7 @@ public function update_encode_transfer(){
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,
+                    'obsolete'=>$obsolete,
                     'upgrade'=>$upgrade,
                 );
             }
@@ -4161,6 +4187,7 @@ public function update_encode_transfer(){
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $dam->et_id); 
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $dam->et_id); 
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $dam->et_id); 
+                $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $dam->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $dam->et_id); 
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $dam->et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
@@ -4194,6 +4221,7 @@ public function update_encode_transfer(){
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,
+                    'obsolete'=>$obsolete,
                     'upgrade'=>$upgrade,
                 );
             }
@@ -4223,6 +4251,7 @@ public function update_encode_transfer(){
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et_id); 
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et_id); 
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et_id); 
+                $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et_id); 
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
@@ -4245,6 +4274,7 @@ public function update_encode_transfer(){
                     'empid'=>$accountability_id,
                     'unit_price'=>$unit_price,
                     'lost'=>$lost,
+                    'obsolete'=>$obsolete,
                     'date_issued'=>'',
                     'date_returned'=>'',
                     'remarks'=>$remarks,
@@ -4289,6 +4319,7 @@ public function update_encode_transfer(){
                     $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $rep->et_id); 
                     $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $rep->et_id); 
                     $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $rep->et_id); 
+                    $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $rep->et_id); 
                     $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $rep->et_id); 
                     $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $rep->et_id); 
                     $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
@@ -4323,6 +4354,7 @@ public function update_encode_transfer(){
                         'location'=>$location,
                         'change_location'=>$change_location,
                         'lost'=>$lost,
+                        'obsolete'=>$obsolete,
                         'upgrade'=>$upgrade,
                     );
                 }
@@ -4927,7 +4959,7 @@ public function update_encode_transfer(){
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement1'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
-        foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE cancelled='0' AND save_temp='0' AND $query GROUP BY eh.et_id") AS $et){
+        foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE cancelled='0' AND save_temp='0' AND lost='0' AND obsolete='0' AND $query GROUP BY eh.et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -5267,6 +5299,7 @@ public function update_encode_transfer(){
                     'borrowed'=>$sub->borrowed,
                     'damaged'=>$sub->damage,
                     'lost'=>$sub->lost,
+                    'obsolete'=>$sub->obsolete,
                     'upgrade'=>$sub->upgrade,
                     'change_location'=>$sub->change_location,
                     'location'=>$location,
@@ -6849,7 +6882,7 @@ public function update_encode_transfer(){
         if($rows!=0){
              echo "<ul id='name-item'>";
             foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND cancelled='0' AND save_temp = '0' AND et_desc LIKE '%$item%'") AS $itm){
-                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0' AND lost='0'") AS $det){  
+                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0' AND lost='0' AND obsolete='0'") AS $det){  
                     $qty = 1;
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
@@ -7469,7 +7502,8 @@ public function update_encode_transfer(){
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
                 $data['department'] =$aaf->department;
                 $qty = 1;
-                foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
+                foreach($this->super_model->select_custom_where('et_details', "et_id='$aaf->et_id' AND obsolete='0' AND lost='0'") AS $det){
+                    //foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
                     $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$det->set_id);
                     $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND accountability_id='$aaf->accountability_id' AND cancelled='0' AND damage='0'");
                     $data['count_set']=$count_set;
@@ -7776,7 +7810,7 @@ public function update_encode_transfer(){
                     'id'=>$mul->et_id,
                     'item'=>$mul->et_desc
                 );
-                foreach($this->super_model->select_custom_where("et_details", "et_id = '$mul->et_id' AND lost ='0'") AS $det){
+                foreach($this->super_model->select_custom_where("et_details", "et_id = '$mul->et_id' AND lost ='0' AND obsolete='0'") AS $det){
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                     $data['details'][] = array(
                         'set_id'=>$det->set_id,
@@ -8168,7 +8202,7 @@ public function update_encode_transfer(){
         $filter=substr($filter, 0, -2);
         if($filter!=''){
             $previousId = '';
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.cancelled='0' AND eh.save_temp='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.cancelled='0' AND eh.save_temp='0' AND lost='0' AND obsolete='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -8271,7 +8305,7 @@ public function update_encode_transfer(){
             }
         }else {
             $previousId = '';
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='0' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='0' AND lost='0' AND obsolete='0' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -8890,6 +8924,7 @@ public function update_encode_transfer(){
             $data['changeloc'] =$this->super_model->select_column_where("et_details", "change_location", "ed_id", $cur->ed_id);
             $data['upgrade'] =$this->super_model->select_column_where("et_details", "upgrade", "ed_id", $cur->ed_id);
             $data['lost'] =$this->super_model->select_column_where("et_details", "lost", "ed_id", $cur->ed_id);
+            $data['obsoletes'] =$this->super_model->select_column_where("et_details", "obsolete", "ed_id", $cur->ed_id);
             $location_id=$this->super_model->select_column_where("et_details", "location_id", "ed_id", $cur->ed_id);
             $data['location'] =$this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
@@ -9214,6 +9249,44 @@ public function update_encode_transfer(){
             }
         }
 
+        $row_obsolete=$this->super_model->count_rows_where("et_details", "ed_id",$id);
+        foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $l){
+            $accountable =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $l->obsolete_accountable);
+            $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $l->et_id);
+
+            $data['history'][]  = array(
+                        "id"=>$l->ed_id,
+                        "employee"=>$accountable,
+                        "item"=>"",
+                        "trdate"=>$l->obsolete_date,
+                        "date_desc"=>"Obsolete Date",
+                        "return_date"=>"",
+                        "method"=>"Obsolete",
+                        "received_by"=>"",
+                        "returned_by"=>"",
+                        "jo_no"=>"",
+                        "qty"=>1,
+                        "repair_price"=>0,
+                        "supplier"=>"",
+                        "remarks"=>$l->obsolete_remarks,
+                        "replacement"=>$item,
+                        "dam_location"=>"",
+                        "equip_damage"=>"",
+                        "receive_date"=>"",
+                    );
+
+            if($row_obsolete!=0){
+                $data['obsolete'][] = array(
+                    "employee"=>$accountable,
+                    "item"=>$item,
+                    "remarks"=>$l->obsolete_remarks,
+                    "obsolete_date"=>$l->obsolete_date,
+                );
+            } else {
+                $data['obsolete']=array();
+            }
+        }
+
         $row_damaged=$this->super_model->count_rows_where("damage_info", "ed_id",$id);
         foreach($this->super_model->select_row_where('damage_info', 'ed_id', $id) AS $di){
             $submitted_by =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $di->submitted_by);
@@ -9426,6 +9499,7 @@ public function update_encode_transfer(){
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id); 
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
                 $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id); 
+                $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $t->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $t->et_id);                     
@@ -9437,6 +9511,7 @@ public function update_encode_transfer(){
                     'location'=>$location,
                     'change_location'=>$change_location,
                     'lost'=>$lost,
+                    'obsolete'=>$obsolete,
                     'accountability'=>$employee,
                     'accountability_id'=>$t->accountability_id,
                     'qty'=>$t->qty,
@@ -9522,5 +9597,32 @@ public function update_encode_transfer(){
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="Return Summary.xlsx"');
         readfile($exportfilename);
+    }
+
+    public function obsolete_report(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $row_avail = $this->row_avail();
+        $data['available_set_qty']= $this->row_set_avail();
+        $data['available_qty']= $this->row_avail();
+        $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        if($row_avail!=0){
+            foreach($this->super_model->select_custom_where("et_details", "obsolete='1'") AS $det){
+                $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
+                $accountability = $this->super_model->select_column_where("employees","employee_name","employee_id",$det->obsolete_accountable);
+                $data['obsolete'][] = array(
+                    'et_id'=>$det->et_id,
+                    'ed_id'=>$det->ed_id,
+                    'accountability'=>$accountability,
+                    'obsolete_date'=>$det->obsolete_date,
+                    'obsolete_remarks'=>$det->obsolete_remarks,
+                    'item'=>$item,
+                );
+            }
+        }else {
+            $data['obsolete'] = array();
+        }
+        $this->load->view('report/obsolete_report',$data);
+        $this->load->view('template/footer');
     }
 }

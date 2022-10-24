@@ -86,6 +86,41 @@
     </div>
 </div>
 
+<div class="modal fade" id="ObsoleteTag" tabindex="-1" role="dialog" aria- labelledby="largeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="largeModalLabel"><span class="fa fa-filter"></span>  Tag as Obsolete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method='POST' action="<?php echo base_url(); ?>report/insert_obsolete">
+                <div class="modal-body">
+                    <table width="100%">
+                        <tr>
+                            <td><p>Date:</p>
+                                <input type="date" id="obsolete_date" name="obsolete_date" class="form-control bor-radius10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p>Remarks:</p>
+                                <textarea id="obsolete_remarks" name="obsolete_remarks" class="form-control bor-radius10"></textarea>
+                            </td>
+                        </tr>                                                        
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success btn-sm btn-block bor-radius" value='Save'>
+                </div>
+                <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
+                <input type="hidden" name="obsolete_accountable" id="obsolete_accountable">
+                <input type="text" name="ed_id" id="oed_id">
+                <input type="hidden" name="et_id" id="oet_id">
+            </form>
+        </div>
+    </div>
+</div>
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
@@ -144,7 +179,7 @@
                                     });
                                     $x = 1;
                                     foreach($sub AS $s){ 
-                                    if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0){
+                                    if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0 && $s['obsolete']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
@@ -166,9 +201,11 @@
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$s['accountability'].'</span>';
                                     }else if($s['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
+                                    }else if($s['obsolete']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Obsolete Item / '.$s['accountability'].'</span>';
                                     }
                                 ?>
-                                <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#ec7070 !important" : ''; ?>">
+                                <tr style = "<?php echo ($s['lost']!=0 || $s['obsolete']!=0) ? "background-color:#ec7070 !important" : ''; ?>">
                                     <td><?php echo $s['asset_control_no']; ?></td>
                                     <td><?php echo $s['serial_no']; ?></td>
                                     <td><?php echo $s['subcat']; ?></td>
@@ -198,6 +235,11 @@
                                             <span  data-toggle="tooltip" data-placement="top" title="Lost">
                                                 <a class="btn btn-secondary-alt text-white item btn-sm" data-toggle="modal" id = "lost_button" data-id = "<?php echo $s['empid'];?>" data-name = "<?php echo $s['accountability'];?>" data-ab = "<?php echo $s['ed_id'];?>" data-ac = '<?php echo $s['et_id']; ?>' data-target="#lostTag" title="Lost" style="border-radius: 0px 2px 2px 0px">
                                                     <i class="fa fa-minus-circle"></i>
+                                                </a>  
+                                            </span>
+                                            <span  data-toggle="tooltip" data-placement="top" title="Obsolete">
+                                                <a class="btn btn-primary-alt text-white item btn-sm" data-toggle="modal" id = "obsolete_button" data-id = "<?php echo $s['empid'];?>" data-ab = "<?php echo $s['ed_id'];?>" data-ac = '<?php echo $s['et_id']; ?>' data-target="#ObsoleteTag" title="Obsolete" style="border-radius: 0px 2px 2px 0px">
+                                                    <i class="fa fa-ban"></i>
                                                 </a>  
                                             </span>
                                             <?php if($s['method']==1 && $s['upgrade']==0){ ?>

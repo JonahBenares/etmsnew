@@ -208,6 +208,15 @@
             $("#et_id").val(et_id);
         });
 
+        $(document).on("click", "#obsolete_button", function () {
+            var obsolete_accountable = $(this).attr("data-id");
+            var ed_id = $(this).attr("data-ab");
+            var et_id = $(this).attr("data-ac");
+            $("#obsolete_accountable").val(obsolete_accountable);
+            $("#oed_id").val(ed_id);
+            $("#oet_id").val(et_id);
+        });
+
         $(document).on("click", "#itemTransfer", function () {
             var ed_id = $(this).attr("data-id");
             $("#ed_ids").val(ed_id);

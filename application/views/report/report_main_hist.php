@@ -38,7 +38,7 @@
                                             switch($det){
                                                 case($i['et_id'] == $det['et_id']):
 
-                                                    if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damage']==0){
+                                                    if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']==0 && $det['damage']==0 && $det['obsolete']==0 ){
                                                         $status = $i['employee'];
                                                     }else if($i['accountability_id']!=0 && $det['borrowed']==0 && $det['lost']==0 && $det['upgrade']!=0 && $det['damage']==0){
                                                         $status = $i['employee']." / Upgraded";
@@ -60,6 +60,8 @@
                                                         $status = '<span style = "color:red;">Damaged / '.$i['employee'].'</span>';
                                                     }else if($det['lost']==1){
                                                         $status = '<span style = "color:orange;">Lost Item / '.$i['employee'].'</span>';
+                                                    }else if($det['obsolete']==1){
+                                                        $status = '<span style = "color:orange;">Obsolete Item / '.$i['employee'].'</span>';
                                                     }
                                 ?>
                                 <tr >

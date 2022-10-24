@@ -32,6 +32,8 @@
                                 <button class="btn btn-info-alt btn-block btn-sm animated headShake text-white bor-radius20">Moved to <?php echo $location; ?></button>
                             <?php } else if($lost=='1'){ ?>
                                 <button class="btn btn-secondary-alt btn-block btn-sm animated headShake text-white bor-radius20">Lost Item</button>
+                            <?php } else if($obsoletes=='1'){ ?>
+                                <button class="btn btn-secondary-alt btn-block btn-sm animated headShake text-white bor-radius20">Obsolete Item</button>
                             <?php }else { echo ''; } ?>
                         </div>
 
@@ -126,6 +128,9 @@
             } else if($his['method'] == 'Lost'){
                 $bg = 'bg-dark-alt';
                 $border = "border-dark";
+            }else if($his['method'] == 'Obsolete'){
+                $bg = 'bg-dark-alt';
+                $border = "border-dark";
             }
            
            ?>
@@ -214,6 +219,15 @@
                     <p class="font-bold">Date Lost:</p>
                     <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('F d, Y', strtotime($his['trdate'])) : ""); ?></p>
                     <p class="font-bold">Replacement Item:</p>
+                    <p class="m-b-10"><?php echo $his['replacement']; ?></p>
+                    <p class="font-bold">Accountable Person:</p>
+                    <p class="m-b-10"><?php echo $his['employee']; ?></p>
+                    <p class="font-bold">Remarks:</p>
+                    <p class="m-b-10"><?php echo $his['remarks']; ?></p>
+                <?php }  else if($his['method'] == 'Obsolete'){ ?>
+                    <p class="font-bold">Date:</p>
+                    <p class="m-b-10"><?php echo (!empty($his['trdate']) ? date('F d, Y', strtotime($his['trdate'])) : ""); ?></p>
+                    <p class="font-bold">Item:</p>
                     <p class="m-b-10"><?php echo $his['replacement']; ?></p>
                     <p class="font-bold">Accountable Person:</p>
                     <p class="m-b-10"><?php echo $his['employee']; ?></p>

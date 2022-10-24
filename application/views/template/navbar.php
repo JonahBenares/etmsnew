@@ -139,6 +139,7 @@
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/transfer_list">Transferred Items</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/returned_list">Returned</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/lost_list">Lost</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>report/obsolete_report">Obsolete</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>repair/repair_list">Damaged</a>
                             </div>
                         </li>

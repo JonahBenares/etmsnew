@@ -46,7 +46,7 @@
                             <tbody>
                                 <?php 
                                     foreach($item AS $i){ 
-                                    if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0 && $i['damaged']==0){
+                                    if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']==0 && $i['damaged']==0 && $i['obsolete']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0 && $i['upgrade']!=0 && $i['damaged']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
@@ -68,6 +68,8 @@
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$i['accountability'].'</span>';
                                     }else if($i['lost']==1){
                                         $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$i['accountability'].'</span>';
+                                    }else if($i['obsolete']==1){
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Obsolete Item / '.$i['accountability'].'</span>';
                                     }
                                     ?>
                                     <tr>
