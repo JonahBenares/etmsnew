@@ -7,9 +7,9 @@
             <div class="col-lg-12">
                 <div class="card bor-radius shadow">
                     <div class="card-header bg-danger-alt cheader-bor">
-                        <strong>DAMAGE</strong> Equipment / Tools
+                        <strong>OBSOLETE</strong> Equipment / Tools
                     </div>
-                    <form action="<?php echo base_url(); ?>report/insert_transfer" method="POST">
+                    <form>
                         <div class="card-body card-block">
                             <table class="table table-hover table-bordered">
                                 <thead>       
@@ -30,11 +30,11 @@
                                 ?>
                                 <tr>       
                                     <td class="p-2" align="center">
-                                        <a href="<?php echo base_url(); ?>report/damage_report/<?php echo $det['damage_id']?>" class="btn btn-warning-alt item btn-sm"  data-toggle="tooltip" data-placement="top" title="View">
+                                        <a href="<?php echo base_url(); ?>report/obsolete_print/<?php echo $det['obsolete_id']?>" class="btn btn-warning-alt item btn-sm"  data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>
-                                    <td><?php echo $h['receive_date'];?></td>
+                                    <td><?php echo date('F d,Y',strtotime($det['receive_date']));?></td>
                                     <td><?php echo $h['item'];?></td>
                                     <td><?php echo $det['serial'];?></td>
                                     <td><?php echo $det['acn'];?></td>

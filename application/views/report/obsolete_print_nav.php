@@ -24,13 +24,13 @@
                     <p style="margin: 0px"><?php echo TEL_NO;?></p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                    <p><strong>EQUIPMENT/TOOLS DAMAGE REPORT</strong></p>
+                    <p><strong>EQUIPMENT/TOOLS OBSOLETE REPORT</strong></p>
                 </td>
             </tr>
         </table>
         <div class="col-lg-12" style="margin:10px 0px 10px">
             <?php 
-                foreach($damage AS $dam){  
+                foreach($obsolete AS $dam){  
                     foreach($details AS $det){ 
                         switch($det){
                             case($dam['ed_id'] == $det['ed_id']):
@@ -40,8 +40,8 @@
                     <td width="15%"><p class="nomarg">Receive Date</p></td>
                     <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['receive_date'];?></label></td>
                     <td width="20%"></td>
-                    <td width="13%"><p class="nomarg pull-right">ETDR No.</p></td>
-                    <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['etdr_no'];?></label></td>
+                    <td width="13%"><p class="nomarg pull-right">OBT No.</p></td>
+                    <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['obt_no'];?></label></td>
                 </tr> 
                 <tr>
                     <td width="15%"><p class="nomarg">Date of Incident</p></td>
@@ -128,31 +128,7 @@
                 </tr>
             </table>
             <br>
-            <p>Provide a brief description of the incident:</p>
-            <table width="100%">
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['incident_description'];?><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td><br></td>
-                </tr>
-            </table>
-            <br>
-            <p>Fully describe the damage done to the equipment:</p>
-            <table width="100%">
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['equip_damage'];?><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td><br></td>
-                </tr>
-            </table>
-            <br>
-            <p> Provide a recommendation on how the equipment is going to be repaired or replaced:</p>
+            <p> Provide a brief description and recommendation for the equipment:</p>
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
@@ -163,35 +139,6 @@
                     <td><br></td>
                 </tr>
             </table>
-            <br>
-            <div class="row">
-                <div class="col-lg-7">
-                    <b for="" class="control-label mb-1">Damage History/Repair and Maintenance:</b>
-                    <br>
-                    <?php
-                        if(!empty($damageview)){ 
-                            array_sort_by_column($damageview, 'date');
-                            foreach($damageview AS $damv){ 
-                           if($damv['method']=='Damaged'){     
-                    ?>
-                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Damaged, " : '';?></span>
-                    <?php }else if($damv['method']=='Repaired'){ ?>
-                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Repaired, " : '';?></span>
-                    <?php } } }?>
-                </div>
-                <div class="col-lg-5">
-                    <b for="" class="control-label mb-1">Upgrade History:</b>
-                    <br>
-                    <?php
-                        
-                        if(!empty($upgrade)){ 
-                            array_sort_by_column($upgrade, 'date');
-                            foreach($upgrade AS $upg){    
-                    ?>
-                        <span><?php echo $upg['date']." - ".$upg['upgrade_item']." - ".$upg['remarks'].', ';?></span>
-                    <?php } }?>
-                </div>
-            </div>
             <br>
             <p> Remarks:</p>
             <table width="100%">

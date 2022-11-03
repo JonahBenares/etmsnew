@@ -6586,6 +6586,7 @@ public function update_encode_transfer(){
                     'damage_id'=>$det->damage_id,
                     'et_id'=>$det->et_id,
                     'ed_id'=>$det->ed_id,
+                    'recieve_date'=>$det->recieve_date,
                     'acn'=> $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $det->ed_id),
                     'type'=> $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id),
                     'model'=> $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id),
@@ -9617,6 +9618,7 @@ public function update_encode_transfer(){
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                 $accountability = $this->super_model->select_column_where("employees","employee_name","employee_id",$det->accountable);
                 $data['obsolete'][] = array(
+                    'obsolete_id'=>$det->obsolete_id,
                     'et_id'=>$det->et_id,
                     'ed_id'=>$det->ed_id,
                     'asset_control_no'=>$det->asset_control_no,
@@ -9826,6 +9828,193 @@ public function update_encode_transfer(){
                 $this->super_model->insert_into("obsolete_series", $obsolete_data);
             }
         }
-        echo "<script>alert('Successfully Tagged as Obsolete!'); window.location = '".base_url()."report/tag_damage_print/$et_id';</script>";
+        echo "<script>alert('Successfully Tagged as Obsolete!'); window.location = '".base_url()."report/tag_obsolete_print/$et_id';</script>";
+    }
+
+    public function tag_obsolete_print(){  
+        $this->load->view('template/header'); 
+        $data['id']=$this->uri->segment(3);
+        $et_id=$this->uri->segment(3);
+        foreach($this->super_model->select_custom_where('et_head', "et_id='$et_id' AND cancelled='0'") AS $head){ 
+                $data['head'][] =  array(
+                    'et_id'=>$head->et_id,
+                    'item'=> $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id),  
+                );
+            foreach($this->super_model->select_row_where('obsolete_info', 'et_id', $head->et_id) AS $det){
+
+               $data['details'][] =  array(
+                    'obsolete_id'=>$det->obsolete_id,
+                    'et_id'=>$det->et_id,
+                    'ed_id'=>$det->ed_id,
+                    'receive_date'=>$det->receive_date,
+                    'acn'=> $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $det->ed_id),
+                    'type'=> $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id),
+                    'model'=> $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id),
+                    'brand'=> $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id),
+                    'serial' => $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id)
+                );
+            }
+        }    
+        $this->load->view('report/tag_obsolete_print',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function obsolete_print(){  
+        $this->load->view('template/header');
+        $data['id']=$this->uri->segment(3);
+        $obsolete_id=$this->uri->segment(3);
+        foreach($this->super_model->select_row_where('obsolete_info', 'obsolete_id', $obsolete_id) AS $dam){
+            foreach($this->super_model->select_row_where('et_head', 'et_id', $dam->et_id) AS $head){ 
+                $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id);
+                $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
+            }
+            $data['type'] = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->verified_by'"); 
+            $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->verified_by'");
+            $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->prepared_by'");
+            $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->verified_by) AS $em){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status1==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->prepared_by) AS $cb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
+                $data['child2'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
+                $data['child3'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+            $data['user_id'] =$_SESSION['fullname'];
+            $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->prepared_by);
+            $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->verified_by);
+            $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->noted_by);
+            $data['accountable'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->accountable);
+            foreach($this->super_model->select_row_where('et_details', 'ed_id', $dam->ed_id) AS $det){
+                $data['details'][]=array(
+                    'ed_id'=>$det->ed_id,
+                    'type'=> $det->type,
+                    'model'=> $det->model,
+                    'brand'=> $det->brand,
+                    'serial' => $det->serial_no,
+                    'asset_control_no' => $det->asset_control_no,
+                    'acquisition_date' => $det->acquisition_date,
+                );
+            }
+            
+            $data['obsolete'][] =  array(
+                'ed_id'=>$dam->ed_id,
+                'et_id'=>$dam->et_id,
+                'obt_no'=> $dam->obt_no,
+                'po_si_no'=> $dam->po_si_no,
+                'item'=> $item,
+                'accountable'=> $accountable,
+                'types'=> $types,
+                'typec'=> $typec,
+                'typen'=> $typen,
+                'date_incident'=>$dam->incident_date,
+                'receive_date'=>$dam->receive_date,
+                'activity'=>$dam->item_activity,
+                'location'=>$dam->incident_location,
+                'accountability'=>$dam->accountable_person,
+                'recommendation'=>$dam->description_recommend,
+                'remarks'=>$dam->obt_remarks
+            );
+        }
+        $this->load->view('report/obsolete_print',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function obsolete_print_nav(){  
+        $this->load->view('template/navbar',$this->dropdown);
+        $this->load->view('template/header');
+        $data['id']=$this->uri->segment(3);
+        $obsolete_id=$this->uri->segment(3);
+        foreach($this->super_model->select_row_where('obsolete_info', 'obsolete_id', $obsolete_id) AS $dam){
+            foreach($this->super_model->select_row_where('et_head', 'et_id', $dam->et_id) AS $head){ 
+                $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id);
+                $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $head->accountability_id);
+            }
+            $data['type'] = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->verified_by'"); 
+            $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->verified_by'");
+            $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->prepared_by'");
+            $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->verified_by) AS $em){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status1==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->prepared_by) AS $cb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
+                $data['child2'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
+                $data['child3'][] = array( 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                    'status'=> $status, 
+                );
+            }
+            $data['user_id'] =$_SESSION['fullname'];
+            $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->prepared_by);
+            $data['submitted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->verified_by);
+            $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->noted_by);
+            $data['accountable'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->accountable);
+            foreach($this->super_model->select_row_where('et_details', 'ed_id', $dam->ed_id) AS $det){
+                $data['details'][]=array(
+                    'ed_id'=>$det->ed_id,
+                    'type'=> $det->type,
+                    'model'=> $det->model,
+                    'brand'=> $det->brand,
+                    'serial' => $det->serial_no,
+                    'asset_control_no' => $det->asset_control_no,
+                    'acquisition_date' => $det->acquisition_date,
+                );
+            }
+            
+            $data['obsolete'][] =  array(
+                'ed_id'=>$dam->ed_id,
+                'et_id'=>$dam->et_id,
+                'obt_no'=> $dam->obt_no,
+                'po_si_no'=> $dam->po_si_no,
+                'item'=> $item,
+                'accountable'=> $accountable,
+                'types'=> $types,
+                'typec'=> $typec,
+                'typen'=> $typen,
+                'date_incident'=>$dam->incident_date,
+                'receive_date'=>$dam->receive_date,
+                'activity'=>$dam->item_activity,
+                'location'=>$dam->incident_location,
+                'accountability'=>$dam->accountable_person,
+                'recommendation'=>$dam->description_recommend,
+                'remarks'=>$dam->obt_remarks
+            );
+        }
+        $this->load->view('report/obsolete_print_nav',$data);
+        $this->load->view('template/footer');
     }
 }

@@ -31,6 +31,7 @@
                                     <th>Serial No.</th>
                                     <th>Accountable Person</th>
                                     <th>Remarks</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,6 +51,11 @@
                                             <td><?php echo $l['serial_no']; ?></td>
                                             <td><?php echo $l['accountability']; ?></td>
                                             <td><?php echo $l['obsolete_remarks']; ?></td>
+                                            <td class="p-b-10 p-t-10"  align="center">
+                                                <a href="<?php echo base_url(); ?>report/obsolete_print_nav/<?php echo $l['obsolete_id']?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                 <?php } } ?>
                             </tbody>

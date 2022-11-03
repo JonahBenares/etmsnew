@@ -1,7 +1,10 @@
-<script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
-<script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
-<link href="<?php echo base_url(); ?>assets/dist/css/printable.css" rel="stylesheet">
-<?php
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print</title>
+</head>
+<?php 
     function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
         $sort_col = array();
         foreach ($arr as $key=> $row) {
@@ -11,8 +14,49 @@
         array_multisort($sort_col, $dir, $arr);
     }
 ?>
-<div class="page-wrapper">
-    <div class="container-fluid m-t-20">        
+<style type="text/css">
+    body{ background-color: #fff }
+    .table-main{
+        border:2px solid black;
+        border-bottom:0px solid black;
+    }
+    #head{
+        font-size: 14px;
+    }
+    .table-bordered>tbody>tr>td, 
+    .table-bordered>tbody>tr>th, 
+    .table-bordered>tfoot>tr>td, 
+    .table-bordered>tfoot>tr>th, 
+    .table-bordered>thead>tr>td, 
+    .table-bordered>thead>tr>th {
+        border: 1px solid #000!important;
+    }
+    .nomarg{
+        margin: 0px;
+    }
+    p, .main-tab, h5, label.nomarg{
+        color:#000;
+    }
+    .select {
+       text-align-last: center;
+       text-align: center;
+       -ms-text-align-last: center;
+       -moz-text-align-last: center;
+        padding: 5px 0px!important;
+        width:100%;
+        border:0px;
+        background:none;
+        text-align:center;
+        -webkit-appearance: none;
+    }
+    @media print{
+        #back{
+            display: none;
+        }
+    }
+</style>
+<body style="padding-top:20px">
+    <div class="container">
         <table class = "table-main " style = "width:100%">
             <tr>
                 <td style="padding:10px;border-bottom: 2px solid #000" width="15%">
@@ -24,13 +68,13 @@
                     <p style="margin: 0px"><?php echo TEL_NO;?></p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                    <p><strong>EQUIPMENT/TOOLS DAMAGE REPORT</strong></p>
+                    <p><strong>EQUIPMENT/TOOLS OBSOLETE REPORT</strong></p>
                 </td>
             </tr>
         </table>
         <div class="col-lg-12" style="margin:10px 0px 10px">
             <?php 
-                foreach($damage AS $dam){  
+                foreach($obsolete AS $dam){  
                     foreach($details AS $det){ 
                         switch($det){
                             case($dam['ed_id'] == $det['ed_id']):
@@ -40,16 +84,16 @@
                     <td width="15%"><p class="nomarg">Receive Date</p></td>
                     <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['receive_date'];?></label></td>
                     <td width="20%"></td>
-                    <td width="13%"><p class="nomarg pull-right">ETDR No.</p></td>
-                    <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['etdr_no'];?></label></td>
-                </tr> 
+                    <td width="13%"><p class="nomarg pull-right">OBT No.</p></td>
+                    <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['obt_no'];?></label></td>
+                </tr>   
                 <tr>
                     <td width="15%"><p class="nomarg">Date of Incident</p></td>
                     <td width="30%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo $dam['date_incident'];?></label></td>
                     <td width="20%"></td>
                     <td width="13%"></td>
                     <td colspan="3"></td>
-                </tr>            
+                </tr>         
             </table>
             <br>
             <table width="100%">
@@ -74,17 +118,17 @@
                 </tr>  
                 <tr>
                     <td></td>
-                    <td></td>
-                    <td><p class="pull-right">Date Acquired </p></td>
+                    <td  width="5%" colspan="2"><p class="pull-right">Date Acquired </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $det['acquisition_date'];?></td>
+                    <td width="10%"></td>
                 </tr>    
                 <tr>
                     <td></td>
                     <td  width="5%" colspan="2"><p class="pull-right">Equipment/Tools </p></td>
-                    <td width="65%" style="border-bottom: 1px solid #999"> : <?php echo $dam['item'];?></td>
+                    <td style="border-bottom: 1px solid #999"> : <?php echo $dam['item'];?></td>
                     <td width="10%"></td>
                 </tr> 
-                <tr>
+                 <tr>
                     <td></td>
                     <td></td>
                     <td><p class="pull-right">Asset Control No. </p></td>
@@ -107,52 +151,28 @@
                     <td></td>
                     <td><p class="pull-right">Serial Number </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $det['serial'];?></td>
-                </tr> 
+                </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td><p class="pull-right">PO/SI Number </p></td>
+                    <td><p class="pull-right">PO/Si Number </p></td>
                     <td style="border-bottom: 1px solid #999"> : <?php echo $dam['po_si_no'];?></td>
-                </tr>
+                </tr> 
             </table>
             <br>
             <p>Person(s) who were using the equipment/Memorandum Receipt/Accountability</p>
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['accountability'];?></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td ><br></td>
-                </tr>
-            </table>
-            <br>
-            <p>Provide a brief description of the incident:</p>
-            <table width="100%">
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['incident_description'];?><br></td>
-                </tr>
+                    <td style="border-bottom: 1px solid #999"><?php echo $dam['accountability'];?><br></td>
+                </tr>                
                 <tr>
                     <td width="10%"></td>
                     <td><br></td>
                 </tr>
             </table>
             <br>
-            <p>Fully describe the damage done to the equipment:</p>
-            <table width="100%">
-                <tr>
-                    <td width="10%"></td>
-                    <td style="border-bottom: 1px solid #999"><?php echo $dam['equip_damage'];?><br></td>
-                </tr>
-                <tr>
-                    <td width="10%"></td>
-                    <td><br></td>
-                </tr>
-            </table>
-            <br>
-            <p> Provide a recommendation on how the equipment is going to be repaired or replaced:</p>
+            <p> Provide a brief description and recommendation for the equipment:</p>
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
@@ -164,36 +184,7 @@
                 </tr>
             </table>
             <br>
-            <div class="row">
-                <div class="col-lg-7">
-                    <b for="" class="control-label mb-1">Damage History/Repair and Maintenance:</b>
-                    <br>
-                    <?php
-                        if(!empty($damageview)){ 
-                            array_sort_by_column($damageview, 'date');
-                            foreach($damageview AS $damv){ 
-                           if($damv['method']=='Damaged'){     
-                    ?>
-                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Damaged, " : '';?></span>
-                    <?php }else if($damv['method']=='Repaired'){ ?>
-                        <span><?php echo ($damv['remarks']!='') ? $damv['date']." - ".$damv['remarks']." - Repaired, " : '';?></span>
-                    <?php } } }?>
-                </div>
-                <div class="col-lg-5">
-                    <b for="" class="control-label mb-1">Upgrade History:</b>
-                    <br>
-                    <?php
-                        
-                        if(!empty($upgrade)){ 
-                            array_sort_by_column($upgrade, 'date');
-                            foreach($upgrade AS $upg){    
-                    ?>
-                        <span><?php echo $upg['date']." - ".$upg['upgrade_item']." - ".$upg['remarks'].', ';?></span>
-                    <?php } }?>
-                </div>
-            </div>
-            <br>
-            <p> Remarks:</p>
+            <p> Remarks: </p>
             <table width="100%">
                 <tr>
                     <td width="10%"></td>
@@ -230,7 +221,7 @@
                     </td>
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        <input class="select" type="" name="" value="<?php echo $accountable;?>" style = "pointer-events:none;">
+                         <input class="select" type="" name="" value="<?php echo $accountable;?>" style = "pointer-events:none;">
                     </td>
                     <td></td>
                 </tr>
@@ -306,5 +297,13 @@
             <br>
         </div>
         <center><a href="" id="printBtn" onclick="iprint()" class="btn btn-success btn-block m-b-50 animated headShake">Print</a></center>
+    
     </div>
-</div>
+
+</body>
+<script>
+    function iprint() {
+      window.print();
+    }
+    </script>
+</html>
