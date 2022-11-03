@@ -118,6 +118,10 @@
         function tagAsDamage(accountability_id,et_id){
             window.open('<?php echo base_url(); ?>report/tag_damage/'+accountability_id+"/"+et_id, '_blank', 'top=10px,left=60px,width=1250,height=650');
         }
+
+        function tagAsObsolete(accountability_id,et_id){
+            window.open('<?php echo base_url(); ?>report/tag_obsolete/'+accountability_id+"/"+et_id, '_blank', 'top=10px,left=60px,width=1250,height=650');
+        }
         function assignTo(et_id){
             window.open('<?php echo base_url(); ?>report/assign/'+et_id, '_blank', 'top=100px,left=400px,width=600,height=450');
         }

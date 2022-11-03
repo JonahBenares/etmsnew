@@ -237,11 +237,14 @@
                                                     <i class="fa fa-minus-circle"></i>
                                                 </a>  
                                             </span>
-                                            <span  data-toggle="tooltip" data-placement="top" title="Obsolete">
+                                            <a class="btn btn-primary-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Tag as Obsolete" onClick="tagAsObsolete(<?php echo $id;?>,<?php echo $s['et_id'];?>)" <?php echo ($s['obsolete']!=0) ? 'style="pointer-events:none;background: #ada9a9;"' : ''; ?>>
+                                                <i class="fa fa-ban"></i>
+                                            </a>
+                                            <!-- <span  data-toggle="tooltip" data-placement="top" title="Obsolete">
                                                 <a class="btn btn-primary-alt text-white item btn-sm" data-toggle="modal" id = "obsolete_button" data-id = "<?php echo $s['empid'];?>" data-ab = "<?php echo $s['ed_id'];?>" data-ac = '<?php echo $s['et_id']; ?>' data-target="#ObsoleteTag" title="Obsolete" style="border-radius: 0px 2px 2px 0px">
                                                     <i class="fa fa-ban"></i>
                                                 </a>  
-                                            </span>
+                                            </span> -->
                                             <?php if($s['method']==1 && $s['upgrade']==0){ ?>
                                             <a href="<?php echo base_url(); ?>report/remove_upgrade/<?php echo $s['et_id']; ?>/<?php echo $s['rep_edid']; ?>/<?php echo $id; ?>" onclick="confirmationRemove(this);return false;" class="btn btn-warning-alt item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Remove Upgrade">
                                                 <i class="fa fa-eraser"></i>

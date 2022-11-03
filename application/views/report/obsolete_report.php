@@ -24,27 +24,34 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
+                                    <th>Asset Control No.</th>
                                     <th>Obsolete Item</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Serial No.</th>
                                     <th>Accountable Person</th>
                                     <th>Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php 
-                            if(!empty($obsolete)){
-                            foreach($obsolete AS $l){ ?>
-                                <tr>                                        
-                                    <td><?php echo $l['obsolete_date']; ?></td>
-                                    <td>
-                                        <a href="<?php echo base_url(); ?>report/view_more/<?php echo $l['et_id'];?>" class=""  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
-                                            <?php echo $l['item']; ?>
-                                        </a> 
-                                    </td>
-                                    <td><?php echo $l['accountability']; ?></td>
-                                    <td><?php echo $l['obsolete_remarks']; ?></td>
-                                </tr>
-                            <?php }
-                            } ?>
+                                <?php 
+                                    if(!empty($obsolete)){
+                                    foreach($obsolete AS $l){ ?>
+                                        <tr>                                        
+                                            <td><?php echo $l['obsolete_date']; ?></td>
+                                            <td><?php echo $l['asset_control_no']; ?></td>
+                                            <td>
+                                                <a href="<?php echo base_url(); ?>report/view_more/<?php echo $l['et_id'];?>" class=""  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
+                                                    <?php echo $l['item']; ?>
+                                                </a> 
+                                            </td>
+                                            <td><?php echo $l['brand']; ?></td>
+                                            <td><?php echo $l['model']; ?></td>
+                                            <td><?php echo $l['serial_no']; ?></td>
+                                            <td><?php echo $l['accountability']; ?></td>
+                                            <td><?php echo $l['obsolete_remarks']; ?></td>
+                                        </tr>
+                                <?php } } ?>
                             </tbody>
                         </table>
                     </div>

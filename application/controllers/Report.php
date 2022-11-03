@@ -395,6 +395,7 @@ class Report extends CI_Controller {
                 'set_name'=>$set_name,
                 'change_location'=>$et->change_location,
                 'lost'=>$et->lost,
+                'obsolete'=>$et->obsolete,
                 'location'=>$location,
                 'unit_price'=>$et->unit_price,
                 'upgrade'=>$et->upgrade
@@ -2633,7 +2634,7 @@ public function update_encode_transfer(){
 
     public function row_avail(){
 
-         $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0' AND lost ='0'",'et_id');
+         $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0' AND lost ='0' AND obsolete='0'",'et_id');
          return $row_avail;
     }
 
@@ -5298,6 +5299,7 @@ public function update_encode_transfer(){
                     'department'=>$sub->department,
                     'et_desc'=>$sub->et_desc,
                     'damaged'=>$sub->damage,
+                    'obsolete'=>$sub->obsolete,
                     'qty'=>$sub->qty,
                     'accountability'=>$accountability,
                     'empid'=>$sub->accountability_id,
@@ -6080,7 +6082,7 @@ public function update_encode_transfer(){
         if($rows==0){
             $etdr_no= $location."-".$date_format."-1001";
         } else {
-            $series = $this->super_model->get_max_where("damage_series", "series","damge_prefix = '$prefix'");
+            $series = $this->super_model->get_max_where("damage_series", "series","damage_prefix = '$prefix'");
             $next=$series+1;
             $etdr_no = $location."-".$date_format."-".$next;
         }
@@ -7627,6 +7629,7 @@ public function update_encode_transfer(){
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
                     'qty'=>$qty,
+                    'return_remarks'=>$l->remarks,
                     'date_issued'=>$date_issued,
                     'asset_control_no'=>$asset_control_no,
                     'item'=>$item_lost,
@@ -9256,15 +9259,15 @@ public function update_encode_transfer(){
         }
 
         $row_obsolete=$this->super_model->count_rows_where("et_details", "ed_id",$id);
-        foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $l){
-            $accountable =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $l->obsolete_accountable);
+        //foreach($this->super_model->select_row_where('et_details', 'ed_id', $id) AS $l){
+        foreach($this->super_model->custom_query("SELECT * FROM obsolete_info oi INNER JOIN et_details ed ON oi.ed_id=ed.ed_id WHERE oi.ed_id='$id' AND obsolete='1'") AS $l){
+            $accountable =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $l->accountable);
             $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $l->et_id);
-
             $data['history'][]  = array(
                         "id"=>$l->ed_id,
                         "employee"=>$accountable,
                         "item"=>"",
-                        "trdate"=>$l->obsolete_date,
+                        "trdate"=>$l->incident_date,
                         "date_desc"=>"Obsolete Date",
                         "return_date"=>"",
                         "method"=>"Obsolete",
@@ -9274,7 +9277,7 @@ public function update_encode_transfer(){
                         "qty"=>1,
                         "repair_price"=>0,
                         "supplier"=>"",
-                        "remarks"=>$l->obsolete_remarks,
+                        "remarks"=>$l->obt_remarks,
                         "replacement"=>$item,
                         "dam_location"=>"",
                         "equip_damage"=>"",
@@ -9285,8 +9288,8 @@ public function update_encode_transfer(){
                 $data['obsolete'][] = array(
                     "employee"=>$accountable,
                     "item"=>$item,
-                    "remarks"=>$l->obsolete_remarks,
-                    "obsolete_date"=>$l->obsolete_date,
+                    "remarks"=>$l->obt_remarks,
+                    "obsolete_date"=>$l->incident_date,
                 );
             } else {
                 $data['obsolete']=array();
@@ -9608,21 +9611,22 @@ public function update_encode_transfer(){
     public function obsolete_report(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        $row_avail = $this->row_avail();
-        $data['available_set_qty']= $this->row_set_avail();
-        $data['available_qty']= $this->row_avail();
-        $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
-        if($row_avail!=0){
-            foreach($this->super_model->select_custom_where("et_details", "obsolete='1'") AS $det){
+        $row_count=$this->super_model->count_custom_where("et_details","obsolete='1'");
+        if($row_count!=0){
+            foreach($this->super_model->custom_query("SELECT * FROM obsolete_info oi INNER JOIN et_details ed ON oi.ed_id=ed.ed_id WHERE ed.obsolete='1'") AS $det){
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
-                $accountability = $this->super_model->select_column_where("employees","employee_name","employee_id",$det->obsolete_accountable);
+                $accountability = $this->super_model->select_column_where("employees","employee_name","employee_id",$det->accountable);
                 $data['obsolete'][] = array(
                     'et_id'=>$det->et_id,
                     'ed_id'=>$det->ed_id,
+                    'asset_control_no'=>$det->asset_control_no,
                     'accountability'=>$accountability,
-                    'obsolete_date'=>$det->obsolete_date,
-                    'obsolete_remarks'=>$det->obsolete_remarks,
+                    'obsolete_date'=>$det->incident_date,
+                    'obsolete_remarks'=>$det->obt_remarks,
                     'item'=>$item,
+                    'brand'=>$det->brand,
+                    'model'=>$det->model,
+                    'serial_no'=>$det->serial_no,
                 );
             }
         }else {
@@ -9630,5 +9634,198 @@ public function update_encode_transfer(){
         }
         $this->load->view('report/obsolete_report',$data);
         $this->load->view('template/footer');
+    }
+
+    public function tag_obsolete(){  
+        $this->load->view('template/header');  
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $et_id =$this->uri->segment(4);
+        $data['et_id'] =$this->uri->segment(4);
+        $data['quantity'] = $this->super_model->select_column_custom_where('et_head', 'qty', "cancelled = '0' AND accountability_id = '$id' AND et_id = '$et_id'");
+        $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
+        if($row!=0){
+            foreach($this->super_model->select_custom_where("et_head", "et_id='$et_id' AND cancelled='0'") AS $head){
+                $data['head'][] = array(
+                    'et_id'=>$head->et_id,
+                );
+                foreach($this->super_model->select_row_where("et_details", "et_id", $head->et_id) AS $det){
+                    $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
+                    $data['details'][] = array(
+                        'ed_id'=>$det->ed_id,
+                        'et_id'=>$det->et_id,
+                        'serial_no'=>$det->serial_no,
+                        'item'=>$item,
+                        'asset_control_no'=>$det->asset_control_no,
+                        'brand'=>$det->brand,
+                        'model'=>$det->model,
+                        'type'=>$det->type
+                    );
+                }  
+            }
+        }else {
+            $data['head'] = array();
+        }   
+        $this->load->view('report/tag_obsolete',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function insert_obt(){
+        $count = $this->input->post('count');
+        $id = $this->input->post('id');
+        $et_id = $this->input->post('et_id');
+        $edid = $this->input->post('edid');
+        $checked =count($edid);
+        foreach($this->super_model->select_row_where('et_head', 'et_id', $et_id) AS $ret){
+            if($checked < $ret->qty){
+                $rows_et=$this->super_model->count_rows("et_head");
+                if($rows_et==0){
+                    $new_etid= 1;
+                } else {
+                    $series = $this->super_model->get_max("et_head", "et_id");
+                    $new_etid = $series+1;
+                }
+                $et_data = array(
+                    'et_id'=>$new_etid,
+                    'user_id'=>$this->input->post('user_id'),
+                    'et_desc'=>$ret->et_desc,
+                    'unit_id'=>$ret->unit_id,
+                    'qty'=>$checked,
+                    'department'=>$ret->department,
+                    'category_id'=>$ret->category_id,
+                    'subcat_id'=>$ret->subcat_id,
+                    'create_date'=>date("Y-m-d H:i:s"),
+                );
+                if($this->super_model->insert_into("et_head", $et_data)){
+                    for($x=0;$x<$checked;$x++){
+                        foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){
+                            $det_data = array(
+                                'et_id'=>$new_etid,
+                            ); 
+                            $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+                        }
+                    }
+                    $new_qty = $count-$checked;
+                    $qty_data = array(
+                        'qty'=>$new_qty,
+                    );
+                    $this->super_model->update_where('et_head', $qty_data, 'et_id', $et_id);
+                    echo "<script>window.location = '".base_url()."report/tag_obsolete_form/$id/$new_etid';</script>";
+                }
+            }else if($checked == $ret->qty){
+                echo "<script>window.location = '".base_url()."report/tag_obsolete_form/$id/$et_id/$checked';</script>";
+            }
+        } 
+    }
+
+    public function tag_obsolete_form(){  
+        $this->load->view('template/header'); 
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $et_id =$this->uri->segment(4);
+        $data['et_id'] =$this->uri->segment(4);
+        $data['count'] =$this->uri->segment(5);
+        $count =$this->uri->segment(5);
+        $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);  
+        $qty = $this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);
+        $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '66'); 
+        $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '53'); 
+        $data['checked_name'] = $this->super_model->select_column_where("employees", "employee_id", "employee_name", 'Mary Grace Bugna'); 
+        $data['noted_id'] = $this->super_model->select_column_where("employees", "employee_id", "employee_name", 'Eric Jabiniar');
+        foreach($this->super_model->select_custom_where('et_head', "et_id='$et_id' AND cancelled='0'") AS $head){ 
+            $data['head'][] =  array(
+                'et_id'=>$head->et_id,
+                'item'=> $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id), 
+                'accountability'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $id), 
+            );
+            foreach($this->super_model->select_row_where('et_details', 'et_id', $head->et_id) AS $det){
+               $data['details'][] =  array(
+                    'et_id'=>$det->et_id,
+                    'ed_id'=>$det->ed_id,
+                    'model'=> $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id),
+                    'brand'=> $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id),
+                    'serial' => $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id),
+                    'asset_control_no' => $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $det->ed_id),
+                    'acquisition_date' => $this->super_model->select_column_where("et_details", "acquisition_date", "ed_id", $det->ed_id),
+                );
+            }
+        }
+        $this->load->view('report/tag_obsolete_form',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function insert_obsolete_form(){
+        $count = $this->input->post('count');
+        $id = $this->input->post('id');
+        $et_id = $this->input->post('et_id');
+
+        for($x=1;$x<=$count;$x++){
+            $id = $this->input->post('id');
+            $date = $this->input->post('date'.$x);
+            $date_rec = $this->input->post('recdate'.$x);
+            $edid = $this->input->post('ed_id'.$x);
+            $po_si_no = $this->input->post('po_si_no'.$x);
+            $activity = $this->input->post('activity'.$x);
+            $prepared_by = $this->input->post('prepared_id'.$x);
+            $verified_by = $this->input->post('verified_id'.$x);
+            $noted_by = $this->input->post('noted_id'.$x);
+            $location = $this->input->post('location'.$x);
+            $receipt = $this->input->post('receipt'.$x);
+            $accountable = $this->input->post('accountable'.$x);
+            $recommendation = $this->input->post('recommendation'.$x);
+            $remarks = $this->input->post('remarks'.$x);
+            foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
+                $det_data = array(
+                    'obsolete'=>1
+                ); 
+                $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
+            }
+
+            $date_format = date("Y-m",strtotime($date_rec));
+            $obt_prefix = "OBT-".$date_format;
+
+            $rows=$this->super_model->count_custom_where("obsolete_series","obsolete_prefix = '$obt_prefix'");
+            if($rows==0){
+                $obt_no= "OBT-".$date_format."-1001";
+            } else {
+                $series = $this->super_model->get_max_where("obsolete_series", "series","obsolete_prefix = '$obt_prefix'");
+                $next=$series+1;
+                $obt_no = "OBT-".$date_format."-".$next;
+            }
+
+            $data_obsolete = array(
+                'et_id'=>$et_id,
+                'incident_date'=>$date,
+                'receive_date'=>$date_rec,
+                'item_activity'=>$activity,
+                'obt_no'=>$obt_no,
+                'ed_id'=>$edid,
+                'po_si_no'=>$po_si_no,
+                'incident_location'=>$location,
+                'accountable_person'=>$receipt,
+                'description_recommend'=>$recommendation,
+                'obt_remarks'=>$remarks,
+                'prepared_by'=>$prepared_by,
+                'verified_by'=>$verified_by,
+                'noted_by'=>$noted_by,
+                'accountable'=>$accountable,
+                'created_date'=>date("Y-m-d H:i:s"),
+                'user_id'=>$this->input->post('user_id'),
+            ); 
+            if($this->super_model->insert_into("obsolete_info", $data_obsolete)){
+                $obsoletedetails=explode("-", $obt_no);
+                $obsolete_prefix1=$obsoletedetails[0];
+                $obsolete_prefix2=$obsoletedetails[1];
+                $obsolete_prefix3=$obsoletedetails[2];
+                $obsolete_prefix=$obsolete_prefix1."-".$obsolete_prefix2."-".$obsolete_prefix3;
+                $series = $obsoletedetails[3];
+                $obsolete_data= array(
+                    'obsolete_prefix'=>$obsolete_prefix,
+                    'series'=>$series
+                );
+                $this->super_model->insert_into("obsolete_series", $obsolete_data);
+            }
+        }
+        echo "<script>alert('Successfully Tagged as Obsolete!'); window.location = '".base_url()."report/tag_damage_print/$et_id';</script>";
     }
 }
