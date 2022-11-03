@@ -9693,6 +9693,7 @@ public function update_encode_transfer(){
                     'et_desc'=>$ret->et_desc,
                     'unit_id'=>$ret->unit_id,
                     'qty'=>$checked,
+                    'accountability_id'=>$id,
                     'department'=>$ret->department,
                     'category_id'=>$ret->category_id,
                     'subcat_id'=>$ret->subcat_id,
