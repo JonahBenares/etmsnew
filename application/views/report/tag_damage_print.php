@@ -34,7 +34,7 @@
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>
-                                    <td><?php echo $h['receive_date'];?></td>
+                                    <td><?php echo $det['receive_date'];?></td>
                                     <td><?php echo $h['item'];?></td>
                                     <td><?php echo $det['serial'];?></td>
                                     <td><?php echo $det['acn'];?></td>

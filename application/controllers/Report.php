@@ -6586,7 +6586,7 @@ public function update_encode_transfer(){
                     'damage_id'=>$det->damage_id,
                     'et_id'=>$det->et_id,
                     'ed_id'=>$det->ed_id,
-                    'recieve_date'=>$det->recieve_date,
+                    'receive_date'=>$det->receive_date,
                     'acn'=> $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $det->ed_id),
                     'type'=> $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id),
                     'model'=> $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id),
