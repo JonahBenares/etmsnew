@@ -117,6 +117,7 @@
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/company_list">Company</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/currency_list">Currency</a>
                               <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/uom_list">UOM</a>
+                              <a class="acc waves-effect waves-dark" href="<?php echo base_url(); ?>masterfile/inspection_status">Inspection Status</a>
                             </div>
                         </li>
                         <li> 
