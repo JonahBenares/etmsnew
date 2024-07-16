@@ -26,16 +26,16 @@
                                 <div class="card-header">
                                     <strong>UPDATE</strong> Inspection Status
                                 </div>
-                                <form action="<?php echo base_url(); ?>masterfile/update_unit" method="POST" novalidate="novalidate">
+                                <form action="<?php echo base_url(); ?>masterfile/update_inspection_status" method="POST" novalidate="novalidate">
                                     <div class="card-body card-block">
                                         <label for="" class="control-label mb-1">Inspection Status:</label>
-                                        <?php foreach($unit AS $un){ ?>
-                                        <input id="" name="unit" type="text" class="form-control bor-radius5" value = "<?php echo $un->unit_name?>">
+                                        <?php foreach($ins_status AS $is){ ?>
+                                        <input id="" name="status" type="text" class="form-control bor-radius5" value = "<?php echo $is->status?>">
                                     </div>
                                     <div class="card-footer">
                                         <center>
                                             <input type = "submit" class="btn btn-info-alt btn-sm bor-radius10 btn-block" placeholder="Update" value="update">
-                                            <input type = "hidden" name = 'unit_id' value="<?php echo $id;?>">
+                                            <input type = "hidden" name = 'ins_id' value="<?php echo $id;?>">
                                         </center>
                                     </div>
                                     <?php } ?>

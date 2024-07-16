@@ -1094,9 +1094,26 @@ class Masterfile extends CI_Controller {
     public function inspection_status(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
-        $data['unit'] = $this->super_model->select_all_order_by('unit', 'unit_name', 'ASC');
+        $data['ins_status'] = $this->super_model->select_all_order_by('inspection_status', 'status', 'ASC');
         $this->load->view('masterfile/inspection_status',$data);
         $this->load->view('template/footer');
+    }
+
+    public function insert_inspection_status(){
+        $trim = trim($this->input->post('status')," ");
+        $row = $this->super_model->count_rows_where("inspection_status","status",$trim);
+        if($row!=0){
+            echo "<script>alert('$trim is already encoded!'); 
+                    window.location ='".base_url()."masterfile/inspection_status'; </script>";
+        }else {
+            $data = array(
+                'status'=>$trim
+            );
+            if($this->super_model->insert_into("inspection_status", $data)){
+               echo "<script>alert('Successfully Added!'); 
+                    window.location ='".base_url()."masterfile/inspection_status'; </script>";
+            }    
+        }        
     }
 
     public function inspection_status_update(){  
@@ -1104,9 +1121,20 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
-        $data['unit'] = $this->super_model->select_row_where('unit', 'unit_id', $id);
+        $data['ins_status'] = $this->super_model->select_row_where('inspection_status', 'inspection_status_id', $id);
         $this->load->view('masterfile/inspection_status_update',$data);
         $this->load->view('template/footer');
+    }
+
+    public function update_inspection_status(){
+        $data = array(
+            'status'=>$this->input->post('status')
+        );
+        $insid = $this->input->post('ins_id');
+            if($this->super_model->update_where('inspection_status', $data, 'inspection_status_id', $insid)){
+            echo "<script>alert('Successfully Updated!'); 
+                window.location ='".base_url()."masterfile/inspection_status'; </script>";
+        }
     }
 
 }
