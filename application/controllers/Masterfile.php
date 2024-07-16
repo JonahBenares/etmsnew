@@ -1090,4 +1090,23 @@ class Masterfile extends CI_Controller {
         $column = $this->super_model->select_column_where($table, $col, $whr_clm, $whr_val);
         return $column;
     }
+
+    public function inspection_status(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $data['unit'] = $this->super_model->select_all_order_by('unit', 'unit_name', 'ASC');
+        $this->load->view('masterfile/inspection_status',$data);
+        $this->load->view('template/footer');
+    }
+
+    public function inspection_status_update(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['unit'] = $this->super_model->select_row_where('unit', 'unit_id', $id);
+        $this->load->view('masterfile/inspection_status_update',$data);
+        $this->load->view('template/footer');
+    }
+
 }

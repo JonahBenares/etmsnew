@@ -242,7 +242,50 @@
                                     </div>
                                 </div> 
                             </div>
-                            
+                            <br>
+                            <div class = "row">
+                                <div class="col-12">
+                                    <table class="table-bordered" width="100%">
+                                        <tr>
+                                            <td class="py-1 px-1" colspan="4">
+                                                <h6>Quarterly Inspection</h6>
+                                            </td>
+                                            <td class="py-1 px-1" width="2%" align="center">
+                                                <button class="btn btn-xs btn-primary"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1" width="15%">Date of Inspection</td>
+                                            <td class="p-1" width="30%">Inspected by</td>
+                                            <td class="p-1" width="20%">Status</td>
+                                            <td class="p-1" width="30%" >Remarks</td>
+                                            <td class="p-1" >
+                                                <!-- <button class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button> -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-0">
+                                                <input type="date" class="form-control text-center" style="font-size:12px;padding:1px!important;border:0px solid #000">
+                                            </td>
+                                            <td class="p-0">
+                                                <select class="form-control" style="font-size:12px;padding:1px!important;border:0px solid #000">
+                                                    <option value="" >select employee</option>
+                                                </select>
+                                            </td>
+                                            <td class="p-0">
+                                                <textarea class="m-0" rows="2" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                            </td>
+                                            <td class="p-0">
+                                                <textarea class="m-0" rows="2" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                            </td>
+                                            <td class="p-0" align="center">
+                                                <button class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div> 
+                            </div>
+                            <br>
                             <div class="row border-class" >
                                 <style type="text/css">
                                     #img-check-none1-<?php echo $x?>{
@@ -425,7 +468,50 @@
                                     </div>
                                 </div> 
                             </div>
-                            
+                            <br>
+                            <div class = "row">
+                                <div class="col-12">
+                                    <table class="table-bordered" width="100%">
+                                        <tr>
+                                            <td class="py-1 px-1" colspan="4">
+                                                <h6>Quarterly Inspection</h6>
+                                            </td>
+                                            <td class="py-1 px-1" width="2%" align="center">
+                                                <button class="btn btn-xs btn-primary"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1" width="15%">Date of Inspection</td>
+                                            <td class="p-1" width="30%">Inspected by</td>
+                                            <td class="p-1" width="20%">Status</td>
+                                            <td class="p-1" width="30%" >Remarks</td>
+                                            <td class="p-1" >
+                                                <!-- <button class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button> -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-0">
+                                                <input type="date" class="form-control text-center" style="font-size:12px;padding:1px!important;border:0px solid #000">
+                                            </td>
+                                            <td class="p-0">
+                                                <select class="form-control" style="font-size:12px;padding:1px!important;border:0px solid #000">
+                                                    <option value="" >select employee</option>
+                                                </select>
+                                            </td>
+                                            <td class="p-0">
+                                                <textarea class="m-0" rows="2" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                            </td>
+                                            <td class="p-0">
+                                                <textarea class="m-0" rows="2" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                            </td>
+                                            <td class="p-0" align="center">
+                                                <button class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div> 
+                            </div>
+                            <br>
                             <div class="row border-class" >
                                 <style type="text/css">
                                     #img-check-none1-<?php echo $x?>{
