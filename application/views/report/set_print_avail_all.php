@@ -55,15 +55,19 @@
         </table>
             <table width="100%" class="table-bordered">
                 <tr>                
-                    <td class="main-tab" width="10%" align="center"><strong>Asset #</strong></td>
+                    <td class="main-tab" width="11%" align="center"><strong>Asset #</strong></td>
                     <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
-                    <td class="main-tab" width="40%" align="center"><strong>Description</strong></td>                    
-                    <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
-                    <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
-                    <td class="main-tab" width="20%" align="center"><strong>Set Name</strong></td>
-                    <td class="main-tab" width="20%" align="center"><strong>Lot No. </strong></td>
-                    <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
-                    <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
+                    <td class="main-tab" width="20%" align="center"><strong>Description</strong></td>                    
+                    <td class="main-tab" width="3%" align="center"><strong>Qty</strong></td>
+                    <td class="main-tab" width="3%" align="center"><strong>U/M</strong></td>
+                    <td class="main-tab" width="10%" align="center"><strong>Set Name</strong></td>
+                    <td class="main-tab" width="10%" align="center"><strong>Lot No. </strong></td>
+                    <td class="main-tab" width="5%" align="center"><strong>Cost</strong></td>
+                    <td class="main-tab" align="center"><strong>Total</strong></td>
+                    <td class="main-tab" align="center" width="5%"><strong>Date of Inspection</strong></td>
+                    <td class="main-tab" align="center" width="10%"><strong>Inspected By</strong></td>
+                    <td class="main-tab" align="center"><strong>Status</strong></td>
+                    <td class="main-tab" align="center" width="10%"><strong>Inspection Remarks</strong></td>
                 </tr>
                 <tr>
                 <?php 
@@ -88,16 +92,19 @@
                             <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo $det['unit_price']; ?></td>
                             <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo number_format($det['total'],2); ?></td>
                         <?php } $previousId = $det['set_id']; ?>
-
+                        <td class="main-tab" align="center"><?php echo $det['inspection_date']?></td>
+                        <td class="main-tab" align="center"><?php echo $det['inspected_by']?></td>
+                        <td class="main-tab" align="center"><?php echo $det['ins_status']?></td>
+                        <td class="main-tab"><?php echo $det['ins_remarks']?></td>
                     </tr>
                 <?php } } else { ?> 
                     <tr>
-                        <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
+                        <td class="main-tab" align="center" colspan='13'><center>No Data Available.</center></td>
                     </tr>
                 <?php } ?>
                 </tr>
                 <tr>
-                    <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
+                    <td class="main-tab" colspan="13"><center>***nothing follows***</center></td>
                 </tr>  
             </table>
             <br>
