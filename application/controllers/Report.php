@@ -1860,6 +1860,8 @@ class Report extends CI_Controller {
         $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $data['employees'] = $this->super_model->select_all_order_by('employees', 'employee_name', 'ASC');
+        $data['ins_status'] = $this->super_model->select_all_order_by('inspection_status', 'status', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
             $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
@@ -1926,7 +1928,23 @@ class Report extends CI_Controller {
             }else {
                 $data['details']=array();
             }
+
+            // foreach($this->super_model->select_row_where('et_inspection','et_id',$nxt->et_id) AS $ins){
+            foreach($this->super_model->select_custom_where("et_inspection", "et_id='$nxt->et_id' ORDER BY date_of_inspection DESC") AS $ins){
+                $inspected_by = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $ins->inspected_by);
+                $status = $this->super_model->select_column_where("inspection_status", "status", "inspection_status_id", $ins->inspection_status_id);
+                $data['inspection'][] = array(
+                    'et_id'=>$ins->et_id,
+                    'date'=>$ins->date_of_inspection,
+                    'inspected_by'=>$inspected_by,
+                    'status'=>$status,
+                    'remarks'=>$ins->remarks,
+                );
+            }
+
         }
+
+        
         $this->load->view('report/edit_encode',$data);
         $this->load->view('template/footer');
     }
@@ -2014,6 +2032,18 @@ class Report extends CI_Controller {
                 }
             }else {
                 $data['details']=array();
+            }
+
+            foreach($this->super_model->select_custom_where("et_inspection", "et_id='$nxt->et_id' ORDER BY date_of_inspection DESC") AS $ins){
+                $inspected_by = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $ins->inspected_by);
+                $status = $this->super_model->select_column_where("inspection_status", "status", "inspection_status_id", $ins->inspection_status_id);
+                $data['inspection'][] = array(
+                    'et_id'=>$ins->et_id,
+                    'date'=>$ins->date_of_inspection,
+                    'inspected_by'=>$inspected_by,
+                    'status'=>$status,
+                    'remarks'=>$ins->remarks,
+                );
             }
         }
         $this->load->view('report/edit_encode_draft',$data);
@@ -2160,6 +2190,30 @@ public function edit_encode_transfer(){
                             $this->super_model->update_where("et_details", $data_pic3, "ed_id", $edid);
                         }
                     }
+
+                    if($this->input->post('date_of_inspection')!=''){
+                        $count_inspection = count($this->input->post('date_of_inspection'));
+                    }else{
+                        $count_inspection = 0;
+                    }
+
+                    for($x=0; $x<$count_inspection;$x++){
+                        $date_of_inspection = $this->input->post('date_of_inspection['.$x.']');
+                        $inspected_by = $this->input->post('inspected_by['.$x.']');
+                        $status = $this->input->post('status['.$x.']');
+                        $remarks = $this->input->post('remarks['.$x.']');
+
+                    $data_ins = array(
+                        'et_id'=>$id,
+                        'date_of_inspection'=>$date_of_inspection,
+                        'inspected_by'=>$inspected_by,
+                        'inspection_status_id'=>$status,
+                        'remarks'=>$remarks,
+                        'date_updated'=>date("Y-m-d H:i:s"),
+                        'user_id'=>$this->input->post('user_id'),
+                    );
+                    $this->super_model->insert_into("et_inspection", $data_ins);
+                }
 
                 if($this->input->post('saved') == 'Submit'){
                     $data = array(

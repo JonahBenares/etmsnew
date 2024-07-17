@@ -11,10 +11,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method = "POST" action="<?php echo base_url();?>masterfile/insert_unit">
+                <form method = "POST" action="<?php echo base_url();?>masterfile/insert_inspection_status">
                     <div class="form-group">
                         <label for="" class="control-label mb-1">Inspection Status:</label>
-                        <input id="" name="unit" type="text" class="form-control bor-radius5" placeholder="">
+                        <input id="" name="status" type="text" class="form-control bor-radius5" placeholder="">
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary-alt btn-block">Add</button>
@@ -60,12 +60,12 @@
                                         <th width="1%" class="text-center"><span class="fa fa-bars"></span></th>
                                     </tr>
                                 </thead>
-                                <?php foreach($unit as $un){ ?>
+                                <?php foreach($ins_status as $is){ ?>
                                     <tr>
-                                        <td><?php echo $un->unit_name;?></td>
+                                        <td><?php echo $is->status;?></td>
                                         <td>                                            
                                             <div class="btn-group">
-                                                <a href="<?php echo base_url(); ?>masterfile/inspection_status_update/<?php echo $un->unit_id?>" class="btn btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
+                                                <a href="<?php echo base_url(); ?>masterfile/inspection_status_update/<?php echo $is->inspection_status_id?>" class="btn btn-info-alt item btn-sm" data-toggle="tooltip" data-placement="top" title="Update">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
                                             </div>
