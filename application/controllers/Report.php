@@ -2048,6 +2048,8 @@ class Report extends CI_Controller {
         $data['company_list'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $data['employees'] = $this->super_model->select_all_order_by('employees', 'employee_name', 'ASC');
+        $data['ins_status'] = $this->super_model->select_all_order_by('inspection_status', 'status', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
             $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
