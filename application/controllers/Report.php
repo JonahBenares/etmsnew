@@ -2025,7 +2025,7 @@ class Report extends CI_Controller {
                     'date'=>$ins->date_of_inspection,
                     'inspected_by'=>$inspected_by,
                     'status'=>$status,
-                    'remarks'=>$ins->remarks,
+                    'ins_remarks'=>$ins->remarks,
                 );
             }
 
@@ -2288,7 +2288,7 @@ public function edit_encode_transfer(){
                         $date_of_inspection = $this->input->post('date_of_inspection['.$x.']');
                         $inspected_by = $this->input->post('inspected_by['.$x.']');
                         $status = $this->input->post('status['.$x.']');
-                        $remarks = $this->input->post('remarks['.$x.']');
+                        $remarks = $this->input->post('ins_remarks['.$x.']');
 
                     $data_ins = array(
                         'et_id'=>$id,
