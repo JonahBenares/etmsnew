@@ -4509,7 +4509,7 @@ public function update_encode_transfer(){
         // foreach($this->super_model->select_custom_where("et_head","accountability_id='0' AND cancelled='0'") AS $a){
             // foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id!='0'  AND damage = '0' AND lost='0' AND obsolete='0'") AS $b){
         $data['details']=array();
-        foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND save_temp='0' $filter_query ORDER BY set_id ASC") AS $b){
+        foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND save_temp='0' $filter_query ORDER BY set_id DESC") AS $b){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $b->unit_id);
             $set_id = $this->super_model->select_column_where("et_details", "set_id", "et_id", $b->et_id);
             $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $b->set_id);
