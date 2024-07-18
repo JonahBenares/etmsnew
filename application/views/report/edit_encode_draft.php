@@ -316,7 +316,7 @@
                                             </td>
                                              <td class="p-0">
                                                 <!-- <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"><?php echo $i['remarks'];?></textarea> -->
-                                                <?php echo $i['remarks'];?>
+                                                <?php echo $i['ins_remarks'];?>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -329,7 +329,7 @@
                                                 <select name="inspected_by[]" class="form-control" style="font-size:12px;padding:1px!important;border:0px solid #000">
                                                     <option value = "">--Select Employee--</option>
                                                     <?php foreach($employees AS $e){ ?>
-                                                    <option value = "<?php echo $e->employee_id; ?>" <?php echo (($d['company'] == $e->employee_id) ? ' selected' : '');?>><?php echo $e->employee_name;?></option>
+                                                    <option value = "<?php echo $e->employee_id; ?>"><?php echo $e->employee_name;?></option>
                                                     <?php } ?>
                                                 </select>
                                             </td>
@@ -337,12 +337,12 @@
                                                 <select name="status[]" class="form-control" style="font-size:12px;padding:1px!important;border:0px solid #000">
                                                     <option value = "">--Select Status--</option>
                                                     <?php foreach($ins_status AS $ie){ ?>
-                                                    <option value = "<?php echo $ie->inspection_status_id; ?>" <?php echo (($d['company'] == $ie->inspection_status_id) ? ' selected' : '');?>><?php echo $ie->status;?></option>
+                                                    <option value = "<?php echo $ie->inspection_status_id; ?>"><?php echo $ie->status;?></option>
                                                     <?php } ?>
                                                 </select>
                                             </td>
                                              <td class="p-0">
-                                                <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                                <textarea class="m-0" rows="2" name="ins_remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
                                             </td>
                                             <td width="10%" align="center" class="addmoreinspection">
                                                 <button type="button" id="btn_inspection" class="btn btn-sm btn-primary addInspection" style="display:none;"><span class="fa fa-plus"></span></button>
@@ -587,7 +587,7 @@
                                             </td>
                                              <td class="p-0">
                                                 <!-- <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"><?php echo $i['remarks'];?></textarea> -->
-                                                <?php echo $i['remarks'];?>
+                                                <?php echo $i['ins_remarks'];?>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -600,7 +600,7 @@
                                                 <select name="inspected_by[]" class="form-control" style="font-size:12px;padding:1px!important;border:0px solid #000">
                                                     <option value = "">--Select Employee--</option>
                                                     <?php foreach($employees AS $e){ ?>
-                                                    <option value = "<?php echo $e->employee_id; ?>" <?php echo (($d['company'] == $e->employee_id) ? ' selected' : '');?>><?php echo $e->employee_name;?></option>
+                                                    <option value = "<?php echo $e->employee_id; ?>"><?php echo $e->employee_name;?></option>
                                                     <?php } ?>
                                                 </select>
                                             </td>
@@ -608,12 +608,12 @@
                                                 <select name="status[]" class="form-control" style="font-size:12px;padding:1px!important;border:0px solid #000">
                                                     <option value = "">--Select Status--</option>
                                                     <?php foreach($ins_status AS $ie){ ?>
-                                                    <option value = "<?php echo $ie->inspection_status_id; ?>" <?php echo (($d['company'] == $ie->inspection_status_id) ? ' selected' : '');?>><?php echo $ie->status;?></option>
+                                                    <option value = "<?php echo $ie->inspection_status_id; ?>"><?php echo $ie->status;?></option>
                                                     <?php } ?>
                                                 </select>
                                             </td>
                                              <td class="p-0">
-                                                <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                                <textarea class="m-0" rows="2" name="ins_remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
                                             </td>
                                             <td width="10%" align="center" class="addmoreinspection">
                                                 <button type="button" id="btn_inspection" class="btn btn-sm btn-primary addInspection" style="display:none;"><span class="fa fa-plus"></span></button>
