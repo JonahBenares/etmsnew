@@ -298,7 +298,7 @@
                                             </td>
                                              <td class="p-0">
                                                 <!-- <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"><?php echo $i['remarks'];?></textarea> -->
-                                                <?php echo $i['remarks'];?>
+                                                <?php echo $i['ins_remarks'];?>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -324,7 +324,7 @@
                                                 </select>
                                             </td>
                                              <td class="p-0">
-                                                <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                                <textarea class="m-0" rows="2" name="ins_remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
                                             </td>
                                             <td width="10%" align="center" class="addmoreinspection">
                                                 <!-- <button type="button" id="btn_inspection" class="btn btn-sm btn-primary addInspection" style="display:none;"><span class="fa fa-plus"></span></button> -->
@@ -569,7 +569,7 @@
                                             </td>
                                              <td class="p-0">
                                                 <!-- <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"><?php echo $i['remarks'];?></textarea> -->
-                                                <?php echo $i['remarks'];?>
+                                                <?php echo $i['ins_remarks'];?>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -595,7 +595,7 @@
                                                 </select>
                                             </td>
                                              <td class="p-0">
-                                                <textarea class="m-0" rows="2" name="remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
+                                                <textarea class="m-0" rows="2" name="ins_remarks[]" style="width:100%;height:100%;font-size:12px;padding:2px!important"></textarea>
                                             </td>
                                             <td width="10%" align="center" class="addmoreinspection">
                                                 <button type="button" id="btn_inspection" class="btn btn-sm btn-primary addInspection" style="display:none;"><span class="fa fa-plus"></span></button>
