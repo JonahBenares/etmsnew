@@ -1,19 +1,19 @@
 <?php
 /*error_reporting(0);*/
 defined('BASEPATH') OR exit('No direct script access allowed');
-require FCPATH.'vendor\autoload.php';
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
-use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
-use PhpOffice\PhpSpreadsheet\Style\Border as border;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat as numberformat;
-use PhpOffice\PhpSpreadsheet\Style\Fill as fill; // Instead fill
-use PhpOffice\PhpSpreadsheet\Style\Color as color; //Instead PHPExcel_Style_Color
-use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
-use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
+// require FCPATH.'vendor\autoload.php';
+// use PhpOffice\PhpSpreadsheet\Spreadsheet;
+// use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
+// use PhpOffice\PhpSpreadsheet\Reader\Csv;
+// use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
+// use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
+// use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
+// use PhpOffice\PhpSpreadsheet\Style\Border as border;
+// use PhpOffice\PhpSpreadsheet\Style\NumberFormat as numberformat;
+// use PhpOffice\PhpSpreadsheet\Style\Fill as fill; // Instead fill
+// use PhpOffice\PhpSpreadsheet\Style\Color as color; //Instead PHPExcel_Style_Color
+// use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
+// use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
 class Report extends CI_Controller {
 
     function __construct(){
@@ -418,9 +418,9 @@ class Report extends CI_Controller {
     }
 
     public function export_overall(){
-        // require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        // $objPHPExcel = new PHPExcel();
-        $objPHPExcel = new Spreadsheet();   
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();   
         $exportfilename="Overall Report.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Overall Report");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -435,20 +435,20 @@ class Report extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Department");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Set Name");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', "Status / Accountability");
-        // $styleArray = array(
-        //   'borders' => array(
-        //     'allborders' => array(
-        //       'style' => PHPExcel_Style_Border::BORDER_THIN
-        //     )
-        //   )
-        // );
         $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN
-                )
+          'borders' => array(
+            'allborders' => array(
+              'style' => PHPExcel_Style_Border::BORDER_THIN
             )
-        );     
+          )
+        );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN
+        //         )
+        //     )
+        // );     
         foreach(range('A','L') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
@@ -463,7 +463,7 @@ class Report extends CI_Controller {
         } else if(stripos($this->uri->segment(8), "%20") !== false) {
             $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
@@ -592,8 +592,10 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $set_name);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $status);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":L".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                // $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                // $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":L".$num,'admin');
                 $num++;
@@ -636,8 +638,8 @@ class Report extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $status);
                     $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":L".$num)->applyFromArray($styleArray);
-                    $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                    $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                     $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":L".$num,'admin');
                     $num++;
@@ -645,25 +647,26 @@ class Report extends CI_Controller {
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Overall Report.xlsx"');
-        header('Cache-Control: max-age=0');
-        ob_end_clean();
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-        $objWriter->save('php://output');
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // if (file_exists($exportfilename))
-        // unlink($exportfilename);
-        // $objWriter->save($exportfilename);
-        // unset($objPHPExcel);
-        // unset($objWriter);   
-        // ob_end_clean();
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment; filename="Overall Report.xlsx"');
-        // readfile($exportfilename);
+        // header('Content-Disposition: attachment;filename="Overall Report.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // ob_end_clean();
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // $objWriter->save('php://output');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Overall Report.xlsx"');
+        readfile($exportfilename);
     }
 
     public function report_print_overall(){  
@@ -1376,12 +1379,12 @@ class Report extends CI_Controller {
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -1494,16 +1497,21 @@ class Report extends CI_Controller {
                 // $total = $et->qty*$et->unit_price;
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='0' AND set_id ='$et->set_id' $filter_query");
                 $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et->set_id);
                 $total=0;
                 $unit_price=0;
+                $currency_disp='';
                 if(empty($set_name)){
                     $unit_price=(float)$et->unit_price;
                     $total = $et->qty* (float)$unit_price;
+                    $currency_disp=$currency;
                 }else if($count_set==$count_set_id) {
                     $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
                     $total = $et->qty*$unit_price;
+                    $currency_disp=$set_currency;
                 }
                 $serial_no='';
                 foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
@@ -1514,7 +1522,8 @@ class Report extends CI_Controller {
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -1534,7 +1543,7 @@ class Report extends CI_Controller {
                     'asset_control_no'=>$et->asset_control_no,
                     'acquisition_date'=>$et->acquisition_date,
                     'date_issued'=>$et->date_issued,
-                    'unit_price'=>$unit_price." ".$currency,
+                    'unit_price'=>$unit_price." ".$currency_disp,
                     'currency'=>$currency,
                     'condition'=>$et->physical_condition,
                     'company'=>$company,
@@ -1650,12 +1659,12 @@ class Report extends CI_Controller {
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -1750,7 +1759,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filters=substr($filter, 0, -2);
         if($filters!=''){
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE $query GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1760,12 +1769,43 @@ class Report extends CI_Controller {
                 $company = $this->super_model->select_column_where("company", "company_name", "company_id", $et->company_id);
                 $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $et->rack_id);
                 $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
-                $total = $et->qty*$et->unit_price;
+                // $total = $et->qty*$et->unit_price;
+                $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
+                $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='1' AND set_id ='$et->set_id' AND $query");
+                $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et->set_id);
+                $total=0;
+                $unit_price=0;
+                $currency_disp='';
+                if(empty($set_name)){
+                    $unit_price=(float)$et->unit_price;
+                    $total = $et->qty* (float)$unit_price;
+                    $currency_disp=$currency;
+                }else if($count_set==$count_set_id) {
+                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
+                    $total = $et->qty*$unit_price;
+                    $currency_disp=$set_currency;
+                }
                 $serial_no='';
                 foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
+                $inspection_date=array();
+                $inspected_by=array();
+                $ins_status=array();
+                $ins_remarks=array();
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
+                    $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
+                    $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
+                    $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
+                    $inspected_by[]= ($ins->inspected_by!=0) ? $inspected_name : '';
+                    $ins_status[]= ($ins->inspection_status_id!=0) ? $inspected_status : '';
+                    $ins_remarks[]= (!empty($ins->remarks)) ? $ins->remarks : '';
+                }
                 $data['report'][]=array(
                     'item'=>$et->et_desc,
                     'qty'=>$et->qty,
@@ -1778,7 +1818,7 @@ class Report extends CI_Controller {
                     'asset_control_no'=>$et->asset_control_no,
                     'acquisition_date'=>$et->acquisition_date,
                     'date_issued'=>$et->date_issued,
-                    'unit_price'=>$et->unit_price,
+                    'unit_price'=>$unit_price." ".$currency_disp,
                     'currency'=>$currency,
                     'condition'=>$et->physical_condition,
                     'company'=>$company,
@@ -1794,10 +1834,18 @@ class Report extends CI_Controller {
                     'lost'=>$et->lost,
                     'change_location'=>$et->change_location,
                     'location'=>$location,
+                    'set_id'=>$et->set_id,
+                    'set_name'=>$set_name,
+                    'set_serial'=>$set_serial,
+                    'count_set'=>$count_set,
+                    'inspection_date'=>implode("<br>",$inspection_date),
+                    'inspected_by'=>implode("<br>",$inspected_by),
+                    'ins_status'=>implode("<br>",$ins_status),
+                    'ins_remarks'=>implode("<br>",$ins_remarks),
                 );
             }
         }else {
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND save_temp='1' AND lost='0' AND cancelled='0' GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='1' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1807,12 +1855,43 @@ class Report extends CI_Controller {
                 $company = $this->super_model->select_column_where("company", "company_name", "company_id", $et->company_id);
                 $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $et->rack_id);
                 $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
-                $total = $et->qty*$et->unit_price;
+                // $total = $et->qty*$et->unit_price;
+                $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
+                $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='1' AND set_id ='$et->set_id'");
+                $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et->set_id);
+                $total=0;
+                $unit_price=0;
+                $currency_disp='';
+                if(empty($set_name)){
+                    $unit_price=(float)$et->unit_price;
+                    $total = $et->qty* (float)$unit_price;
+                    $currency_disp=$currency;
+                }else if($count_set==$count_set_id) {
+                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
+                    $total = $et->qty*$unit_price;
+                    $currency_disp=$set_currency;
+                }
                 $serial_no='';
                 foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
+                $inspection_date=array();
+                $inspected_by=array();
+                $ins_status=array();
+                $ins_remarks=array();
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
+                    $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
+                    $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
+                    $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
+                    $inspected_by[]= ($ins->inspected_by!=0) ? $inspected_name : '';
+                    $ins_status[]= ($ins->inspection_status_id!=0) ? $inspected_status : '';
+                    $ins_remarks[]= (!empty($ins->remarks)) ? $ins->remarks : '';
+                }
                 $data['report'][]=array(
                     'item'=>$et->et_desc,
                     'qty'=>$et->qty,
@@ -1825,7 +1904,7 @@ class Report extends CI_Controller {
                     'asset_control_no'=>$et->asset_control_no,
                     'acquisition_date'=>$et->acquisition_date,
                     'date_issued'=>$et->date_issued,
-                    'unit_price'=>$et->unit_price,
+                    'unit_price'=>$unit_price." ".$currency_disp,
                     'currency'=>$currency,
                     'condition'=>$et->physical_condition,
                     'company'=>$company,
@@ -1841,6 +1920,14 @@ class Report extends CI_Controller {
                     'lost'=>$et->lost,
                     'change_location'=>$et->change_location,
                     'location'=>$location,
+                    'set_id'=>$et->set_id,
+                    'set_name'=>$set_name,
+                    'set_serial'=>$set_serial,
+                    'count_set'=>$count_set,
+                    'inspection_date'=>implode("<br>",$inspection_date),
+                    'inspected_by'=>implode("<br>",$inspected_by),
+                    'ins_status'=>implode("<br>",$ins_status),
+                    'ins_remarks'=>implode("<br>",$ins_remarks),
                 );
             }
         }
@@ -3293,12 +3380,12 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -3493,9 +3580,9 @@ public function update_encode_transfer(){
     }
 
     public function export_transfer(){
-        // require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        // $objPHPExcel = new PHPExcel();
-        $objPHPExcel = new Spreadsheet();
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();
         $exportfilename="Transfered Items.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Transfered Items");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -3524,20 +3611,20 @@ public function update_encode_transfer(){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X2', "Unit Cost");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y2', "Total Cost");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z2', "Remarks");
-        // $styleArray = array(
-        //   'borders' => array(
-        //     'allborders' => array(
-        //       'style' => PHPExcel_Style_Border::BORDER_THIN
-        //     )
-        //   )
-        // );
         $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN
-                )
+          'borders' => array(
+            'allborders' => array(
+              'style' => PHPExcel_Style_Border::BORDER_THIN
             )
+          )
         );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN
+        //         )
+        //     )
+        // );
         foreach(range('A','Z') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
@@ -3548,18 +3635,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
         if(stripos($this->uri->segment(8), "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8) ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -3731,19 +3818,19 @@ public function update_encode_transfer(){
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Z".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Z".$num,'admin');
                 $num++;
@@ -3823,19 +3910,19 @@ public function update_encode_transfer(){
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Z".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Z".$num,'admin');
                 $num++;
@@ -3843,25 +3930,26 @@ public function update_encode_transfer(){
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:Z2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:Z2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Z2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:Z2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Transfered Items.xlsx"');
-        header('Cache-Control: max-age=0');
-        ob_end_clean();
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-        $objWriter->save('php://output');
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // if (file_exists($exportfilename))
-        // unlink($exportfilename);
-        // $objWriter->save($exportfilename);
-        // unset($objPHPExcel);
-        // unset($objWriter);   
-        // ob_end_clean();
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment; filename="Transfered Items.xlsx"');
-        // readfile($exportfilename);
+        // header('Content-Disposition: attachment;filename="Transfered Items.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // ob_end_clean();
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // $objWriter->save('php://output');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Transfered Items.xlsx"');
+        readfile($exportfilename);
     }
 
     public function report_print_avail(){
@@ -3871,12 +3959,12 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -3987,17 +4075,22 @@ public function update_encode_transfer(){
             $placement = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $et->placement_id);
             // $total = $et->qty*$et->unit_price;
             $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+            $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+            $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
             $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
             $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND cancelled = '0' AND save_temp='0' AND set_id ='$et->set_id' $filter_query");
             $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et->set_id);
             $total=0;
             $unit_price=0;
+            $currency_disp='';
             if(empty($set_name)){
                 $unit_price=(float)$et->unit_price;
                 $total = $et->qty* (float)$unit_price;
+                $currency_disp=$set_currency;
             }else if($count_set==$count_set_id) {
                 $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
                 $total = $et->qty*$unit_price;
+                $currency_disp=$currency;
             }
             $serial_no='';
             foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
@@ -4008,7 +4101,8 @@ public function update_encode_transfer(){
             $inspected_by=array();
             $ins_status=array();
             $ins_remarks=array();
-            foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+            // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+            foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                 $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                 $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                 $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -4028,7 +4122,7 @@ public function update_encode_transfer(){
                 'asset_control_no'=>$et->asset_control_no,
                 'acquisition_date'=>$et->acquisition_date,
                 'date_issued'=>$et->date_issued,
-                'unit_price'=>$et->unit_price,
+                'unit_price'=>$unit_price." ".$currency_disp,
                 'currency'=>$currency,
                 'condition'=>$et->physical_condition,
                 'company'=>$company,
@@ -4301,18 +4395,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -4415,7 +4509,7 @@ public function update_encode_transfer(){
         // foreach($this->super_model->select_custom_where("et_head","accountability_id='0' AND cancelled='0'") AS $a){
             // foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id!='0'  AND damage = '0' AND lost='0' AND obsolete='0'") AS $b){
         $data['details']=array();
-        foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND save_temp='0' $filter_query ORDER BY set_id ASC") AS $b){
+        foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND save_temp='0' $filter_query ORDER BY set_id DESC") AS $b){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $b->unit_id);
             $set_id = $this->super_model->select_column_where("et_details", "set_id", "et_id", $b->et_id);
             $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $b->set_id);
@@ -4430,7 +4524,7 @@ public function update_encode_transfer(){
             $inspected_by=array();
             $ins_status=array();
             $ins_remarks=array();
-            foreach($this->super_model->select_row_where("et_inspection", "et_id", $b->et_id) AS $ins){
+            foreach($this->super_model->select_custom_where("et_inspection", "et_id='$b->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                 $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                 $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                 $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -5693,7 +5787,8 @@ public function update_encode_transfer(){
                     'department'=>$et->department,
                     'unit'=>$unit,
                     'damaged'=>$et->damage,
-                    'asset_control'=>$et->asset_control_no,
+                    'asset_control_no'=>$et->asset_control_no,
+                    'serial_no'=>$et->serial_no,
                     'acquisition_date'=>$et->acquisition_date,
                     'date_issued'=>$et->date_issued,
                     'et_desc'=>$et->et_desc,
@@ -8508,9 +8603,9 @@ public function update_encode_transfer(){
     }
 
     public function export_equipment(){
-        // require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        // $objPHPExcel = new PHPExcel();
-        $objPHPExcel = new Spreadsheet();
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();
         $exportfilename="Equipment Tools.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Equipment and Tools Fields");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -8543,21 +8638,21 @@ public function update_encode_transfer(){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AB2', "Inspected By");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AC2', "Status");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AD2', "Inspection Remarks");
-        // $styleArray = array(
-        //   'borders' => array(
-        //     'allborders' => array(
-        //       'style' => PHPExcel_Style_Border::BORDER_THIN
-        //     )
-        //   )
-        // );
         $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN,
-                    'color' => ['rgb' => '000000'],
-                )
+          'borders' => array(
+            'allborders' => array(
+              'style' => PHPExcel_Style_Border::BORDER_THIN
             )
+          )
         );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN,
+        //             'color' => ['rgb' => '000000'],
+        //         )
+        //     )
+        // );
         $max_column = $objPHPExcel->getActiveSheet()->getHighestDataColumn();
         for($column = 'A'; !$this->isBiggerExcelColumn($column,$max_column); ++$column){
             $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -8569,18 +8664,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8) , "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -8697,16 +8792,18 @@ public function update_encode_transfer(){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
                 $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='0' AND lost='0' AND obsolete='0' AND ed.set_id ='$et->set_id' AND $query");
                 $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et_set_id);
                 if(empty($set_name)){
-                    $unit_price=$et->unit_price.' '.$currency;
-                    $total = $et->qty*$unit_price.' '.$currency;
+                    $unit_price=$et->unit_price;
+                    $total = $et->qty*$unit_price;
                 }else if($count_set==$count_set_id) {
-                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id).' '.$currency;
-                    $total = $et->qty*$unit_price.' '.$currency;
+                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
+                    $total = $et->qty*$unit_price;
                 }
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade==0 && $et->damage==0){
                     $status = 'Assigned';
@@ -8736,7 +8833,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -8769,19 +8867,19 @@ public function update_encode_transfer(){
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price." ".$set_currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total." ".$set_currency);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price." ".$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total." ".$currency);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AA'.$num, implode("\n",$inspection_date));
@@ -8792,13 +8890,13 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -8823,6 +8921,8 @@ public function update_encode_transfer(){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
                     $unit_price=$et->unit_price;
@@ -8862,7 +8962,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -8895,19 +8996,19 @@ public function update_encode_transfer(){
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$set_currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$set_currency);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AA'.$num, implode("\n",$inspection_date));
@@ -8918,13 +9019,13 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -8932,31 +9033,33 @@ public function update_encode_transfer(){
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Equipment Tools.xlsx"');
-        header('Cache-Control: max-age=0');
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-        ob_end_clean();
-        $objWriter->save('php://output');
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // if (file_exists($exportfilename))
-        // unlink($exportfilename);
-        // $objWriter->save($exportfilename);
-        // unset($objPHPExcel);
-        // unset($objWriter);   
-        // ob_end_clean();
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment; filename="Equipment Tools.xlsx"');
-        // readfile($exportfilename);
+        // header('Content-Disposition: attachment;filename="Equipment Tools.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // ob_end_clean();
+        // $objWriter->save('php://output');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Equipment Tools.xlsx"');
+        readfile($exportfilename);
     }
 
     public function export_equipment_draft(){
-        //require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        //$objPHPExcel = new PHPExcel();
-        $objPHPExcel = new Spreadsheet();
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();
         $exportfilename="Equipment Tools.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Equipment and Tools Fields");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -8989,20 +9092,20 @@ public function update_encode_transfer(){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AB2', "Inspected By");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AC2', "Status");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AD2', "Inspection Remarks");
-        // $styleArray = array(
-        //   'borders' => array(
-        //     'allborders' => array(
-        //       'style' => PHPExcel_Style_Border::BORDER_THIN
-        //     )
-        //   )
-        // );
         $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN
-                )
+          'borders' => array(
+            'allborders' => array(
+              'style' => PHPExcel_Style_Border::BORDER_THIN
             )
+          )
         );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN
+        //         )
+        //     )
+        // );
         $max_column = $objPHPExcel->getActiveSheet()->getHighestDataColumn();
         for($column = 'A'; !$this->isBiggerExcelColumn($column,$max_column); ++$column){
             $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -9013,18 +9116,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8) ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)) ?? '');
-        } else if(stripos($this->uri->segment(8) ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -9041,7 +9144,7 @@ public function update_encode_transfer(){
         }
 
         if($from!='null' && $to!='null'){
-           $sql.= " ed.acquisition_date BETWEEN '$from' AND '$to' AND";
+           $sql.= " acquisition_date BETWEEN '$from' AND '$to' AND";
            $filter .= $from.' '.$to;
         }
 
@@ -9069,58 +9172,59 @@ public function update_encode_transfer(){
         }
 
         if($brand!='null'){
-            $sql.=" ed.brand LIKE '%$brand%' AND";
+            $sql.=" brand LIKE '%$brand%' AND";
             $filter .= $brand;
         }
 
         if($model!='null'){
-            $sql.=" ed.model LIKE '%$model%' AND";
+            $sql.=" model LIKE '%$model%' AND";
             $filter .= $model;
         }
 
         if($type!='null'){
-            $sql.=" ed.type LIKE '%$type%' AND";
+            $sql.=" type LIKE '%$type%' AND";
             $filter .= $type;
         }
 
         if($serial!='null'){
-            $sql.=" ed.serial_no LIKE '%$serial%' AND";
+            $sql.=" serial_no LIKE '%$serial%' AND";
             $filter .= $serial;
         }
 
         if($damage!='null'){
-            $sql.=" ed.damage = '$damage' AND";
+            $sql.=" damage = '$damage' AND";
             $filter .= $damage;
         }
 
         if($condition!='null'){
-            $sql.=" ed.physical_condition LIKE '%$condition%' AND";
+            $sql.=" physical_condition LIKE '%$condition%' AND";
             $filter .= $condition;
         }
 
         if($placement!='null'){
-            $sql.=" ed.placement_id = '$placement' AND";
+            $sql.=" placement_id = '$placement' AND";
             $place = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $placement);
             $filter .= $place;
         }
 
         if($company!='null'){
-            $sql.=" ed.company_id = '$company' AND";
+            $sql.=" company_id = '$company' AND";
             $rr = $this->super_model->select_column_where("company", "company_name", "company_id", $company);
             $filter .=$rr;
         }
 
         if($rack!='null'){
-            $sql.=" ed.rack_id = '$rack' AND";
+            $sql.=" rack_id = '$rack' AND";
             $rak = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $rack);
             $filter .=$rak;
         }
         $array = array($from,$to);
         $query=substr($sql, 0, -3);
         $filter=substr($filter, 0, -2);
+        echo $query;
         if($filter!=''){
             $previousId='';
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE save_temp='1' AND cancelled='0' AND $query GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -9135,6 +9239,8 @@ public function update_encode_transfer(){
                 }
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
                     $unit_price=$et->unit_price;
@@ -9144,7 +9250,7 @@ public function update_encode_transfer(){
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND save_temp='1' AND $query");
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' AND set_id ='$et_set_id' AND $query");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -9165,7 +9271,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -9198,8 +9305,8 @@ public function update_encode_transfer(){
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$set_currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$set_currency);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
@@ -9219,14 +9326,14 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -9234,7 +9341,7 @@ public function update_encode_transfer(){
             }
         }else {
             $previousId='';
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id!=0 AND save_temp=1 AND cancelled=0 GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -9250,6 +9357,8 @@ public function update_encode_transfer(){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
                     $unit_price=$et->unit_price;
@@ -9259,7 +9368,7 @@ public function update_encode_transfer(){
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND set_id ='$et_set_id' AND save_temp='1'");
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND cancelled='0' AND save_temp='1' AND lost='0' AND obsolete='0' AND set_id ='$et_set_id'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -9278,7 +9387,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -9311,8 +9421,8 @@ public function update_encode_transfer(){
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$set_currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$set_currency);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
@@ -9332,14 +9442,14 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -9347,25 +9457,26 @@ public function update_encode_transfer(){
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Equipment Tools Draft.xlsx"');
-        header('Cache-Control: max-age=0');
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-        ob_end_clean();
-        $objWriter->save('php://output');
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // if (file_exists($exportfilename))
-        // unlink($exportfilename);
-        // $objWriter->save($exportfilename);
-        // unset($objPHPExcel);
-        // unset($objWriter);   
-        // ob_end_clean();
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment; filename="Equipment Tools.xlsx"');
-        // readfile($exportfilename);
+        // header('Content-Disposition: attachment;filename="Equipment Tools Draft.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // ob_end_clean();
+        // $objWriter->save('php://output');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Equipment Tools.xlsx"');
+        readfile($exportfilename);
     }
 
     public function damage_report_blank(){  
@@ -10127,9 +10238,9 @@ public function update_encode_transfer(){
         $date_returned_from=$this->input->post("date_returned_from");
         $date_returned_to=$this->input->post("date_returned_to");
         $date = date("Y",strtotime($date_returned_from));
-        // require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        // $objPHPExcel = new PHPExcel();
-        $objPHPExcel = new Spreadsheet();
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();
         $exportfilename="Return Summary.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Asset Return Summary $date");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "No.");
@@ -10143,20 +10254,20 @@ public function update_encode_transfer(){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', "Acquisition Cost");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Returned By");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Remarks");
-        // $styleArray = array(
-        //     'borders' => array(
-        //     'allborders' => array(
-        //       'style' => PHPExcel_Style_Border::BORDER_THIN
-        //     )
-        //   )
-        // );
         $styleArray = array(
             'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN
-                )
+            'allborders' => array(
+              'style' => PHPExcel_Style_Border::BORDER_THIN
             )
+          )
         );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN
+        //         )
+        //     )
+        // );
         foreach(range('A','K') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
@@ -10184,32 +10295,33 @@ public function update_encode_transfer(){
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $returned_by);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $r->return_remarks);
             $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":K".$num)->applyFromArray($styleArray);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":C".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":I".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('I'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":C".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":I".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('I'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
             $num++;
             $x++;
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
         $objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Return Summary.xlsx"');
-        header('Cache-Control: max-age=0');
-        ob_end_clean();
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-        $objWriter->save('php://output');
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        // if (file_exists($exportfilename))
-        // unlink($exportfilename);
-        // $objWriter->save($exportfilename);
-        // unset($objPHPExcel);
-        // unset($objWriter);   
-        // ob_end_clean();
         // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment; filename="Return Summary.xlsx"');
-        // readfile($exportfilename);
+        // header('Content-Disposition: attachment;filename="Return Summary.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // ob_end_clean();
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // $objWriter->save('php://output');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Return Summary.xlsx"');
+        readfile($exportfilename);
     }
 
     public function obsolete_report(){  
@@ -10884,7 +10996,9 @@ public function update_encode_transfer(){
     }
 
     public function export_equipment_avail(){
-        $objPHPExcel = new Spreadsheet();
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();
         $exportfilename="Equipment Tools Available.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Equipment and Tools Fields");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -10919,12 +11033,19 @@ public function update_encode_transfer(){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AD2', "Inspection Remarks");
         $styleArray = array(
             'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN,
-                    'color' => ['rgb' => '000000'],
-                )
+              'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+              )
             )
-        );
+          );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN,
+        //             'color' => ['rgb' => '000000'],
+        //         )
+        //     )
+        // );
         $max_column = $objPHPExcel->getActiveSheet()->getHighestDataColumn();
         for($column = 'A'; !$this->isBiggerExcelColumn($column,$max_column); ++$column){
             $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -10936,18 +11057,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -11061,16 +11182,18 @@ public function update_encode_transfer(){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
                 $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et->set_id' AND save_temp='0' AND accountability_id = '0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND $query");
                 $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et_set_id);
                 if(empty($set_name)){
-                    $unit_price=$et->unit_price.' '.$currency;
-                    $total = $et->qty*$unit_price.' '.$currency;
+                    $unit_price=$et->unit_price;
+                    $total = $et->qty*$unit_price;
                 }else if($count_set==$count_set_id) {
-                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id).' '.$currency;
-                    $total = $et->qty*$unit_price.' '.$currency;
+                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
+                    $total = $et->qty*$unit_price;
                 }
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade==0 && $et->damage==0){
                     $status = 'Assigned';
@@ -11100,7 +11223,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -11137,19 +11261,19 @@ public function update_encode_transfer(){
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price." ".$set_currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total." ".$set_currency);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price." ".$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total." ".$currency);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 if($et->set_id!=0 && ($previousId !== $et->set_id)){
@@ -11166,13 +11290,13 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -11197,6 +11321,8 @@ public function update_encode_transfer(){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $et->set_id);
+                $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
+                $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
                 if(empty($set_name)){
                     $unit_price=$et->unit_price;
@@ -11237,7 +11363,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -11274,19 +11401,19 @@ public function update_encode_transfer(){
                     $count_set=$count_set-1;
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$set_currency);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$set_currency);
                     $objPHPExcel->getActiveSheet()->mergeCells('V'.$num.':V'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 if($et->set_id!=0 && ($previousId !== $et->set_id)){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
@@ -11302,13 +11429,13 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -11316,15 +11443,26 @@ public function update_encode_transfer(){
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Equipment Tools Available.xlsx"');
-        header('Cache-Control: max-age=0');
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment;filename="Equipment Tools Available.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // ob_end_clean();
+        // $objWriter->save('php://output');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
         ob_end_clean();
-        $objWriter->save('php://output');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Equipment Tools Available.xlsx"');
+        readfile($exportfilename);
     }
 
     public function search_report_set(){
@@ -11577,7 +11715,9 @@ public function update_encode_transfer(){
     }
 
     public function export_equipment_set(){
-        $objPHPExcel = new Spreadsheet();
+        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel = new Spreadsheet();
         $exportfilename="Equipment Tools Available Set.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Equipment and Tools Fields");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -11612,12 +11752,19 @@ public function update_encode_transfer(){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AD2', "Inspection Remarks");
         $styleArray = array(
             'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => border::BORDER_THIN,
-                    'color' => ['rgb' => '000000'],
-                )
+              'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN,
+              )
             )
-        );
+          );
+        // $styleArray = array(
+        //     'borders' => array(
+        //         'allBorders' => array(
+        //             'borderStyle' => border::BORDER_THIN,
+        //             'color' => ['rgb' => '000000'],
+        //         )
+        //     )
+        // );
         $max_column = $objPHPExcel->getActiveSheet()->getHighestDataColumn();
         for($column = 'A'; !$this->isBiggerExcelColumn($column,$max_column); ++$column){
             $objPHPExcel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -11629,18 +11776,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -11738,7 +11885,7 @@ public function update_encode_transfer(){
         $filter=substr($filter, 0, -2);
         if($filter!=''){
             $previousId = '';
-            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND $query GROUP BY ed.et_id ORDER BY set_id ASC") AS $et){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND save_temp='0' AND $query GROUP BY ed.et_id ORDER BY set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -11762,11 +11909,11 @@ public function update_encode_transfer(){
                 $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE ed.set_id ='$et->set_id' AND save_temp='0' AND accountability_id = '0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND $query");
                 $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et_set_id);
                 if(empty($set_name)){
-                    $unit_price=$et->unit_price.' '.$currency;
-                    $total = $et->qty*$unit_price.' '.$currency;
+                    $unit_price=$et->unit_price;
+                    $total = $et->qty*$unit_price;
                 }else if($count_set==$count_set_id) {
-                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id).' '.$currency;
-                    $total = $et->qty*$unit_price.' '.$currency;
+                    $unit_price=$this->super_model->select_column_where("et_set", "set_price", "set_id", $et->set_id);
+                    $total = $et->qty*$unit_price;
                 }
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade==0 && $et->damage==0){
                     $status = 'Assigned';
@@ -11796,7 +11943,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -11839,13 +11987,13 @@ public function update_encode_transfer(){
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price." ".$currency);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total." ".$currency);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 if($et->set_id!=0 && ($previousId !== $et->set_id)){
@@ -11862,13 +12010,13 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -11877,7 +12025,7 @@ public function update_encode_transfer(){
             }
         }else {
             $previousId = '';
-            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' GROUP BY ed.et_id ORDER BY set_id ASC") AS $et){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND save_temp='0' AND set_id!='0' GROUP BY ed.et_id ORDER BY set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -11934,7 +12082,8 @@ public function update_encode_transfer(){
                 $inspected_by=array();
                 $ins_status=array();
                 $ins_remarks=array();
-                foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                // foreach($this->super_model->select_row_where("et_inspection", "et_id", $et->et_id) AS $ins){
+                foreach($this->super_model->select_custom_where("et_inspection", "et_id='$et->et_id' ORDER BY date_of_inspection DESC") AS $ins){
                     $inspected_name=$this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $ins->inspected_by);
                     $inspected_status=$this->super_model->select_column_where('inspection_status', 'status', 'inspection_status_id', $ins->inspection_status_id);
                     $inspection_date[]= (!empty($ins->date_of_inspection)) ? $ins->date_of_inspection : '';
@@ -11977,13 +12126,13 @@ public function update_encode_transfer(){
                     $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.':W'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('X'.$num.':X'.($num+$count_set));
                     $objPHPExcel->getActiveSheet()->mergeCells('Y'.$num.':Y'.($num+$count_set));
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }else if($et->set_id==0){
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$num, $set_serial);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$num, $unit_price.' '.$currency);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$num, $total.' '.$currency);
-                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('X'.$num.":Y".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 }
                 // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$num, $et->remarks);
                 if($et->set_id!=0 && ($previousId !== $et->set_id)){
@@ -12000,13 +12149,13 @@ public function update_encode_transfer(){
                 $objPHPExcel->getActiveSheet()->getStyle('AB'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AC'.$num)->getAlignment()->setWrapText(true);
                 $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
-                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
+                $objPHPExcel->getActiveSheet()->getStyle('AA'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('AD'.$num)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_BOTTOM);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":AD".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('K'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":AD".$num,'admin');
                 $num++;
@@ -12014,14 +12163,24 @@ public function update_encode_transfer(){
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:AD2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Equipment Tools Available Set.xlsx"');
-        header('Cache-Control: max-age=0');
-        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment;filename="Equipment Tools Available Set.xlsx"');
+        // header('Cache-Control: max-age=0');
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
+        // ob_end_clean();
+        // $objWriter->save('php://output');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        if (file_exists($exportfilename))
+        unlink($exportfilename);
+        $objWriter->save($exportfilename);
+        unset($objPHPExcel);
+        unset($objWriter);   
         ob_end_clean();
-        $objWriter->save('php://output');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Equipment Tools Available Set.xlsx"');
+        readfile($exportfilename);
     }
 }
