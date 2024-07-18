@@ -1379,12 +1379,12 @@ class Report extends CI_Controller {
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -1659,12 +1659,12 @@ class Report extends CI_Controller {
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -1759,7 +1759,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filters=substr($filter, 0, -2);
         if($filters!=''){
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1774,7 +1774,7 @@ class Report extends CI_Controller {
                 $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
                 $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='0' AND set_id ='$et->set_id' AND $query");
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='1' AND set_id ='$et->set_id' AND $query");
                 $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et->set_id);
                 $total=0;
                 $unit_price=0;
@@ -1845,7 +1845,7 @@ class Report extends CI_Controller {
                 );
             }
         }else {
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND save_temp='1' AND lost='0' AND cancelled='0' GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='1' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1860,7 +1860,7 @@ class Report extends CI_Controller {
                 $set_currency_id = $this->super_model->select_column_where("et_set","set_currency","set_id",$et->set_id);
                 $set_currency=$this->super_model->select_column_where("currency","currency_name","currency_id",$set_currency_id);
                 $set_serial = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='0' AND set_id ='$et->set_id'");
+                $count_set = $this->super_model->count_custom("SELECT eh.et_id FROM et_details ed INNER JOIN et_head eh ON eh.et_id = ed.et_id WHERE accountability_id!='0' AND cancelled='0' AND lost='0' AND obsolete='0' AND save_temp='1' AND set_id ='$et->set_id'");
                 $count_set_id = $this->super_model->count_rows_where("et_details","set_id",$et->set_id);
                 $total=0;
                 $unit_price=0;
@@ -3380,12 +3380,12 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -3635,18 +3635,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
         if(stripos($this->uri->segment(8), "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8) ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -3959,12 +3959,12 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -4395,18 +4395,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -8664,18 +8664,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8) , "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -9116,18 +9116,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8) ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)) ?? '');
-        } else if(stripos($this->uri->segment(8) ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8) ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -9224,7 +9224,7 @@ public function update_encode_transfer(){
         echo $query;
         if($filter!=''){
             $previousId='';
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE save_temp='1' AND cancelled='0' AND $query GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' AND $query GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -9250,7 +9250,7 @@ public function update_encode_transfer(){
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND save_temp='1' AND $query");
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' AND set_id ='$et_set_id' AND $query");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -9341,7 +9341,7 @@ public function update_encode_transfer(){
             }
         }else {
             $previousId='';
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id!=0 AND save_temp=1 AND cancelled=0 GROUP BY eh.et_id") AS $et){
+            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE eh.accountability_id!='0' AND eh.cancelled='0' AND eh.save_temp='1' AND lost='0' AND obsolete='0' GROUP BY eh.et_id ORDER BY ed.set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -9368,7 +9368,7 @@ public function update_encode_transfer(){
                     $total = $et->qty*$unit_price;
                 }
                 $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $et->set_id);
-                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND set_id ='$et_set_id' AND save_temp='1'");
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$et->accountability_id' AND cancelled='0' AND save_temp='1' AND lost='0' AND obsolete='0' AND set_id ='$et_set_id'");
                 if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $et->change_location==1){
@@ -11057,18 +11057,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -11776,18 +11776,18 @@ public function update_encode_transfer(){
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
-        if(stripos($this->uri->segment(8)  ?? '', "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8) ?? ''));
-        } else if(stripos($this->uri->segment(8)  ?? '', "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)  ?? ''));
+        $department=str_replace("%20"," ",$this->uri->segment(7));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
         }else{
-            $item=urldecode($this->uri->segment(8) ?? '');
+            $item=urldecode($this->uri->segment(8));
         }
-        $brand=str_replace("%20"," ",$this->uri->segment(9)  ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10)  ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11)  ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12)  ?? '');
+        $brand=str_replace("%20"," ",$this->uri->segment(9));
+        $model=str_replace("%20"," ",$this->uri->segment(10));
+        $type=str_replace("%20"," ",$this->uri->segment(11));
+        $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -11885,7 +11885,7 @@ public function update_encode_transfer(){
         $filter=substr($filter, 0, -2);
         if($filter!=''){
             $previousId = '';
-            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND $query GROUP BY ed.et_id ORDER BY set_id ASC") AS $et){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' AND save_temp='0' AND $query GROUP BY ed.et_id ORDER BY set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -12025,7 +12025,7 @@ public function update_encode_transfer(){
             }
         }else {
             $previousId = '';
-            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND set_id!='0' GROUP BY ed.et_id ORDER BY set_id ASC") AS $et){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='0' AND cancelled='0' AND damage='0' AND change_location = '0' AND lost='0' AND obsolete='0' AND save_temp='0' AND set_id!='0' GROUP BY ed.et_id ORDER BY set_id DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
