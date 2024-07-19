@@ -2292,7 +2292,8 @@ public function edit_encode_transfer(){
                         $status = $this->input->post('status['.$x.']');
                         $remarks = $this->input->post('ins_remarks['.$x.']');
 
-                    $data_ins = array(
+                    if($date_of_inspection != ''){
+                        $data_ins = array(
                         'et_id'=>$id,
                         'date_of_inspection'=>$date_of_inspection,
                         'inspected_by'=>$inspected_by,
@@ -2300,8 +2301,10 @@ public function edit_encode_transfer(){
                         'remarks'=>$remarks,
                         'date_updated'=>date("Y-m-d H:i:s"),
                         'user_id'=>$this->input->post('user_id'),
-                    );
-                    $this->super_model->insert_into("et_inspection", $data_ins);
+                        );
+                        $this->super_model->insert_into("et_inspection", $data_ins);
+                    }
+                    
                 }
 
                 if($this->input->post('saved') == 'Submit'){
