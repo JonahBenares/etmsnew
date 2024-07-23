@@ -2286,11 +2286,11 @@ public function edit_encode_transfer(){
                         $count_inspection = 0;
                     }
 
-                    for($x=0; $x<$count_inspection;$x++){
-                        $date_of_inspection = $this->input->post('date_of_inspection['.$x.']');
-                        $inspected_by = $this->input->post('inspected_by['.$x.']');
-                        $status = $this->input->post('status['.$x.']');
-                        $remarks = $this->input->post('ins_remarks['.$x.']');
+                    for($i=0; $i<$count_inspection;$i++){
+                        $date_of_inspection = $this->input->post('date_of_inspection['.$i.']');
+                        $inspected_by = $this->input->post('inspected_by['.$i.']');
+                        $status = $this->input->post('status['.$i.']');
+                        $remarks = $this->input->post('ins_remarks['.$i.']');
 
                     if($date_of_inspection != ''){
                         $data_ins = array(
