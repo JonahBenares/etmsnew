@@ -563,16 +563,42 @@ class Report extends CI_Controller {
                 $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$et->set_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $item_desc = $et->et_desc.", ".$et->brand.", ".$et->model;
-                if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->obsolete==0){
+                // if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->obsolete==0){
+                //     $status = $employee;
+                // }else if($et->accountability_id==0 && $et->damage==0 && $et->change_location==0){
+                //     $status = 'Available';
+                // }else if($et->accountability_id==0 && $et->change_location==1){
+                //     $status = "Moved to ".$location;
+                // }else if($et->borrowed==1){
+                //     $status = 'Borrowed';
+                // }else if($et->damage==1){
+                //     $status = 'Damaged';
+                // }else if($et->lost==1){
+                //     $status = 'Lost Item / '.$employee;
+                // }else if($et->obsolete==1){
+                //     $status = 'Obsolete Item / '.$employee;
+                // }
+
+                if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade==0 && $et->damage==0 && $et->obsolete==0){
                     $status = $employee;
-                }else if($et->accountability_id==0 && $et->damage==0 && $et->change_location==0){
+                }else if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade!=0 && $et->damage==0){
+                    $status = $employee." / Upgraded";
+                }else if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade!=0 && $et->damage==1){
+                    $status = $employee." / Upgraded / Damaged";
+                }else if($et->accountability_id!=0 && $et->borrowed==0 && $et->lost==0 && $et->upgrade==0 && $et->damage==1){
+                    $status = $employee." / Damaged";
+                }else if($et->accountability_id==0 && $et->damage==0 && $et->change_location==0 && $et->upgrade!=0){
+                    $status = 'Available / Upgraded';
+                }else if($et->accountability_id==0 && $et->damage==0 && $et->change_location==0 && $et->upgrade==0){
                     $status = 'Available';
                 }else if($et->accountability_id==0 && $et->change_location==1){
                     $status = "Moved to ".$location;
                 }else if($et->borrowed==1){
                     $status = 'Borrowed';
-                }else if($et->damage==1){
+                }else if($et->damage==1 && $et->accountability_id==0){
                     $status = 'Damaged';
+                }else if($et->damage==1 && $et->accountability_id!=0){
+                    $status = 'Damaged / '.$employee;
                 }else if($et->lost==1){
                     $status = 'Lost Item / '.$employee;
                 }else if($et->obsolete==1){
@@ -609,21 +635,48 @@ class Report extends CI_Controller {
                     $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$r->set_id);
                     $location = $this->super_model->select_column_where("location", "location_name", "location_id", $r->location_id);
                     $item_desc = $ss->et_desc.", ".$r->brand.", ".$r->model;
-                    if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0 && $r->obsolete==0){
-                        $status = $employee;
-                    }else if($ss->accountability_id==0 && $r->damage==0 && $r->change_location==0){
+                    // if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0 && $r->obsolete==0){
+                    //     $status = $employee;
+                    // }else if($ss->accountability_id==0 && $r->damage==0 && $r->change_location==0){
+                    //     $status = 'Available';
+                    // }else if($ss->accountability_id==0 && $r->change_location==1){
+                    //     $status = "Moved to ".$location;
+                    // }else if($r->borrowed==1){
+                    //     $status = 'Borrowed';
+                    // }else if($r->damage==1){
+                    //     $status = 'Damaged';
+                    // }else if($r->lost==1){
+                    //     $status = 'Lost Item / '.$employee;
+                    // }else if($r->obsolete==1){
+                    //     $status = 'Obsolete Item / '.$employee;
+                    // }
+
+                    if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0 && $r->upgrade==0 && $r->damage==0 && $r->obsolete==0){
+                    $status = $employee;
+                    }else if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0 && $r->upgrade!=0 && $r->damage==0){
+                        $status = $employee." / Upgraded";
+                    }else if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0 && $r->upgrade!=0 && $r->damage==1){
+                        $status = $employee." / Upgraded / Damaged";
+                    }else if($ss->accountability_id!=0 && $r->borrowed==0 && $r->lost==0 && $r->upgrade==0 && $r->damage==1){
+                        $status = $employee." / Damaged";
+                    }else if($ss->accountability_id==0 && $r->damage==0 && $r->change_location==0 && $r->upgrade!=0){
+                        $status = 'Available / Upgraded';
+                    }else if($ss->accountability_id==0 && $r->damage==0 && $r->change_location==0 && $r->upgrade==0){
                         $status = 'Available';
                     }else if($ss->accountability_id==0 && $r->change_location==1){
                         $status = "Moved to ".$location;
                     }else if($r->borrowed==1){
                         $status = 'Borrowed';
-                    }else if($r->damage==1){
+                    }else if($r->damage==1 && $ss->accountability_id==0){
                         $status = 'Damaged';
+                    }else if($r->damage==1 && $ss->accountability_id!=0){
+                        $status = 'Damaged / '.$employee;
                     }else if($r->lost==1){
                         $status = 'Lost Item / '.$employee;
                     }else if($r->obsolete==1){
                         $status = 'Obsolete Item / '.$employee;
                     }
+
                     $create_date=date("Y-m-d",strtotime($ss->create_date));
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $create_date);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $r->acquisition_date);
