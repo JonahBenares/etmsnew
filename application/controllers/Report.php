@@ -8609,7 +8609,7 @@ public function update_encode_transfer(){
                             'ed_id'=>$edid[$x],
                             'return_id'=>$return_id,
                             'date_issued'=>$date_issued,
-                            'return_remarks'=>$ret_remarks[$x],
+                            'return_remarks'=>isset($ret_remarks[$edid[$x]]) ? $ret_remarks[$edid[$x]] : '',
                         );
 
                         }
@@ -8636,7 +8636,7 @@ public function update_encode_transfer(){
                                     'ed_id'=>$edid[$x],
                                     'return_id'=>$return_id,
                                     'date_issued'=>$date_issued,
-                                    'return_remarks'=>$ret_remarks[$x],
+                                    'return_remarks'=>isset($ret_remarks[$edid[$x]]) ? $ret_remarks[$edid[$x]] : '',
                                 );
                                 $this->super_model->insert_into("return_details", $returndet_data);
                                 foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){

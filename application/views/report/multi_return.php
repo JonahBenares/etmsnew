@@ -104,7 +104,7 @@
                                             <td><?php echo $det['acn'];?></td>
                                             <td><?php if($det['set_id']==0){ echo $det['price']."<small> ".$det['currency']."</small>"; }?></td>
                                             <td><?php echo $det['serial'];?></td>
-                                            <td><textarea name="ret_remarks[]" placeholder="Remarks"></textarea></td>
+                                            <td><textarea name="ret_remarks[<?= $det['edid'] ?>]" placeholder="Remarks"></textarea></td>
                                         </tr>
                                     <?php 
                                         break;
