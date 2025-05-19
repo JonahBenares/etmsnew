@@ -8603,14 +8603,16 @@ public function update_encode_transfer(){
                                 ); 
                                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
                             }
-                        }
+                        
                         $returndet_data = array(
                             'et_id'=>$ret->et_id,
-                            'ed_id'=>$edid[$y],
+                            'ed_id'=>$edid[$x],
                             'return_id'=>$return_id,
                             'date_issued'=>$date_issued,
-                            'return_remarks'=>$ret_remarks[$y],
+                            'return_remarks'=>$ret_remarks[$x],
                         );
+
+                        }
                         $this->super_model->insert_into("return_details", $returndet_data);
                         $new_qty = $q-$val;
                         $qty_data = array(
