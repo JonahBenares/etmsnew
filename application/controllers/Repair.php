@@ -59,6 +59,8 @@ class Repair extends CI_Controller {
                     $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
                     $repair =$this->super_model->select_column_where("repair_details", "assessment", "ed_id", $det->ed_id);
                     $accountable = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $det->et_id);
+                    $damage_id   = null;
+                    $count_ed_id = 0;
                     foreach($this->super_model->select_custom_where("damage_info","ed_id='$det->ed_id' ORDER BY ed_id DESC") AS $dam){
                         $damage_id =$dam->damage_id;
                         $count_ed_id = $this->super_model->count_rows_where("damage_info","ed_id",$dam->ed_id);
