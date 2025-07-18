@@ -141,10 +141,12 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/header');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
-        $row=$this->super_model->count_rows_where("employee_inclusion","parent_id",$id);
+        // $row=$this->super_model->count_rows_where("employee_inclusion","parent_id",$id);
+        $row = $this->super_model->count_custom_where("employee_inclusion", "parent_id = '$id' AND removed != 1");
         $data['employee'] = $this->super_model->select_all_order_by('employees', 'employee_name', 'ASC');
         if($row!=0){
-            foreach($this->super_model->select_row_where("employee_inclusion","parent_id",$id) AS $multi){
+            // foreach($this->super_model->select_row_where("employee_inclusion","parent_id",$id) AS $multi){
+            foreach($this->super_model->select_custom_where("employee_inclusion", "parent_id = '$id' AND removed != 1") as $multi){
                 $employee_name =$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$multi->child_id'");
                 $status = $this->super_model->select_column_where("employees","status","employee_id",$multi->child_id);
                 $data['multi_emp'][] = array(
@@ -163,19 +165,39 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+    // public function delete_employee_pop(){
+    //     $id=$this->uri->segment(3);
+    //     $parent=$this->uri->segment(4);
+    //     $child=$this->uri->segment(5);
+    //     /*$row = $this->super_model->count_rows_where("et_head","accountability_id",$child);
+    //     if($row!=0){
+    //        echo "<script>alert('You cannot delete this record!');window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent';</script>";
+    //     }else{*/
+    //     if($this->super_model->delete_custom_where('employee_inclusion', "ei_id='$id' AND child_id = '$child'")){
+    //         echo "<script>alert('Succesfully Deleted');
+    //         window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent'; </script>";
+    //     }
+    //     //}
+    // }
+
     public function delete_employee_pop(){
-        $id=$this->uri->segment(3);
-        $parent=$this->uri->segment(4);
-        $child=$this->uri->segment(5);
-        /*$row = $this->super_model->count_rows_where("et_head","accountability_id",$child);
-        if($row!=0){
-           echo "<script>alert('You cannot delete this record!');window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent';</script>";
-        }else{*/
-        if($this->super_model->delete_custom_where('employee_inclusion', "ei_id='$id' AND child_id = '$child'")){
-            echo "<script>alert('Succesfully Deleted');
-            window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent'; </script>";
+        date_default_timezone_set('Asia/Manila');
+        $id = $this->uri->segment(3);
+        $parent = $this->uri->segment(4);
+        $child = $this->uri->segment(5);
+
+        $data = array(
+            'removed' => 1,
+            'removed_date' => date('Y-m-d H:i:s')
+        );
+
+        if ($this->super_model->update_custom_where('employee_inclusion', $data, "ei_id='$id' AND child_id = '$child'")) {
+            echo "<script>
+                alert('Successfully Deleted');
+                window.opener.location.reload();
+                window.location = '".base_url()."masterfile/employee_pop/$parent';
+            </script>";
         }
-        //}
     }
 
     public function transfer_dept(){
@@ -902,7 +924,8 @@ class Masterfile extends CI_Controller {
                 );
                 $rows=$this->super_model->count_rows("employee_inclusion");
                 if($rows!=0){
-                    foreach($this->super_model->select_row_where("employee_inclusion", "parent_id", $emp->employee_id) AS $em){
+                    // foreach($this->super_model->select_row_where("employee_inclusion", "parent_id", $emp->employee_id) AS $em){
+                    foreach($this->super_model->select_custom_where("employee_inclusion", "parent_id = '$emp->employee_id' AND removed != 1") as $em){
                         $emp = $this->super_model->select_column_custom_where('employees', 'employee_name', "employee_id = '$em->child_id'");
                         $status = $this->super_model->select_column_custom_where('employees', 'status', "employee_id = '$em->child_id'");
                         $data['ems'][] = array(

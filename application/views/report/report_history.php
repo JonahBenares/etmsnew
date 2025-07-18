@@ -173,6 +173,7 @@
                                         }
                                     }
                                     foreach($data2 AS $s){
+                                    $status = '<span class="badge badge-pill bg-secondary"></span>';
                                     if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0 && $s['obsolete']==0){
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
                                     }else if($s['empid']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0){

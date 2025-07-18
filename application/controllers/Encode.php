@@ -124,10 +124,12 @@ class Encode extends CI_Controller {
             $data['save_temp']=$et->save_temp;
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "employee_id = '$em->child_id'");
-                $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$em->child_id'"), 
-                    'status'=>$status
-                );
+                if($status==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($et->create_date)))){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$em->child_id'"), 
+                        'status'=>$status
+                    );
+                }
             }
             $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
             $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $et->accountability_id);

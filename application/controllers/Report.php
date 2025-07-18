@@ -1355,7 +1355,7 @@ class Report extends CI_Controller {
             $data['save_temp']=$et->save_temp;
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
                 $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status==0){
+                if($status==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($et->create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
                     );
@@ -3120,7 +3120,7 @@ public function update_encode_transfer(){
             $data['save_temp']=$et->save_temp;
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
                 $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status==0){
+                if($status==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($et->create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
                     );
@@ -4399,8 +4399,9 @@ public function update_encode_transfer(){
         $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $empid);
         $qty=1;
         foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$empid) AS $em){
+            $create_date = $this->super_model->select_column_custom_where("et_head", "create_date", "accountability_id='$empid AND cancelled='0'");
             $status = $this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-            if($status==0){
+            if($status==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                 $data['child'][] = array( 
                     'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
                 );
@@ -7213,10 +7214,11 @@ public function update_encode_transfer(){
             $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'");
             $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->checked_by'");
             $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
+            $create_date = $this->super_model->select_column_where("et_head", "create_date", "et_id", $dam->et_id);
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->submitted_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
                 $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status1==0){
+                if($status1==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
                         'status'=> $status, 
@@ -7226,18 +7228,24 @@ public function update_encode_transfer(){
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
-                $data['child2'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $cb->child_id);
+                if($status1==0 && (empty($cb->removed_date) || date('Y-m-d', strtotime($cb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                    $data['child2'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
-                $data['child3'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $nb->child_id);
+                if($status1==0 && (empty($nb->removed_date) || date('Y-m-d', strtotime($nb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                    $data['child3'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->checked_by);
@@ -7330,10 +7338,11 @@ public function update_encode_transfer(){
             $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'");
             $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->checked_by'");
             $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
+            $create_date = $this->super_model->select_column_where("et_head", "create_date", "et_id", $dam->et_id);
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->submitted_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
                 $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status1==0){
+                if($status1==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
                         'status'=> $status, 
@@ -7344,7 +7353,7 @@ public function update_encode_transfer(){
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->checked_by) AS $cb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
                 $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $cb->child_id);
-                if($status1==0){
+                if($status1==0 && (empty($cb->removed_date) || date('Y-m-d', strtotime($cb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child2'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
                         'status'=> $status, 
@@ -7355,7 +7364,7 @@ public function update_encode_transfer(){
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
                 $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $nb->child_id);
-                if($status1==0){
+                if($status1==0 && (empty($nb->removed_date) || date('Y-m-d', strtotime($nb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child3'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
                         'status'=> $status, 
@@ -7473,7 +7482,9 @@ public function update_encode_transfer(){
                 } else { 
                     $ch = '';
                      foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$emp->employee_id) AS $child){
-                        $ch.=$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$child->child_id'"). ", ";
+                        if($child->removed == 0){
+                            $ch.=$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$child->child_id'"). ", ";
+                        }
                      }
                      $chi = substr($ch, 0, -2);
 
@@ -7697,12 +7708,14 @@ public function update_encode_transfer(){
             $data['count_return'] = $this->super_model->count_join_where("et_details","et_head", "accountability_id='$ret->accountability_id' AND save_temp='0' AND damage='0' AND beyond_repair='0' AND borrowed='0' AND change_location='0' AND lost='0'","et_id");
             $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $ret->accountability_id); 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$ret->accountability_id) AS $em){
+                $et_id = $this->super_model->select_column_where("return_details", "et_id", "return_id", $ret->return_id);
+                $create_date = $this->super_model->select_column_where("et_head", "create_date", "et_id", $et_id);
                 $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status==0){
-                    $data['child'][] = array( 
-                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
-                    );
-                }
+                   if($status==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                        $data['child'][] = array( 
+                            'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                        );
+                    }
             }
             $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ret->accountability_id);
             $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $ret->accountability_id);
@@ -7790,8 +7803,10 @@ public function update_encode_transfer(){
             $data['count_return'] = $this->super_model->count_join_where("et_details","et_head", "accountability_id='$ret->accountability_id' AND save_temp='0' AND damage='0' AND beyond_repair='0' AND borrowed='0' AND change_location='0' AND lost='0'","et_id");
             $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $ret->accountability_id); 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$ret->accountability_id) AS $em){
+                $et_id = $this->super_model->select_column_where("return_details", "et_id", "return_id", $ret->return_id);
+                $create_date = $this->super_model->select_column_where("et_head", "create_date", "et_id", $et_id);
                 $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status==0){
+                   if($status==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
                     );
@@ -8100,7 +8115,7 @@ public function update_encode_transfer(){
         if($row!=0){
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$id) AS $em){
                 $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status==0){
+                if($status==0 && $em->removed == 0){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
                     );
@@ -10648,10 +10663,12 @@ public function update_encode_transfer(){
             $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->verified_by'");
             $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->prepared_by'");
             $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
+            $create_date = $this->super_model->select_column_where("et_head", "create_date", "et_id", $dam->et_id);
+
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->verified_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
                 $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status1==0){
+                 if($status1==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
                         'status'=> $status, 
@@ -10661,18 +10678,24 @@ public function update_encode_transfer(){
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->prepared_by) AS $cb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
-                $data['child2'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $cb->child_id);
+                 if($status1==0 && (empty($cb->removed_date) || date('Y-m-d', strtotime($cb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                    $data['child2'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
-                $data['child3'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $nb->child_id);
+                 if($status1==0 && (empty($nb->removed_date) || date('Y-m-d', strtotime($nb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                    $data['child3'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->prepared_by);
@@ -10728,10 +10751,12 @@ public function update_encode_transfer(){
             $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->verified_by'");
             $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->prepared_by'");
             $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
+            $create_date = $this->super_model->select_column_where("et_head", "create_date", "et_id", $dam->et_id);
+
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->verified_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
                 $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
-                if($status1==0){
+                 if($status1==0 && (empty($em->removed_date) || date('Y-m-d', strtotime($em->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
                         'status'=> $status, 
@@ -10741,18 +10766,24 @@ public function update_encode_transfer(){
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->prepared_by) AS $cb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$cb->child_id'");
-                $data['child2'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $cb->child_id);
+                 if($status1==0 && (empty($cb->removed_date) || date('Y-m-d', strtotime($cb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                        $data['child2'][] = array( 
+                            'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$cb->child_id'"), 
+                            'status'=> $status, 
+                        );
+                    }
             }
 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->noted_by) AS $nb){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$nb->child_id'");
-                $data['child3'][] = array( 
-                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
-                    'status'=> $status, 
-                );
+                $status1=$this->super_model->select_column_where("employees", "status", "employee_id", $nb->child_id);
+                 if($status1==0 && (empty($nb->removed_date) || date('Y-m-d', strtotime($nb->removed_date)) >= date('Y-m-d', strtotime($create_date)))){
+                    $data['child3'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$nb->child_id'"), 
+                        'status'=> $status, 
+                    );
+                }
             }
             $data['user_id'] =$_SESSION['fullname'];
             $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $dam->prepared_by);
