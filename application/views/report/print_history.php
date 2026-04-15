@@ -93,10 +93,10 @@
                             <td class="main-tab" align="center"><?php echo $det['serial_no'];?></td>
                             <td class="main-tab" align="center"><?php echo ($det['lost']!=0) ? $det['et_desc']." - <b>Lost Item</b>" : $det['et_desc'];;?></td>
                             <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['set_id'];?></td>
                             <?php if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
                             <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? $det['unit_price']." <small>".$det['currency']."</small>" : $det['set_price']." <small>".$det['set_currency']."</small>";?></td>
-                            <?php } else if($det['set_id']==0){ ?>
+                            <?php } else { ?>
                             <td class="main-tab" align="center"><?php echo $det['unit_price']." <small>".$det['currency']."</small>";?></td>   
                             <?php } ?>
                             <?php if(!empty($det['accountabilitys'])){ ?>
@@ -109,12 +109,12 @@
                         </tr>
                         <?php $previousId = $det['set_id']; } } else { ?>
                         <tr>
-                            <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
+                            <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
                         </tr>
                         <?php } ?>
                     </tr>
                     <tr>
-                        <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
+                        <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
                     </tr>   
                 </table>
                 <br>
