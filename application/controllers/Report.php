@@ -5277,6 +5277,315 @@ public function update_encode_transfer(){
         $this->load->view('template/footer');
     }
 
+    public function print_history_lost(){  
+        $this->load->view('template/header');
+        //$this->load->view('template/navbar',$this->dropdown);
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
+        $data['user_id'] =$_SESSION['fullname'];
+        $ret_id =$this->super_model->select_column_where("return_head", "accountability_id", "accountability_id", $id);
+        $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
+        $location_id= $this->super_model->select_column_where('employees', 'location_id', 'employee_id', $id);
+        $location= $this->super_model->select_column_where('location', 'location_prefix', 'location_id', $location_id);
+        $date_format=date("Y");
+        $acf_nos= $this->super_model->select_column_where('employees', 'acf_no', 'employee_id', $id);
+        if($acf_nos==''){
+            $acf = $location."-".$date_format."-1001";
+        }else{
+            $acf = $acf_nos;
+        }
+
+        $acf_pref=explode("-", $acf);
+        $one=$acf_pref[0];
+        $two=$acf_pref[1];
+        $three=$acf_pref[2];
+        $four = (!empty($acf_pref[3])) ? $acf_pref[3] : '';
+        if(!empty($one) && !empty($two) && !empty($three) && !empty($four)){ 
+            $acf_prefix1=$acf_pref[0];
+            $acf_prefix2=$acf_pref[1];
+            $acf_prefix3=$acf_pref[2];
+            $acf_prefix=$acf_prefix1."-".$acf_prefix2."-".$acf_prefix3;
+            $series = $acf_pref[3];
+        }else {
+            $acf_prefix1=$acf_pref[0];
+            $acf_prefix2=$acf_pref[1];
+            $acf_prefix=$acf_prefix1."-".$acf_prefix2;
+            $series = $acf_pref[2];
+        }
+
+        $check_existing = $this->super_model->count_custom_where("acf_series", "acf_prefix='$acf_prefix'");
+        if($check_existing==0){
+            $acf_no= $location."-".$date_format."-1001";
+        } else {
+            $series = $this->super_model->get_max_where("acf_series", "series","acf_prefix='$acf_prefix'");
+            $next=$series+1;
+            $acf_no = $location."-".$date_format."-".$next;
+        }
+
+        if($acf_nos==''){
+            $data['acf_no'] =$acf_no;
+        }else {
+            $data['acf_no'] =$acf_nos;
+        }
+        $replacement='';
+         foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $sub){
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
+                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
+                $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
+                $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
+                $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
+                $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $sub->et_id);
+                $set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $sub->ed_id);
+                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $sub->set_id);
+                $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
+                $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sub->set_id);
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                $data['count_set']=$count_set;
+                $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$sub->set_id);
+                $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$sub->set_id);
+                $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$sub->currency_id);
+                foreach($this->super_model->select_row_where("lost_items","ed_id",$sub->ed_id) AS $lo){
+                    $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
+                    if($lo->ed_id==$sub->ed_id){
+                        $replacement.= $this->super_model->select_column_where("et_head", "et_desc", "et_id", $rep_et);
+                    }
+                }
+                $data['sub'][] = array(
+                    'et_id'=>$sub->et_id,
+                    'ed_id'=>$sub->ed_id,
+                    'set_id'=>$sub->set_id,
+                    'set_name'=>$set_name,
+                    'set_price'=>$set_price,
+                    'asset_control_no'=>$sub->asset_control_no,
+                    'serial_no'=>$sub->serial_no,
+                    'set_currency'=>$set_currency,
+                    'currency'=>$currency,
+                    'count_set'=>$count_set,
+                    'cat'=>$category,
+                    'subcat'=>$subcat,
+                    'unit'=>$unit,
+                    'department'=>$sub->department,
+                    'et_desc'=>$sub->et_desc,
+                    'qty'=>$sub->qty,
+                    'accountability'=>$accountability,
+                    'accountabilitys'=>'',
+                    'empid'=>$sub->accountability_id,
+                    'unit_price'=>$sub->unit_price,
+                    'lost'=>$sub->lost,
+                    'date_issued'=>'',
+                    'date_returned'=>'',
+                    'remarks'=>'',
+                    'replacement'=>$replacement,
+                );
+        }
+
+        foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id='$id'") AS $r){
+            $set_id=$this->super_model->select_column_where("et_details","set_id",'ed_id',$r->ed_id);
+            $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$set_id);
+            // $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+            $count_set = $this->super_model->count_custom("SELECT COUNT(*) AS cnt FROM et_details WHERE set_id = '$set_id' AND et_id = '".$r->et_id."'");
+            $data['count_set']=$count_set;
+            $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$set_id);
+            $accountability_id = $this->super_model->select_column_where("et_head", "accountability_id", "et_id", $r->et_id);
+            $accountabilitys=$this->super_model->select_column_where("employees","employee_name","employee_id",$accountability_id);
+            $et_id = $this->super_model->select_column_where("return_details", "et_id", "return_id", $r->return_id);
+            $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $r->et_id);
+            $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
+            $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $r->accountability_id);
+            $category_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $r->et_id);
+            $subcat_id =$this->super_model->select_column_where("et_head", "subcat_id", "et_id", $r->et_id);
+            $category =$this->super_model->select_column_where("category", "category_name", "category_id", $category_id);
+            $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
+            $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $r->et_id);
+            $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id);
+            //$set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $r->ed_id);
+            $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $r->et_id);
+            $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $r->et_id);
+            $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+            $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
+            $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+            $curid = $this->super_model->select_column_where("et_details","currency_id",'et_id',$r->et_id);
+            $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
+            $department =$this->super_model->select_column_where("et_head", "department", "et_id", $r->et_id);
+            $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $r->et_id);
+            $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $r->et_id);
+            $date_returned =$this->super_model->select_column_where("return_head", "return_date", "return_id", $r->return_id);
+            $date_issued =$this->super_model->select_column_where("return_details", "date_issued", "return_id", $r->return_id);
+            $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $r->et_id);
+            if(!empty($accountabilitys)){
+                $remarks = $r->return_remarks;
+            }else {
+                if(!empty($r->return_remarks)){
+                    $remarks = $r->return_remarks.' - Returned';
+                }else {
+                    $remarks = 'Returned';
+                }
+            }
+            $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
+            $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
+            //$rep_edid_count = $this->super_model->count_custom_where("repair_details","ed_id='$r->ed_id'");
+            $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+            if($count_return!=0){
+                $data['sub'][] = array(
+                    'et_id'=>$r->et_id,
+                    'ed_id'=>$r->ed_id,
+                    'set_id'=>$set_id,
+                    'set_name'=>$set_name,
+                    'set_price'=>$set_price,
+                    'set_currency'=>$set_currency,
+                    'asset_control_no'=>$asset_control_no,
+                    'serial_no'=>$serial_no,
+                    'currency'=>$currency,
+                    'count_set'=>$count_set,
+                    'cat'=>$category,
+                    'subcat'=>$subcat,
+                    'unit'=>$unit,
+                    'department'=>$department,
+                    'et_desc'=>$et_desc,
+                    'qty'=>$qty,
+                    'accountability'=>$accountability,
+                    'accountabilitys'=>$accountabilitys,
+                    'empid'=>$r->accountability_id,
+                    'unit_price'=>$unit_price,
+                    'lost'=>$lost,
+                    'date_issued'=>$date_issued,
+                    'date_returned'=>$date_returned,
+                    'remarks'=>$remarks,
+                    'replacement'=>'',
+                );
+            }
+
+            $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$et_id);
+            //if($et_id == $dam_etid && $damaged==1){
+                foreach($this->super_model->select_row_where("damage_info","et_id",$r->et_id) AS $dam){
+                    $remarks_alls="Damaged";
+                    $remarks="Damaged - ".$dam->incident_date;
+                    $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
+                    $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
+                    $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $dam->et_id);
+                    $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $dam->et_id);
+                    $department =$this->super_model->select_column_where("et_head", "department", "et_id", $dam->et_id);
+                    $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
+                    $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $dam->et_id);
+                    $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $accountability_id);
+                    $category_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $dam->et_id);
+                    $category =$this->super_model->select_column_where("category", "category_name", "category_id", $category_id);
+                    $subcat_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $dam->et_id);
+                    $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
+                    $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $dam->et_id);
+                    $set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $dam->ed_id);
+                    $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                    $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
+                    $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                    $curid=$this->super_model->select_column_where("et_details","currency_id",'et_id',$dam->et_id);
+                    $asset_control_no=$this->super_model->select_column_where("et_details","asset_control_no",'et_id',$dam->et_id);
+                    $serial_no=$this->super_model->select_column_where("et_details","serial_no",'et_id',$dam->et_id);
+                    $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
+                    $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $dam->et_id);
+                    foreach($this->super_model->select_custom_where('et_details', "ed_id='$dam->ed_id'") AS $sa){
+                        $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                        $data['count_set']=$count_set;
+                        $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$sa->set_id);
+                    }
+                    $data['sub'][] = array(
+                        'et_id'=>$dam->et_id,
+                        'ed_id'=>$dam->ed_id,
+                        'set_id'=>$set_id,
+                        'set_name'=>$set_name,
+                        'set_price'=>$set_price,
+                        'set_currency'=>$set_currency,
+                        'serial_no'=>$serial_no,
+                        'asset_control_no'=>$asset_control_no,
+                        'currency'=>$currency,
+                        'count_set'=>$count_set,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$department,
+                        'et_desc'=>$et_desc,
+                        'qty'=>$qty,
+                        'accountability'=>$accountability,
+                        'accountabilitys'=>'',
+                        'empid'=>$accountability_id,
+                        'unit_price'=>$unit_price,
+                        'lost'=>$lost,
+                        'date_issued'=>'',
+                        'date_returned'=>'',
+                        'remarks'=>$remarks,
+                        'replacement'=>'',
+                    );
+                //}
+            }
+            foreach($this->super_model->select_custom_where("repair_details","ed_id='$r->ed_id' AND method='0'") AS $rep){
+                $remarks="Repaired - ".$rep->repair_date." - ".$rep->remarks;
+                $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
+                $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+                $unit_id =$this->super_model->select_column_where("et_head", "unit_id", "et_id", $et_id);
+                $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);
+                $department =$this->super_model->select_column_where("et_head", "department", "et_id", $et_id);
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $unit_id);
+                $accountability_id =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et_id);
+                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $accountability_id);
+
+                $category_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $et_id);
+                $category =$this->super_model->select_column_where("category", "category_name", "category_id", $category_id);
+                $subcat_id =$this->super_model->select_column_where("et_head", "category_id", "et_id", $et_id);
+                $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat_id);
+                $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $et_id);
+                $set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $rep->ed_id);
+                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $set_cur = $this->super_model->select_column_where("et_set","set_currency",'set_id',$set_id);
+                $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_cur);
+                $curid = $this->super_model->select_column_where("et_details","currency_id",'et_id',$et_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details","asset_control_no",'et_id',$et_id);
+                $serial_no = $this->super_model->select_column_where("et_details","serial_no",'et_id',$et_id);
+                $currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$curid);
+                $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
+                foreach($this->super_model->select_custom_where('et_details', "ed_id='$rep->ed_id'") AS $sa){
+                    $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sa->set_id);
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
+                    $data['count_set']=$count_set;
+                    $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$sa->set_id);
+                }
+                $data['sub'][] = array(
+                    'et_id'=>$et_id,
+                    'ed_id'=>$edid,
+                    'set_id'=>$set_id,
+                    'set_name'=>$set_name,
+                    'set_price'=>$set_price,
+                    'set_currency'=>$set_currency,
+                    'serial_no'=>$serial_no,
+                    'asset_control_no'=>$asset_control_no,
+                    'currency'=>$currency,
+                    'count_set'=>$count_set,
+                    'cat'=>$category,
+                    'subcat'=>$subcat,
+                    'unit'=>$unit,
+                    'department'=>$department,
+                    'et_desc'=>$et_desc,
+                    'qty'=>$qty,
+                    'accountability'=>$accountability,
+                    'accountabilitys'=>'',
+                    'empid'=>$accountability_id,
+                    'unit_price'=>$unit_price,
+                    'lost'=>$lost,
+                    'date_issued'=>'',
+                    'date_returned'=>'',
+                    'remarks'=>$remarks,
+                    'replacement'=>'',
+                );
+            } 
+        } 
+
+       
+
+        $this->load->view('report/print_history_lost',$data);
+        $this->load->view('template/footer');
+    }
+
     public function insert_acfno(){
         $acf_no = $this->input->post('acf_no');
         $emp_id = $this->input->post('employee_id');

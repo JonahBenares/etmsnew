@@ -15,7 +15,7 @@
                     <p id="head" style="margin: 0px"><?php echo TEL_NO;?></p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                    <h5><strong>ASSET CLEARANCE FORM</strong></h5>
+                    <h5><strong>LOST ASSET FORM</strong></h5>
                 </td>
             </tr>
         </table>
@@ -85,6 +85,7 @@
                                 }
                             }
                             foreach($data2 AS $det){ 
+                                if($det['lost'] == 0) continue; 
                     ?>
                         <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
                             <td class="main-tab" align="center"><?php echo ($det['lost']==0) ? $det['date_returned'] : '';?></td>
@@ -118,11 +119,11 @@
                     </tr>   
                 </table>
                 <br>
-                <table width="100%">
+                <!-- <table width="100%">
                     <tr>
                         <td class="main-tab" style="text-indent:20%">This is to certify that <span style="border-bottom: 1px solid #a2a2a2"><?php echo $name;?></span> cleared from any liabilites from the company. </td>
                     </tr>
-                </table>
+                </table> -->
                 <br>
                  <table width="100%">
                     <tr>
