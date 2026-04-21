@@ -5033,6 +5033,7 @@ public function update_encode_transfer(){
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $sub->ed_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $sub->set_id);
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
+                $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $sub->et_id);
                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sub->set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                 $data['count_set']=$count_set;
@@ -5068,7 +5069,7 @@ public function update_encode_transfer(){
                     'empid'=>$sub->accountability_id,
                     'unit_price'=>$sub->unit_price,
                     'lost'=>$sub->lost,
-                    'date_issued'=>'',
+                    'date_issued'=>$sub->date_issued,
                     'date_returned'=>'',
                     'remarks'=>'',
                     'replacement'=>$replacement,
@@ -5339,6 +5340,8 @@ public function update_encode_transfer(){
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $sub->ed_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $sub->set_id);
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
+                $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $sub->et_id);
+               
                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sub->set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                 $data['count_set']=$count_set;
@@ -5374,7 +5377,7 @@ public function update_encode_transfer(){
                     'empid'=>$sub->accountability_id,
                     'unit_price'=>$sub->unit_price,
                     'lost'=>$sub->lost,
-                    'date_issued'=>'',
+                    'date_issued'=>$sub->date_issued,
                     'date_returned'=>'',
                     'remarks'=>'',
                     'replacement'=>$replacement,
