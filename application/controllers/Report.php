@@ -4658,6 +4658,7 @@ public function update_encode_transfer(){
         $replacement='';
         foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $s){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $s->unit_id);
+            $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $sub->et_id);
             $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $s->accountability_id);
             $category =$this->super_model->select_column_where("category", "category_name", "category_id", $s->category_id);
             $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $s->subcat_id);
@@ -4688,7 +4689,7 @@ public function update_encode_transfer(){
                 'empid'=>$s->accountability_id,
                 'unit_price'=>$s->unit_price,
                 'lost'=>$s->lost,
-                'date_issued'=>'',
+                'date_issued'=>$s->date_issued,
                 'date_returned'=>'',
                 'remarks_all'=>'',
                 'remarks'=>'',
