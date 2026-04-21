@@ -15,7 +15,7 @@
                     <p id="head" style="margin: 0px"><?php echo TEL_NO;?></p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                    <h5><strong>LOST ASSET FORM</strong></h5>
+                    <h5><strong>ASSET CLEARANCE FORM</strong></h5>
                 </td>
             </tr>
         </table>
@@ -26,8 +26,8 @@
                         <td width="5%"><h5 class="nomarg">Date</h5></td>
                         <td width="20%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo date('Y-m-d');?></label></td>
                         <td width="34%"></td>
-                        <!-- <td width="13%"><h5 class="nomarg pull-right">ACF No.</h5></td>
-                        <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <input type = "text" name = "acf_no" id = "acf_no" value = "<?php echo $acf_no; ?>" readonly></label></td> -->
+                        <td width="13%"><h5 class="nomarg pull-right">ACF No.</h5></td>
+                        <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <input type = "text" name = "acf_no" id = "acf_no" value = "<?php echo $acf_no; ?>" readonly></label></td>
                     </tr>            
                 </table>
             </div>
@@ -119,11 +119,11 @@
                     </tr>   
                 </table>
                 <br>
-                <!-- <table width="100%">
+                <table width="100%">
                     <tr>
                         <td class="main-tab" style="text-indent:20%">This is to certify that <span style="border-bottom: 1px solid #a2a2a2"><?php echo $name;?></span> cleared from any liabilites from the company. </td>
                     </tr>
-                </table> -->
+                </table>
                 <br>
                  <table width="100%">
                     <tr>
