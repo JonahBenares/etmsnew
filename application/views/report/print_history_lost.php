@@ -26,8 +26,8 @@
                         <td width="5%"><h5 class="nomarg">Date</h5></td>
                         <td width="20%" style="border-bottom: 1px solid #999"> <label class="nomarg">: <?php echo date('Y-m-d');?></label></td>
                         <td width="34%"></td>
-                        <td width="13%"><h5 class="nomarg pull-right">ACF No.</h5></td>
-                        <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <input type = "text" name = "acf_no" id = "acf_no" value = "<?php echo $acf_no; ?>" readonly></label></td>
+                        <!-- <td width="13%"><h5 class="nomarg pull-right">ACF No.</h5></td>
+                        <td colspan="3" style="border-bottom: 1px solid #999"> <label class="nomarg">: <input type = "text" name = "acf_no" id = "acf_no" value = "<?php echo $acf_no; ?>" readonly></label></td> -->
                     </tr>            
                 </table>
             </div>
