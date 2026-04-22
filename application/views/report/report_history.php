@@ -113,6 +113,10 @@
                                 <a href="<?php echo base_url(); ?>report/print_history/<?php echo $id;?>" class="btn btn-info-alt btn-sm" title="Print">
                                     <span class="fa fa-print"></span></a>
                             </div>
+                            <div class="btn-group pull-right">
+                                <a href="<?php echo base_url(); ?>report/print_history_lost/<?php echo $id;?>" class="btn btn-danger btn-sm" title="Print">
+                                    <span class="fa fa-print"></span></a>
+                            </div>
                         </h4>
                          <table class="table table-borderesd dataTable table-striped table-earning">
                             <thead>
