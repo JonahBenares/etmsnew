@@ -44,7 +44,6 @@
                         <td class="main-tab" width="7%" align="center"><strong>Unit Price</strong></td>
                         <td class="main-tab" width="8%" align="center"><strong>Remarks</strong></td>
                     </tr>
-<<<<<<< HEAD
                     <tr>
                     <?php 
                     if(!empty($sub)){
@@ -177,99 +176,6 @@
                     </tr>
                     <?php } ?>
                     
-=======
-                    <?php 
-                        if(!empty($sub)){
-                            usort($sub, function($a, $b) {
-                                $a_id = $a['set_id'] ?? 0;
-                                $b_id = $b['set_id'] ?? 0;
-                                return $a_id <=> $b_id;
-                            });
-                            $a=0;
-                            $previousId = '';
-                            $data2 = [];
-                            foreach($sub AS $value){
-                                $remarks = !empty($value['remarks'])
-                                ? $value['remarks']
-                                : (
-                                    !empty($value['return_details'])
-                                        ? (is_array($value['return_details'])
-                                            ? ($value['return_details']['return_remarks'] ?? '')
-                                            : (json_decode($value['return_details'], true)['return_remarks'] ?? '')
-                                        )
-                                        : ''
-                                );
-
-                            $key = $value['et_id'] . $remarks;
-                                if(!isset($data2[$key])) {
-                                    $data2[$key]= array(
-                                        'et_id'=>$value['et_id'],
-                                        'ed_id'=>$value['ed_id'],
-                                        'set_id'=>$value['set_id'],
-                                        'set_name'=>$value['set_name'],
-                                        'set_price'=>$value['set_price'],
-                                        'set_currency'=>$value['set_currency'],
-                                        'asset_control_no'=>$value['asset_control_no'],
-                                        'serial_no'=>$value['serial_no'],
-                                        'currency'=>$value['currency'],
-                                        'count_set'=>$value['count_set'],
-                                        'cat'=>$value['cat'],
-                                        'subcat'=>$value['subcat'],
-                                        'unit'=>$value['unit'],
-                                        'department'=>$value['department'],
-                                        'et_desc'=>$value['et_desc'],
-                                        'qty'=>$value['qty'],
-                                        'accountability'=>$value['accountability'],
-                                        'empid'=>$value['empid'],
-                                        'unit_price'=>$value['unit_price'],
-                                        'lost'=>$value['lost'],
-                                        'date_issued' => $value['date_issued'] 
-                                        ?? (is_array($value['et_details'] ?? null) 
-                                            ? ($value['et_details']['date_issued'] ?? null) 
-                                            : (json_decode($value['et_details'] ?? '', true)['date_issued'] ?? null)
-                                        ),
-                                        'date_returned' => $return_date ?? '',
-                                        'remarks' => $remarks,
-                                    );
-                                }
-                            }
-                            foreach($data2 AS $det){ 
-                                // if($det['lost'] == 0) continue; 
-                    ?>
-                        <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
-                            <td class="main-tab" align="center">
-                                <?php echo ($det['lost'] != 0) ? '' : ($det['date_returned'] ?? ''); ?>
-                            </td>
-                            <td class="main-tab" align="center">
-                                <?php echo !empty($det['date_issued']) 
-                                    ? $det['date_issued'] 
-                                    : (!empty($det['et_details']['date_issued']) 
-                                        ? $det['et_details']['date_issued'] 
-                                        : '-'); ?>
-                            </td>
-                            <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['serial_no'];?></td>
-                            <td class="main-tab" align="center"><?php echo ($det['lost']!=0) ? $det['et_desc']." - <b>Lost Item</b>" : $det['et_desc'];;?></td>
-                            <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                            <?php if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
-                            <td class="main-tab" align="center" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php echo ($det['set_id']==0) ? $det['unit_price']." <small>".$det['currency']."</small>" : $det['set_price']." <small>".$det['set_currency']."</small>";?></td>
-                            <?php } else { ?>
-                            <td class="main-tab" align="center"><?php echo $det['unit_price']." <small>".$det['currency']."</small>";?></td>   
-                            <?php } ?>
-                            <?php if(!empty($det['accountability'])){ ?>
-                                <td class="main-tab" align="center"><?php echo $det['remarks']; ?></td>
-
-                            <?php } else { ?>
-                                <td class="main-tab" align="center"><?php echo $det['remarks']; ?></td>
-                            <?php } ?>
-                        </tr>
-                        <?php $previousId = $det['set_id']; } } else { ?>
-                        <tr>
-                            <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
-                        </tr>
-                        <?php } ?>
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
                     </tr>
                     <tr>
                         <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
