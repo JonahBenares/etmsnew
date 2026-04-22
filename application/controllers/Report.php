@@ -4658,7 +4658,6 @@ public function update_encode_transfer(){
         $replacement='';
         foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $s){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $s->unit_id);
-            
             $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $s->accountability_id);
             $category =$this->super_model->select_column_where("category", "category_name", "category_id", $s->category_id);
             $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $s->subcat_id);
@@ -5034,7 +5033,6 @@ public function update_encode_transfer(){
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "ed_id", $sub->ed_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $sub->set_id);
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
-                $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $sub->et_id);
                 $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$sub->set_id);
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
                 $data['count_set']=$count_set;
@@ -5070,7 +5068,7 @@ public function update_encode_transfer(){
                     'empid'=>$sub->accountability_id,
                     'unit_price'=>$sub->unit_price,
                     'lost'=>$sub->lost,
-                    'date_issued'=>$sub->date_issued,
+                    'date_issued'=>'',
                     'date_returned'=>'',
                     'remarks'=>'',
                     'replacement'=>$replacement,
@@ -5269,7 +5267,7 @@ public function update_encode_transfer(){
                     'unit_price'=>$unit_price,
                     'lost'=>$lost,
                     'date_issued'=>'',
-                    'date_returned' => $ret->return_date ?? '',
+                    'date_returned'=>'',
                     'remarks'=>$remarks,
                     'replacement'=>'',
                 );
@@ -5279,7 +5277,7 @@ public function update_encode_transfer(){
         $this->load->view('template/footer');
     }
 
-    public function print_history_lost(){  
+public function print_history_lost(){  
     $this->load->view('template/header');
     $this->load->view('template/navbar',$this->dropdown);
 
@@ -5307,15 +5305,9 @@ public function update_encode_transfer(){
 
     $data['acf_no'] = $acf_no;
 
-<<<<<<< HEAD
     $replacement='';
 
     // ================= LOST ITEMS =================
-=======
-    // =====================================================
-    // ================= LOST ITEMS (print_history_lost) ====
-    // =====================================================
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
     $data['sub'] = array();
 
     foreach($this->super_model->custom_query("
@@ -5341,7 +5333,6 @@ public function update_encode_transfer(){
         $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $sub->currency_id);
         $date_issued = $this->super_model->select_column_where("et_details", "date_issued", "et_id", $sub->et_id);
 
-<<<<<<< HEAD
         foreach($this->super_model->select_row_where("lost_items","ed_id",$sub->ed_id) AS $lo){
             $rep_et = $this->super_model->select_column_where("et_details","et_id","ed_id",$lo->ed_id);
             if($lo->ed_id==$sub->ed_id){
@@ -5349,13 +5340,10 @@ public function update_encode_transfer(){
             }
         }
 
-=======
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
         $data['sub'][] = array(
             'et_id' => $sub->et_id,
             'ed_id' => $sub->ed_id,
             'set_id' => $set_id,
-<<<<<<< HEAD
             'set_name' => isset($set_name) ? $set_name : '',
             'set_price' => isset($set_price) ? $set_price : 0,
             'set_currency' => isset($set_currency) ? $set_currency : '',
@@ -5366,54 +5354,26 @@ public function update_encode_transfer(){
             'cat' => isset($category) ? $category : '',
             'subcat' => isset($subcat) ? $subcat : '',
             'unit' => isset($unit) ? $unit : '',
-=======
-            'set_name' => $set_name ?? '',
-            'set_price' => $set_price ?? 0,
-            'set_currency' => $set_currency ?? '',
-            'asset_control_no' => $sub->asset_control_no,
-            'serial_no' => $sub->serial_no,
-            'currency' => $currency ?? '',
-            'count_set' => 1,
-            'cat' => $category ?? '',
-            'subcat' => $subcat ?? '',
-            'unit' => $unit ?? '',
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
             'department' => $sub->department,
             'et_desc' => $sub->et_desc,
             'qty' => $sub->qty,
             'accountability' => $data['name'],
-<<<<<<< HEAD
             'accountabilitys'=>'',
-=======
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
             'empid' => $sub->accountability_id,
             'unit_price' => $sub->unit_price,
             'lost' => $lost,
             'date_issued' => $date_issued,
             'remarks' => 'Lost',
-<<<<<<< HEAD
             'date_returned' => '',
             'replacement'=>$replacement,
         );
     }
 
     // ================= RETURN ITEMS =================
-=======
-        );
-    }
-
-    // =====================================================
-    // ================= LATEST RETURN ONLY =================
-    // =====================================================
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
 
     $data['details'] = array();
     $data['return'] = array();
 
-<<<<<<< HEAD
-=======
-    // ✅ GET ONLY THE LATEST RETURN OF EMPLOYEE
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
     $latest = $this->super_model->custom_query("
         SELECT * FROM return_head 
         WHERE accountability_id = '$id' 
@@ -5423,7 +5383,6 @@ public function update_encode_transfer(){
 
     foreach($latest as $ret){
 
-<<<<<<< HEAD
         $data['ars_no'] = $ret->ars_no;
         $data['return_date'] = $ret->return_date;
         $data['remarks'] = $ret->return_remarks;
@@ -5489,64 +5448,6 @@ public function update_encode_transfer(){
 
     $this->load->view('report/print_history_lost',$data);
     $this->load->view('template/footer');
-=======
-            $data['ars_no'] = $ret->ars_no;
-            $data['return_date'] = $ret->return_date;
-            $data['remarks'] = $ret->return_remarks;
-
-            // ✅ GET DETAILS OF THAT ONE RETURN
-            foreach($this->super_model->select_row_where('return_details','return_id',$ret->return_id) AS $det){
-
-                $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
-                $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
-                $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
-                $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $det->ed_id);
-                $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
-                $unit_id = $this->super_model->select_column_where("et_head", "unit_id", "et_id", $det->et_id);
-                $unit = $this->super_model->select_column_where( "unit", "unit_name", "unit_id", $unit_id);
-                $asset_control_no = $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $det->ed_id);
-                $date_issued = $this->super_model->select_column_where("et_details", "date_issued", "ed_id", $det->ed_id);
-                $return_remarks = $this->super_model->select_column_where("return_details", "return_remarks", "return_id", $ret->return_id
-);
-
-                // ✅ MERGE INTO MAIN TABLE
-                $data['sub'][] = array(
-                    'et_id' => $det->et_id,
-                    'ed_id' => $det->ed_id,
-                    'set_id' => 0,
-                    'set_name' => '',
-                    'set_price' => 0,
-                    'set_currency' => '',
-                    'asset_control_no' => $asset_control_no ?? '',
-                    'serial_no' => $serial,
-                    'currency' => $currency ?? '',
-                    'count_set' => 1,
-                    'cat' => '',
-                    'subcat' => '',
-                    'unit' => $unit ?? '',
-                    'department' => '',
-                    'et_desc' => $item,
-                    'qty' => 1,
-                    'accountability' => $data['name'],
-                    'empid' => $id,
-                    'unit_price' => $price,
-                    'lost' => 0,
-                    'date_issued' => $date_issued ?? '',
-                    'date_returned' => $ret->return_date,
-                    'remarks' => $det->return_remarks ?? $data['remarks'] ?? 'Returned',
-                );
-            }
-
-            $data['return'][] = array(
-                'return_id' => $ret->return_id,
-                'date_returned' => $ret->return_date,
-            );
-        }
-
-        // ================= VIEW =================
-        $this->load->view('report/print_history_lost',$data);
-        $this->load->view('template/footer');
->>>>>>> e31b756a8097c7a8a749d1d0861ab09783d85584
 }
 
     public function insert_acfno(){
