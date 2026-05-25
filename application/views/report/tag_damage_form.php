@@ -158,11 +158,34 @@
                                             <textarea name="remarks<?php echo $x;?>" class="form-control" id="" cols="30" rows="2"></textarea>
                                         </div>
                                     </div>
-                                    <div class="row">                                                 
+                                    <div class="row">
                                         <div class="col-12">
-                                            <label for="" class="control-label mb-1">Remove Accountability:</label>
-                                             <input type="radio" name="remove_accountability<?php echo $x;?>" value="1" required>Yes</input>
-                                            <input type="radio" name="remove_accountability<?php echo $x;?>" value="2" required>No</input>
+                                            <input type="radio" name="remove_accountability<?php echo $x;?>" value="1"
+                                                   onclick="toggleAcc(<?php echo $x;?>, 'remove')" required>
+                                            Remove Accountability
+
+                                            <input type="radio" name="remove_accountability<?php echo $x;?>" value="3"
+                                                   onclick="toggleAcc(<?php echo $x;?>, 'change')" required>
+                                            Change Accountability
+
+                                            <input type="radio" name="remove_accountability<?php echo $x;?>" value="2"
+                                                   onclick="toggleAcc(<?php echo $x;?>, 'none')" required>
+                                            No changes in accountability
+                                        </div>
+                                    </div>
+
+                                    <!-- DROPDOWN (ONLY FOR CHANGE) -->
+                                    <div class="row mt-2" id="acc_box_<?php echo $x;?>" style="display:none;">
+                                        <div class="col-12">
+                                            <label class="control-label mb-1">Select New Accountability:</label>
+                                            <select name="new_accountability<?php echo $x;?>" class="form-control select2" style="width:100%">
+                                                <option value="">-- Select Employee --</option>
+                                                <?php foreach($new_accountability as $e){ ?>
+                                                    <option value="<?php echo $e->employee_id; ?>">
+                                                        <?php echo $e->employee_name; ?>
+                                                    </option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">                                                 
@@ -220,3 +243,23 @@
         </div>
     </div>
 </div>
+<script>
+function toggleAcc(index, action){
+    let box = document.getElementById('acc_box_' + index);
+    let select = $(box).find('.select2');
+
+    if(action === 'change'){
+        box.style.display = 'block';
+
+        // FIX WIDTH ONLY (NO REINIT)
+        setTimeout(function () {
+            select.select2('open');   // forces correct rendering
+            select.select2('close');
+        }, 100);
+
+    } else {
+        box.style.display = 'none';
+        select.val(null).trigger('change');
+    }
+}
+</script>

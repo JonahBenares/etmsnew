@@ -180,29 +180,100 @@
                                     $x = 1;
                                     foreach($sub AS $s){ 
                                     if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==0 && $s['obsolete']==0){
+
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==0){
+
                                         $status = '<span class="badge badge-pill bg-primary-alt uppercase">Assigned / Upgraded</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']!=0 && $s['damaged']==1){
+
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Upgraded / Damaged</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['accountability_id']!=0 && $s['borrowed']==0 && $s['lost']==0 && $s['upgrade']==0 && $s['damaged']==1){
+
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Assigned / Damaged</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['accountability_id']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']==0){
+
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['accountability_id']==0 && $s['damaged']==0 && $s['change_location']==0 && $s['upgrade']!=0){
+
                                         $status = '<span class="badge badge-pill bg-success-alt uppercase">Available / Upgraded</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['accountability_id']==0 && $s['change_location']==1){
-                                        $status = "Moved to ".$s['location'];
+
+                                        $status = '<span class="badge badge-pill bg-secondary-alt uppercase">Moved to '.$s['location'].'</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['borrowed']==1){
+
                                         $status = '<span class="badge badge-pill bg-info-alt uppercase">Borrowed</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['damaged']==1 && $s['accountability_id']==0){
+
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['damaged']==1 && $s['accountability_id']!=0){
+
                                         $status = '<span class="badge badge-pill bg-danger-alt uppercase">Damaged / '.$s['accountability'].'</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['lost']==1){
-                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Lost Item / '.$s['accountability'].'</span>';
+
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">Lost Item / '.$s['accountability'].'</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
+
                                     }else if($s['obsolete']==1){
-                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">'.'Obsolete Item / '.$s['accountability'].'</span>';
+
+                                        $status = '<span class="badge badge-pill bg-dark-alt uppercase">Obsolete Item / '.$s['accountability'].'</span>';
+
+                                        if($s['draft']==1){
+                                            $status .= ' <span class="badge badge-pill bg-warning-alt uppercase">Draft</span>';
+                                        }
                                     }
                                 ?>
                                 <tr style = "<?php echo ($s['lost']!=0 || $s['obsolete']!=0) ? "background-color:#ec7070 !important" : ''; ?>">

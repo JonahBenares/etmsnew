@@ -1,18 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-// require FCPATH.'vendor\autoload.php';
-// use PhpOffice\PhpSpreadsheet\Spreadsheet;
-// use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
-// use PhpOffice\PhpSpreadsheet\Reader\Csv;
-// use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
-// use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
-// use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
-// use PhpOffice\PhpSpreadsheet\Style\Border as border;
-// use PhpOffice\PhpSpreadsheet\Style\NumberFormat as numberformat;
-// use PhpOffice\PhpSpreadsheet\Style\Fill as fill; // Instead fill
-// use PhpOffice\PhpSpreadsheet\Style\Color as color; //Instead PHPExcel_Style_Color
-// use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
-// use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
+require FCPATH.'vendor\autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
+use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
+use PhpOffice\PhpSpreadsheet\Style\Border as border;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat as numberformat;
+use PhpOffice\PhpSpreadsheet\Style\Fill as fill; // Instead fill
+use PhpOffice\PhpSpreadsheet\Style\Color as color; //Instead PHPExcel_Style_Color
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
+use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
 class Repair extends CI_Controller {
 
     function __construct(){
@@ -103,6 +103,7 @@ class Repair extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
         /*$data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");*/
+        $data['new_accountability'] = $this->super_model->select_all_order_by("employees", "employee_name", "ASC");
         foreach($this->super_model->select_all("repair_details") AS $det){
         $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$det->ed_id' AND accountable!='0' ORDER BY create_date DESC");
         $data['et_head']=$this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.et_id NOT IN (SELECT et_id FROM repair_details WHERE method='1' AND remove_upgrade='0') AND accountability_id='$accountable' || accountability_id='0' AND damage='0' AND save_temp='0' ORDER BY et_desc ASC");
@@ -116,6 +117,7 @@ class Repair extends CI_Controller {
                         $category=$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);  
                     } 
                     $item=$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dets->et_id);             
+                    $current_accountability=$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $dets->et_id);             
                     $model =$this->super_model->select_column_where("et_details", "model", "ed_id", $dets->ed_id);
                     $model =$this->super_model->select_column_where("et_details", "model", "ed_id", $dets->ed_id);
                     $serial =$this->super_model->select_column_where("et_details", "serial_no", "ed_id", $dets->ed_id);
@@ -124,6 +126,7 @@ class Repair extends CI_Controller {
                     $data['details'][]=array(
                         'repair_id'=>$det->repair_id,
                         'ed_id'=>$dets->ed_id,
+                        'current_accountability'=>$current_accountability,
                         'item'=>$item,
                         'category'=>$category,
                         'brand'=>$brand,
@@ -189,6 +192,8 @@ class Repair extends CI_Controller {
             $user_id = $this->input->post('user_id'.$x);
             $received_by = $this->input->post('rec_id'.$x);
             $et_id = $this->input->post('upgrade_itm'.$x);
+            $change_accountability = $this->input->post('change_accountability'.$x);
+            $new_accountability = $this->input->post('new_accountability'.$x);
             foreach($this->super_model->select_row_where('repair_details', 'ed_id', $edid) AS $rep){
                 $rep_data = array(
                     'repair_date'=>$date,
@@ -216,11 +221,20 @@ class Repair extends CI_Controller {
                     ); 
                 }
                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
+
+                if($change_accountability==1){
+                    $update_accountable = array(
+                        'accountability_id'=>$new_accountability,
+                    ); 
+                    $this->super_model->update_where("et_head", $update_accountable, "et_id", $det->et_id);
+                }
                 
                 if($method=='1'){
                     $method_data = array(
                         'method'=>0,
                     ); 
+
+
                 }else {
                     $method_data = array(
                         'method'=>1,
@@ -239,19 +253,19 @@ class Repair extends CI_Controller {
                         }
                     }
 
-                    $remove_accountability = $this->super_model->select_column_custom_where("damage_info","remove_accountability","ed_id='$edid' AND accountable!='0' ORDER BY create_date DESC");
-                    if($remove_accountability==1){
-                        $update_accountable = array(
-                            'accountability_id'=>0,
-                        ); 
-                        $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
-                    }else{
-                        $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0' ORDER BY create_date DESC");
-                        $update_accountable = array(
-                            'accountability_id'=>$accountable,
-                        ); 
-                        $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
-                    }
+                    // $remove_accountability = $this->super_model->select_column_custom_where("damage_info","remove_accountability","ed_id='$edid' AND accountable!='0' ORDER BY create_date DESC");
+                    // if($remove_accountability==1){
+                    //     $update_accountable = array(
+                    //         'accountability_id'=>0,
+                    //     ); 
+                    //     $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    // }else{
+                    //     $accountable = $this->super_model->select_column_custom_where("damage_info","accountable","ed_id = '$edid' AND accountable!='0' ORDER BY create_date DESC");
+                    //     $update_accountable = array(
+                    //         'accountability_id'=>$accountable,
+                    //     ); 
+                    //     $this->super_model->update_where("et_head", $update_accountable, "et_id", $et_id);
+                    // }
                 }
                 
                 $this->super_model->update_where("repair_details", $method_data, "repair_id", $repair_id);
@@ -286,9 +300,9 @@ class Repair extends CI_Controller {
         $date_received_to=$this->input->post('date_received_to');
         $accountable=$this->input->post('with_accountability');
         $date = date("FY",strtotime($date_received_from));
-        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        $objPHPExcel = new PHPExcel();
-        // $objPHPExcel = new Spreadsheet();
+        // require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        // $objPHPExcel = new PHPExcel();
+        $objPHPExcel = new Spreadsheet();
         $exportfilename="Damage Summary Report.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Damage Summary Report $date");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "No.");
@@ -312,20 +326,20 @@ class Repair extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S2', "Damage done to the Equipment");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T2', "Recommendation");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U2', "Remarks");
-        $styleArray = array(
-          'borders' => array(
-            'allborders' => array(
-              'style' => PHPExcel_Style_Border::BORDER_THIN
-            )
-          )
-        );
         // $styleArray = array(
-        //     'borders' => array(
-        //         'allBorders' => array(
-        //             'borderStyle' => border::BORDER_THIN
-        //         )
+        //   'borders' => array(
+        //     'allborders' => array(
+        //       'style' => PHPExcel_Style_Border::BORDER_THIN
         //     )
+        //   )
         // );
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => border::BORDER_THIN
+                )
+            )
+        );
 
         foreach(range('A','U') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
@@ -388,33 +402,33 @@ class Repair extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $d->recommendation);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $d->remarks);
             $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":U".$num)->applyFromArray($styleArray);
-            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":C".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('L'.$num.":O".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objPHPExcel->getActiveSheet()->getStyle('O'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":C".$num)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('L'.$num.":O".$num)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('O'.$num)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
             $x++;
             $num++;
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
         $objPHPExcel->getActiveSheet()->getStyle('A2:U2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
-        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment;filename="Damage Summary Report.xlsx"');
-        // header('Cache-Control: max-age=0');
-        // ob_end_clean();
-        // $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
-        // $objWriter->save('php://output');
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        if (file_exists($exportfilename))
-        unlink($exportfilename);
-        $objWriter->save($exportfilename);
-        unset($objPHPExcel);
-        unset($objWriter);   
-        ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Damage Summary Report.xlsx"');
-        readfile($exportfilename);
+        header('Content-Disposition: attachment;filename="Damage Summary Report.xlsx"');
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+        $objWriter->save('php://output');
+
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        // if (file_exists($exportfilename))
+        // unlink($exportfilename);
+        // $objWriter->save($exportfilename);
+        // unset($objPHPExcel);
+        // unset($objWriter);   
+        // ob_end_clean();
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment; filename="Damage Summary Report.xlsx"');
+        // readfile($exportfilename);
     }
 }
 ?>

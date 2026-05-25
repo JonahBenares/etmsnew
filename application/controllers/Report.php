@@ -4674,6 +4674,7 @@ public function update_encode_transfer(){
                 'et_id'=>$s->et_id,
                 'ed_id'=>$s->ed_id,
                 'set_id'=>$s->set_id,
+                'draft'=>$s->save_temp,
                 'asset_control_no'=>$s->asset_control_no,
                 'serial_no'=>$s->serial_no,
                 'set_name'=>$set_name,
@@ -4734,10 +4735,12 @@ public function update_encode_transfer(){
             $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $r->et_id);
             $damaged =$this->super_model->select_column_where("et_details", "damage", "ed_id", $r->ed_id);
             $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+            $draft =$this->super_model->select_column_where("et_head", "save_temp", "et_id", $r->et_id);
             if($count_return!=0){
                 $data['sub'][] = array(
                     'et_id'=>$r->et_id,
                     'ed_id'=>$r->ed_id,
+                    'draft'=>$draft,
                     'set_id'=>$set_id,
                     'asset_control_no'=>$asset_control_no,
                     'serial_no'=>$serial_no,
@@ -4798,10 +4801,12 @@ public function update_encode_transfer(){
                 $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $dam->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $dam->et_id); 
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $dam->et_id); 
-                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+                $draft =$this->super_model->select_column_where("et_head", "save_temp", "et_id", $dam->et_id);
                 $data['sub'][] = array(
                     'et_id'=>$dam->et_id,
                     'ed_id'=>$dam->ed_id,
+                    'draft'=>$draft,
                     'set_id'=>$set_id,
                     'asset_control_no'=>$asset_control_no,
                     'serial_no'=>$serial_no,
@@ -4862,10 +4867,12 @@ public function update_encode_transfer(){
                 $obsolete = $this->super_model->select_column_where("et_details", "obsolete", "et_id", $et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et_id); 
                 $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $et_id); 
-                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);
+                $draft =$this->super_model->select_column_where("et_head", "save_temp", "et_id", $et_id);
                 $data['sub'][] = array(
                     'et_id'=>$et_id,
                     'ed_id'=>$rep->ed_id,
+                    'draft'=>$draft,
                     'set_id'=>$set_id,
                     'asset_control_no'=>$asset_control_no,
                     'serial_no'=>$serial_no,
@@ -4931,9 +4938,11 @@ public function update_encode_transfer(){
                     $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $rep->et_id); 
                     $upgrade = $this->super_model->select_column_where("et_details", "upgrade", "et_id", $rep->et_id); 
                     $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id); 
+                    $draft =$this->super_model->select_column_where("et_head", "save_temp", "et_id", $rep->et_id);
                     $data['sub'][] = array(
                         'et_id'=>$et_id,
                         'ed_id'=>$rep->ed_id,
+                        'draft'=>$draft,
                         'set_id'=>$set_id,
                         'asset_control_no'=>$asset_control_no,
                         'serial_no'=>$serial_no,
@@ -5889,6 +5898,7 @@ public function update_encode_transfer(){
                 $data['sub'][] = array(
                     'et_id'=>$sub->et_id,
                     'ed_id'=>$sub->ed_id,
+                    'draft'=>$sub->save_temp,
                     'set_id'=>$sub->set_id,
                     'serial_no'=>$sub->serial_no,
                     'asset_control_no'=>$sub->asset_control_no,
@@ -6858,7 +6868,8 @@ public function update_encode_transfer(){
         $count =$this->uri->segment(5);
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);  
         $qty = $this->super_model->select_column_where("et_head", "qty", "et_id", $et_id);
-        $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '66'); 
+        $data['new_accountability'] = $this->super_model->select_all_order_by("employees", "employee_name", "ASC");
+        $data['noted_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '66');
         $data['checked_by'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", '53'); 
         $data['checked_name'] = $this->super_model->select_column_where("employees", "employee_id", "employee_name", 'Mary Grace Bugna'); 
         $data['noted_id'] = $this->super_model->select_column_where("employees", "employee_id", "employee_name", 'Eric Jabiniar');
@@ -6950,6 +6961,7 @@ public function update_encode_transfer(){
             $receipt = $this->input->post('receipt'.$x);
             $accountable = $this->input->post('accountable'.$x);
             $remove_accountability = $this->input->post('remove_accountability'.$x);
+            $new_accountability = $this->input->post('new_accountability'.$x);
             $recommendation = $this->input->post('recommendation'.$x);
             $remarks = $this->input->post('remarks'.$x);
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
@@ -6963,19 +6975,20 @@ public function update_encode_transfer(){
                 $rep_data = array(
                     'damage'=>1
                 ); 
-                if($this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id)){
-                    if($remove_accountability==1){
-                        $remove_data = array(
-                            'accountability_id'=>0,
-                        );
-                        $this->super_model->update_where("et_head", $remove_data, "et_id",$rep->et_id);
-                    }else{
-                        $remove_data = array(
-                            'accountability_id'=>$accountable,
-                        );
-                        $this->super_model->update_where("et_head", $remove_data, "et_id",$rep->et_id);
-                    }
-                }
+                $this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id);
+                // if($this->super_model->update_where("et_details", $rep_data, "et_id", $rep->et_id)){
+                //     if($remove_accountability==1){
+                //         $remove_data = array(
+                //             'accountability_id'=>0,
+                //         );
+                //         $this->super_model->update_where("et_head", $remove_data, "et_id",$rep->et_id);
+                //     }else{
+                //         $remove_data = array(
+                //             'accountability_id'=>$accountable,
+                //         );
+                //         $this->super_model->update_where("et_head", $remove_data, "et_id",$rep->et_id);
+                //     }
+                // }
             }
 
             if($id!=0){ 
@@ -7052,12 +7065,28 @@ public function update_encode_transfer(){
                 'user_id'=>$this->input->post('user_id'),
             ); 
             if($this->super_model->insert_into("damage_info", $data_damage)){
-                if($remove_accountability==2){
-                    $remove_data = array(
-                        'accountability_id'=>$accountable,
-                    );
-                    $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
-                }
+                // if($remove_accountability==2){
+                //     $remove_data = array(
+                //         'accountability_id'=>$accountable,
+                //     );
+                //     $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
+
+                    if($remove_accountability==1){
+                        $remove_data = array(
+                            'accountability_id'=>0,
+                        );
+                        $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
+                    }else if($remove_accountability==2){
+                        $remove_data = array(
+                            'accountability_id'=>$accountable,
+                        );
+                        $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
+                    }else{
+                        $remove_data = array(
+                            'accountability_id'=>$new_accountability,
+                        );
+                        $this->super_model->update_where("et_head", $remove_data, "et_id",$et_id);
+                    }
             }
 
             $date_issued = $this->super_model->select_column_where("et_details", "date_issued", "ed_id", $edid);

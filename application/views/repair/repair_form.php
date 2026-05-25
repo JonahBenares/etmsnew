@@ -26,8 +26,9 @@
     <div class="container-fluid">
         <form action = '<?php echo base_url(); ?>repair/unsaved' method = "POST">
             <?php
+            $z = 1;
                 foreach($rep AS $d){  
-                    $z = 1;
+                    
                     foreach($details AS $r){ 
                         switch($r){
                             case($d['ed_id'] == $r['ed_id']):
@@ -45,9 +46,9 @@
         <form method = "POST" action = "<?php echo base_url(); ?>repair/insert_repair" novalidate>
             <!-- LOOP HERE -->
             <?php 
-
+                 $z = 1;
                 foreach($rep AS $d){  
-                    $z = 1;
+                   
                     foreach($details AS $r){ 
                         switch($r){
                             case($d['ed_id'] == $r['ed_id']):       
@@ -91,40 +92,82 @@
                                         </table>
                                     </td>
                                     <td>
-                                        <label for="" class="control-label mb-1">Select Method:</label>
-                                        <br>
-                                        <p><input id="method1" name="method<?php echo $z;?>" type="radio" value="1" required> Repair</p>
-                                        <p><input id="method2" name="method<?php echo $z;?>" type="radio" value="2" required> Upgrade</p>
-                                        <br>
-                                        <label style="display: none" for="" class="control-label mb-1 upgrade_label" id="upgrade_label">Upgrade Item:</label>
-                                        <select id="upgrade_itm" name="upgrade_itm<?php echo $z;?>" class="form-control bor-radius5 cc-exp select2" required>
-                                            <option value=''>--Select Item--</option>
-                                            <?php foreach($et_head AS $eh){ ?>
-                                            <option value="<?php echo $eh->et_id;?>"><?php echo $eh->et_desc." | ".$eh->serial_no." | ".$eh->asset_control_no;?></option>
-                                            <?php } ?>
-                                        </select>
-                                        <label for="" class="control-label mb-1" id="rep_date">Repair Date:</label>
-                                        <input id="date" name="date<?php echo $z;?>" type="date"  class="form-control bor-radius5 cc-exp" required>
-                                        <label for="" class="control-label mb-1" id="rep_price">Repair Price:</label>
-                                        <input id="price" name="price<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp" onkeypress="return isNumberKey(event,this)">
-                                        <label for="" class="control-label mb-1">JO No. / PR No.:</label>
-                                        <input id="date" name="jo<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
-                                        <label for="" class="control-label mb-1">Supplier:</label>
-                                        <input id="date" name="supplier<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
-                                    </td>
-                                    <td>
-                                        <label for="" class="control-label mb-1">Assessment:</label>
-                                        <br>
-                                        <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="1" required> Repaired</p>
-                                        <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="2" required> Beyond Repair</p>
-                                        <br>
-                                        <label for="" class="control-label mb-1">Received by:</label>
-                                        <input name="receive" type="text" class="form-control bor-radius5 cc-exp receive" data-trigger="<?php echo $z;?>"  autocomplete = "off"  id = "receive<?php echo $z; ?>">
-                                        <span id="suggestion-receive<?php echo $z;?>"></span>
-                                        <input type="hidden" name="rec_id<?php echo $z;?>" id="rec_id<?php echo $z;?>">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <label for="" class="control-label mb-1">Select Method:</label>
+                                                    <br>
+                                                    <p><input id="method1" name="method<?php echo $z;?>" type="radio" value="1" required> Repair</p>
+                                                    <p><input id="method2" name="method<?php echo $z;?>" type="radio" value="2" required> Upgrade</p>
+                                                    <br>
+                                                    <label style="display: none" for="" class="control-label mb-1 upgrade_label" id="upgrade_label">Upgrade Item:</label>
+                                                    <select id="upgrade_itm" name="upgrade_itm<?php echo $z;?>" class="form-control bor-radius5 cc-exp select2" required>
+                                                        <option value=''>--Select Item--</option>
+                                                        <?php foreach($et_head AS $eh){ ?>
+                                                        <option value="<?php echo $eh->et_id;?>"><?php echo $eh->et_desc." | ".$eh->serial_no." | ".$eh->asset_control_no;?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <label for="" class="control-label mb-1" id="rep_date">Repair Date:</label>
+                                                    <input id="date" name="date<?php echo $z;?>" type="date"  class="form-control bor-radius5 cc-exp" required>
+                                                    <label for="" class="control-label mb-1" id="rep_price">Repair Price:</label>
+                                                    <input id="price" name="price<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp" onkeypress="return isNumberKey(event,this)">
+                                                    <label for="" class="control-label mb-1">JO No. / PR No.:</label>
+                                                    <input id="date" name="jo<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
+                                                    <label for="" class="control-label mb-1">Supplier:</label>
+                                                    <input id="date" name="supplier<?php echo $z;?>" type="text"  class="form-control bor-radius5 cc-exp">
+                                                </td>
+                                                <td>
+                                                    <label for="" class="control-label mb-1">Assessment:</label>
+                                                    <br>
+                                                    <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="1" required> Repaired</p>
+                                                    <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="2" required> Beyond Repair</p>
+                                                    <br>
+                                                    <label for="" class="control-label mb-1">Received by:</label>
+                                                    <input name="receive" type="text" class="form-control bor-radius5 cc-exp receive" data-trigger="<?php echo $z;?>"  autocomplete = "off"  id = "receive<?php echo $z; ?>">
+                                                    <span id="suggestion-receive<?php echo $z;?>"></span>
+                                                    <input type="hidden" name="rec_id<?php echo $z;?>" id="rec_id<?php echo $z;?>">
 
-                                        <label for="" class="control-label mb-1">Remarks:</label>
-                                        <textarea name="remarks<?php echo $z;?>" id=""  rows="7" class="form-control"></textarea>
+                                                    <label for="" class="control-label mb-1">Remarks:</label>
+                                                    <textarea name="remarks<?php echo $z;?>" id=""  rows="7" class="form-control"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <label class="control-label mb-1"> Change Accountability? </label>
+                                                    <p> <input type="radio" name="change_accountability<?php echo $z; ?>" value="1" onclick="toggleAccountability(<?php echo $z; ?>,1)"> Yes </p>
+                                                    <p> <input type="radio" name="change_accountability<?php echo $z; ?>" value="0" checked onclick="toggleAccountability(<?php echo $z; ?>,0)"> No </p>
+
+                                                    <br>
+
+                                                    <!-- ACCOUNTABILITY DROPDOWN -->
+                                                    <label class="control-label mb-1">
+                                                        New Accountability:
+                                                    </label>
+
+                                                    <select name="new_accountability<?php echo $z; ?>" 
+                                                            id="new_accountability<?php echo $z; ?>" 
+                                                            class="form-control"
+                                                            data-default="<?php echo $r['current_accountability']; ?>"
+                                                            disabled>
+
+                                                        <?php if($r['current_accountability'] == 0){ ?>
+                                                            <option value="0" selected>Select Employees</option>
+                                                        <?php } ?>
+
+                                                        <?php foreach($new_accountability AS $na){ ?>
+
+                                                            <option value="<?php echo $na->employee_id; ?>"
+                                                                <?php if($na->employee_id == $r['current_accountability']){ echo 'selected'; } ?>>
+
+                                                                <?php echo $na->employee_name; ?>
+
+                                                            </option>
+
+                                                        <?php } ?>
+
+                                                    </select>
+                                            </tr>
+                                        </table>
                                     </td>
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                     <input type="hidden" name="ed_id<?php echo $z;?>" value = "<?php echo $d['ed_id'];?>">
@@ -168,4 +211,30 @@
             $('.upgrade_label').show();
         });
     });
+
+function toggleAccountability(id, val){
+
+    var dropdown = $("#new_accountability"+id);
+
+    if(dropdown.length == 0){
+        return;
+    }
+
+    var defaultValue = dropdown.attr('data-default');
+
+    if(parseInt(val) == 1){
+
+        dropdown.prop('disabled', false);
+
+    } else {
+
+        dropdown.val(defaultValue);
+
+        dropdown.prop('disabled', true);
+
+        dropdown.trigger('change');
+
+    }
+
+}
 </script>
