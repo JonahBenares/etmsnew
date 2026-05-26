@@ -4665,7 +4665,7 @@ public function update_encode_transfer(){
         |--------------------------------------------------------------------------
         | Add parent items only
         */
-        foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+        foreach($this->super_model->select_custom_where("employee_inclusion","child_id='$id' AND removed='0'") AS $c){
 
             if(!in_array($c->parent_id, $accountability_ids)){
                 $accountability_ids[] = $c->parent_id;
@@ -5038,7 +5038,7 @@ public function update_encode_transfer(){
         $accountability_ids = array($id);
 
         // if current employee is child
-        foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+        foreach($this->super_model->select_custom_where("employee_inclusion","child_id='$id' AND removed='0'") AS $c){
 
             // include parent items
             if(!in_array($c->parent_id, $accountability_ids)){
@@ -6141,7 +6141,7 @@ public function print_history_lost(){
             $accountability_ids = array($id);
 
             // if current employee is child
-            foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+            foreach($this->super_model->select_custom_where("employee_inclusion","child_id='$id' AND removed='0'") AS $c){
 
                 // include parent items
                 if(!in_array($c->parent_id, $accountability_ids)){
@@ -8415,7 +8415,7 @@ public function print_history_lost(){
         $accountability_ids = array($id);
 
         // if current employee is child
-        foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+        foreach($this->super_model->select_custom_where("employee_inclusion","child_id='$id' AND removed='0'") AS $c){
 
             // include parent items
             if(!in_array($c->parent_id, $accountability_ids)){
