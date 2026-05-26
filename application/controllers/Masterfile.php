@@ -986,7 +986,7 @@ class Masterfile extends CI_Controller {
         }
     }
 
-    public function insert_multiemp(){
+/*    public function insert_multiemp(){
         $employee = $this->input->post('employee_id');
         $empid = $this->input->post('empid');
         $data = array(
@@ -1001,7 +1001,56 @@ class Masterfile extends CI_Controller {
                 echo "<script>alert('Successfully Added!'); window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$empid';</script>";
             }
         }
+    }*/
+
+public function insert_multiemp(){
+    $employee = $this->input->post('employee_id');
+    $empid = $this->input->post('empid');
+
+    // check if record exists
+    $check = $this->super_model->custom_query(" SELECT * FROM employee_inclusion WHERE child_id = '$employee' AND parent_id = '$empid' LIMIT 1 ");
+
+    if(count($check) > 0){
+        foreach($check as $c){
+
+            // if removed = 1 → restore it
+            if($c->removed == 1){
+                $where = array(
+                    'child_id'  => $employee,
+                    'parent_id' => $empid
+                );
+
+                $data = array(
+                    'removed' => 0
+                );
+
+                $this->super_model->update_custom_where(
+                    "employee_inclusion",
+                    $data,
+                    $where
+                );
+
+                echo "<script> alert('Successfully Restored!'); window.opener.location.reload(); window.location = '".base_url()."masterfile/employee_pop/$empid'; </script>";
+                return;
+            }
+        }
+
+        // already active record
+        echo "<script> alert('This employee is already encoded!'); window.opener.location.reload(); window.location = '".base_url()."masterfile/employee_pop/$empid'; </script>";
+
+    } else {
+        // insert new record
+        $data = array(
+            'parent_id' => $empid,
+            'child_id'  => $employee,
+            'removed'   => 0
+        );
+
+        if($this->super_model->insert_into("employee_inclusion", $data)){
+            echo "<script> alert('Successfully Added!'); window.opener.location.reload(); window.location = '".base_url()."masterfile/employee_pop/$empid'; </script>";
+        }
     }
+}
 
     public function office_update(){  
         $this->load->view('template/header');
