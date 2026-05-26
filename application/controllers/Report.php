@@ -4652,11 +4652,47 @@ public function update_encode_transfer(){
         $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
+
+        // ============================================
+        // ACCOUNTABILITY FILTER
+        // ============================================
+
+        $accountability_ids = array($id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | IF CURRENT USER IS CHILD
+        |--------------------------------------------------------------------------
+        | Add parent items only
+        */
+        foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+
+            if(!in_array($c->parent_id, $accountability_ids)){
+                $accountability_ids[] = $c->parent_id;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | IF CURRENT USER IS PARENT
+        |--------------------------------------------------------------------------
+        | Parent only sees own items
+        */
+        $id_list = implode("','", $accountability_ids);
+
+        // ============================================
+
+
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $ret_id =$this->super_model->select_column_where("return_head", "accountability_id", "accountability_id", $id);
-        $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
+        // $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
+            $count = 0;
+            foreach($this->super_model->custom_query("SELECT * FROM return_head WHERE accountability_id IN ('$id_list')") AS $cnt){
+                $count++;
+            }
         $replacement='';
-        foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $s){
+        // foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $s){
+        foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id IN ('$id_list') AND eh.cancelled = '0'") AS $s){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $s->unit_id);
             $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $s->accountability_id);
             $category =$this->super_model->select_column_where("category", "category_name", "category_id", $s->category_id);
@@ -4706,7 +4742,8 @@ public function update_encode_transfer(){
             );
         }
 
-        foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id='$id'") AS $r){
+        // foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id='$id'") AS $r){
+        foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id IN ('$id_list')") AS $r){
             $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $r->et_id);
             $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
             $remarks_all = "Turn over to";
@@ -4733,7 +4770,11 @@ public function update_encode_transfer(){
             $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $r->et_id);
             $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $r->et_id);
             $damaged =$this->super_model->select_column_where("et_details", "damage", "ed_id", $r->ed_id);
-            $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+            // $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+            $count_return = 0;
+            foreach($this->super_model->custom_query("SELECT * FROM return_head WHERE accountability_id IN ('$id_list')") AS $cr){
+                $count_return++;
+            }
             $draft =$this->super_model->select_column_where("et_head", "save_temp", "et_id", $r->et_id);
             if($count_return!=0){
                 $data['sub'][] = array(
@@ -4985,10 +5026,37 @@ public function update_encode_transfer(){
         //$this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACCOUNTABILITY FILTER
+        |--------------------------------------------------------------------------
+        | Parent = own items only
+        | Child = own items + parent items
+        */
+
+        $accountability_ids = array($id);
+
+        // if current employee is child
+        foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+
+            // include parent items
+            if(!in_array($c->parent_id, $accountability_ids)){
+                $accountability_ids[] = $c->parent_id;
+            }
+        }
+
+        $id_list = implode("','", $accountability_ids);
+
+
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $data['user_id'] =$_SESSION['fullname'];
         $ret_id =$this->super_model->select_column_where("return_head", "accountability_id", "accountability_id", $id);
-        $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
+        // $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
+        $count = 0;
+        foreach($this->super_model->custom_query("SELECT * FROM return_head WHERE accountability_id IN ('$id_list')") AS $c){
+            $count++;
+        }
         $location_id= $this->super_model->select_column_where('employees', 'location_id', 'employee_id', $id);
         $location= $this->super_model->select_column_where('location', 'location_prefix', 'location_id', $location_id);
         $date_format=date("Y");
@@ -5032,7 +5100,8 @@ public function update_encode_transfer(){
             $data['acf_no'] =$acf_nos;
         }
         $replacement='';
-         foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $sub){
+         // foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id='$id' AND eh.cancelled = '0'") AS $sub){
+         foreach($this->super_model->custom_query("SELECT * FROM et_details ed INNER JOIN et_head eh ON ed.et_id=eh.et_id WHERE accountability_id IN ('$id_list') AND eh.cancelled = '0'") AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
@@ -5084,7 +5153,9 @@ public function update_encode_transfer(){
                 );
         }
 
-        foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id='$id'") AS $r){
+        foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id IN ('$id_list')") AS $r){
+        // foreach($this->super_model->custom_query("SELECT * FROM return_details rd INNER JOIN return_head rh ON rd.return_id=rh.return_id WHERE accountability_id='$id'") AS $r){
+
             $set_id=$this->super_model->select_column_where("et_details","set_id",'ed_id',$r->ed_id);
             $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$set_id);
             // $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id'");
@@ -5129,7 +5200,11 @@ public function update_encode_transfer(){
             $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
             $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
             //$rep_edid_count = $this->super_model->count_custom_where("repair_details","ed_id='$r->ed_id'");
-            $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+            // $count_return = $this->super_model->count_rows_where("return_head","accountability_id",$id);
+           $count_return = 0;
+            foreach($this->super_model->custom_query("SELECT * FROM return_head WHERE accountability_id IN ('$id_list')") AS $cr){
+                $count_return++;
+            }
             if($count_return!=0){
                 $data['sub'][] = array(
                     'et_id'=>$r->et_id,
@@ -6056,10 +6131,42 @@ public function print_history_lost(){
         $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
+
+            /*
+            |--------------------------------------------------------------------------
+            | ACCOUNTABILITY FILTER
+            |--------------------------------------------------------------------------
+            */
+
+            $accountability_ids = array($id);
+
+            // if current employee is child
+            foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+
+                // include parent items
+                if(!in_array($c->parent_id, $accountability_ids)){
+                    $accountability_ids[] = $c->parent_id;
+                }
+            }
+
+            $id_list = implode("','", $accountability_ids);
+
+            /*
+            |--------------------------------------------------------------------------
+            | MAIN
+            |--------------------------------------------------------------------------
+            */
+
+
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
-        $row=$this->super_model->count_join_where('et_head','et_details', "accountability_id='$id' AND cancelled = '0'","et_id");
+
+        $row = 0;
+        foreach ($this->super_model->custom_query(" SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id IN ('$id_list') AND cancelled = '0' ") AS $r)
+            { $row++; }
+        // $row=$this->super_model->count_join_where('et_head','et_details', "accountability_id='$id' AND cancelled = '0'","et_id");
         if($row!=0){
-            foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='$id' AND cancelled = '0' GROUP BY eh.et_id") AS $sub){
+            // foreach ($this->super_model->custom_query("SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id='$id' AND cancelled = '0' GROUP BY eh.et_id") AS $sub){
+            foreach ($this->super_model->custom_query(" SELECT * FROM et_head eh INNER JOIN et_details ed ON eh.et_id=ed.et_id WHERE accountability_id IN ('$id_list') AND cancelled = '0' GROUP BY eh.et_id ") AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
@@ -8296,10 +8403,39 @@ public function print_history_lost(){
         $this->load->view('template/navbar',$this->dropdown);
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACCOUNTABILITY FILTER
+        |--------------------------------------------------------------------------
+        | Parent = own items only
+        | Child = own items + parent items
+        */
+
+        $accountability_ids = array($id);
+
+        // if current employee is child
+        foreach($this->super_model->select_row_where("employee_inclusion","child_id",$id) AS $c){
+
+            // include parent items
+            if(!in_array($c->parent_id, $accountability_ids)){
+                $accountability_ids[] = $c->parent_id;
+            }
+        }
+
+        $id_list = implode("','", $accountability_ids);
+
+        /*
+        |--------------------------------------------------------------------------
+        | MAIN
+        |--------------------------------------------------------------------------
+        */
         $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $id);
         $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $id);
-        $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
+        // $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
+        $row = 0;
+        foreach($this->super_model->custom_query(" SELECT * FROM et_head WHERE accountability_id IN ('$id_list') AND cancelled='0' ") AS $r){$row++; }
         if($row!=0){
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$id) AS $em){
                 $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
@@ -8309,7 +8445,8 @@ public function print_history_lost(){
                     );
                 }
             }
-            foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0' ORDER BY et_desc ASC") AS $aaf){
+            // foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0' ORDER BY et_desc ASC") AS $aaf){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head WHERE accountability_id IN ('$id_list') AND cancelled = '0' ORDER BY et_desc ASC") AS $aaf){
                 $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
                 $data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
