@@ -9904,7 +9904,8 @@ public function print_history_lost(){
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
-        if($row_avail!=0){
+        $data['lost'] = array();
+        // if($row_avail!=0){
             foreach($this->super_model->select_custom_where("et_details", "lost='1'") AS $det){
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                 $lost_date =$this->super_model->select_column_where("lost_items", "lost_date", "ed_id", $det->ed_id);
@@ -9928,9 +9929,9 @@ public function print_history_lost(){
                     'remarks'=>$remarks
                 );
             }
-        }else {
-            $data['lost'] = array();
-        }
+        // }else {
+        //     $data['lost'] = array();
+        // }
         $this->load->view('report/lost_list',$data);
         $this->load->view('template/footer');
     }
