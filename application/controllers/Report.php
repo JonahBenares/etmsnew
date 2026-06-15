@@ -1,19 +1,19 @@
 <?php
 /*error_reporting(0);*/
 defined('BASEPATH') OR exit('No direct script access allowed');
-// require FCPATH.'vendor\autoload.php';
-// use PhpOffice\PhpSpreadsheet\Spreadsheet;
-// use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
-// use PhpOffice\PhpSpreadsheet\Reader\Csv;
-// use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
-// use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
-// use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
-// use PhpOffice\PhpSpreadsheet\Style\Border as border;
-// use PhpOffice\PhpSpreadsheet\Style\NumberFormat as numberformat;
-// use PhpOffice\PhpSpreadsheet\Style\Fill as fill; // Instead fill
-// use PhpOffice\PhpSpreadsheet\Style\Color as color; //Instead PHPExcel_Style_Color
-// use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
-// use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
+require FCPATH.'vendor\autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as writerxlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as readerxlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing as drawing; // Instead PHPExcel_Worksheet_Drawing
+use PhpOffice\PhpSpreadsheet\Style\Alignment as alignment; // Instead alignment
+use PhpOffice\PhpSpreadsheet\Style\Border as border;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat as numberformat;
+use PhpOffice\PhpSpreadsheet\Style\Fill as fill; // Instead fill
+use PhpOffice\PhpSpreadsheet\Style\Color as color; //Instead PHPExcel_Style_Color
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup as pagesetup; // Instead PHPExcel_Worksheet_PageSetup
+use PhpOffice\PhpSpreadsheet\IOFactory as io_factory; // Instead PHPExcel_IOFactory
 class Report extends CI_Controller {
 
     function __construct(){
@@ -418,9 +418,9 @@ class Report extends CI_Controller {
     }
 
     public function export_overall(){
-        require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
-        $objPHPExcel = new PHPExcel();
-        // $objPHPExcel = new Spreadsheet();   
+        // require_once(APPPATH.'../assets/dist/js/phpexcel/Classes/PHPExcel/IOFactory.php');
+        // $objPHPExcel = new PHPExcel();
+        $objPHPExcel = new Spreadsheet();   
         $exportfilename="Overall Report.xlsx";
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', "Overall Report");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', "Date Encoded");
@@ -435,20 +435,20 @@ class Report extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', "Department");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', "Set Name");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', "Status / Accountability");
-        $styleArray = array(
-          'borders' => array(
-            'allborders' => array(
-              'style' => PHPExcel_Style_Border::BORDER_THIN
-            )
-          )
-        );
         // $styleArray = array(
-        //     'borders' => array(
-        //         'allBorders' => array(
-        //             'borderStyle' => border::BORDER_THIN
-        //         )
+        //   'borders' => array(
+        //     'allborders' => array(
+        //       'style' => PHPExcel_Style_Border::BORDER_THIN
         //     )
-        // );     
+        //   )
+        // );
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => border::BORDER_THIN
+                )
+            )
+        );     
         foreach(range('A','L') as $columnID){
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
@@ -457,18 +457,20 @@ class Report extends CI_Controller {
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7));
-        if(stripos($this->uri->segment(8), "%20%20") !== false) {
-            $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
-        } else if(stripos($this->uri->segment(8), "%20") !== false) {
-            $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
-        }else{
-            $item=urldecode($this->uri->segment(8));
-        }
-        $brand=str_replace("%20"," ",$this->uri->segment(9));
-        $model=str_replace("%20"," ",$this->uri->segment(10));
-        $type=str_replace("%20"," ",$this->uri->segment(11));
-        $serial=str_replace("%20"," ",$this->uri->segment(12));
+        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
+        $segment8 = $this->uri->segment(8, '');
+        $item = urldecode(str_replace('%20%20', ', ', $segment8));
+        // if(stripos($this->uri->segment(8), "%20%20") !== false) {
+        //     $item=urldecode(str_replace("%20%20",", ",$this->uri->segment(8)));
+        // } else if(stripos($this->uri->segment(8), "%20") !== false) {
+        //     $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
+        // }else{
+        //     $item=urldecode($this->uri->segment(8));
+        // }
+        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
+        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
+        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
+        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
@@ -618,10 +620,10 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $set_name);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $status);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":L".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                // $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                // $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
+                // $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                // $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":L".$num,'admin');
                 $num++;
@@ -691,8 +693,8 @@ class Report extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $set_name);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $status);
                     $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":L".$num)->applyFromArray($styleArray);
-                    $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                    $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $objPHPExcel->getActiveSheet()->getStyle('F'.$num.":G".$num)->getNumberFormat()->setFormatCode(numberformat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle("L".$num)->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
                     $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                     $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":L".$num,'admin');
                     $num++;
@@ -700,46 +702,48 @@ class Report extends CI_Controller {
             }
         }
         $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getAlignment()->setHorizontal(alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
-        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment;filename="Overall Report.xlsx"');
-        // header('Cache-Control: max-age=0');
-        // ob_end_clean();
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Xlsx');
-        // $objWriter->save('php://output');
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        if (file_exists($exportfilename))
-        unlink($exportfilename);
-        $objWriter->save($exportfilename);
-        unset($objPHPExcel);
-        unset($objWriter);   
-        ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Overall Report.xlsx"');
-        readfile($exportfilename);
+        header('Content-Disposition: attachment;filename="Overall Report.xlsx"');
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+        $objWriter = io_factory::createWriter($objPHPExcel, 'Xlsx');
+        $objWriter->save('php://output');
+
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        // if (file_exists($exportfilename))
+        // unlink($exportfilename);
+        // $objWriter->save($exportfilename);
+        // unset($objPHPExcel);
+        // unset($objWriter);   
+        // ob_end_clean();
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment; filename="Overall Report.xlsx"');
+        // readfile($exportfilename);
     }
 
     public function report_print_overall(){  
         $this->load->view('template/header');
-        $from=$this->uri->segment(3);
-        $to=$this->uri->segment(4);
-        $category=$this->uri->segment(5);
-        $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7));
-        $item=urldecode(str_replace("%20"," ",$this->uri->segment(8)));
-        $brand=str_replace("%20"," ",$this->uri->segment(9));
-        $model=str_replace("%20"," ",$this->uri->segment(10));
-        $type=str_replace("%20"," ",$this->uri->segment(11));
-        $serial=str_replace("%20"," ",$this->uri->segment(12));
-        $damage=$this->uri->segment(13);
-        $condition=$this->uri->segment(14);
-        $placement=$this->uri->segment(15);
-        $company=$this->uri->segment(16);
-        $encoded_from=$this->uri->segment(17);
-        $encoded_to=$this->uri->segment(18);
+        $from = $this->uri->segment(3);
+        $to = $this->uri->segment(4);
+        $category = $this->uri->segment(5);
+        $subcat = $this->uri->segment(6);
+
+        $department = str_replace("%20", " ", $this->uri->segment(7, ''));
+        $item = urldecode(str_replace("%20", " ", $this->uri->segment(8, '')));
+        $brand = str_replace("%20", " ", $this->uri->segment(9, ''));
+        $model = str_replace("%20", " ", $this->uri->segment(10, ''));
+        $type = str_replace("%20", " ", $this->uri->segment(11, ''));
+        $serial = str_replace("%20", " ", $this->uri->segment(12, ''));
+
+        $damage = $this->uri->segment(13);
+        $condition = $this->uri->segment(14);
+        $placement = $this->uri->segment(15);
+        $company = $this->uri->segment(16);
+        $encoded_from = $this->uri->segment(17);
+        $encoded_to = $this->uri->segment(18);
         $sql="";
         $filter = "";
         if($encoded_from!='null' && $encoded_to!='null'){
