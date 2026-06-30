@@ -212,29 +212,36 @@
         });
     });
 
-function toggleAccountability(id, val){
+    $(document).ready(function () {
+        $('#new_accountability').select2({
+            width: '100%',
+            dropdownParent: $('#changeAccountability')
+        });
+    });
 
-    var dropdown = $("#new_accountability"+id);
+    function toggleAccountability(id, val){
 
-    if(dropdown.length == 0){
-        return;
+        var dropdown = $("#new_accountability"+id);
+
+        if(dropdown.length == 0){
+            return;
+        }
+
+        var defaultValue = dropdown.attr('data-default');
+
+        if(parseInt(val) == 1){
+
+            dropdown.prop('disabled', false);
+
+        } else {
+
+            dropdown.val(defaultValue);
+
+            dropdown.prop('disabled', true);
+
+            dropdown.trigger('change');
+
+        }
+
     }
-
-    var defaultValue = dropdown.attr('data-default');
-
-    if(parseInt(val) == 1){
-
-        dropdown.prop('disabled', false);
-
-    } else {
-
-        dropdown.val(defaultValue);
-
-        dropdown.prop('disabled', true);
-
-        dropdown.trigger('change');
-
-    }
-
-}
 </script>

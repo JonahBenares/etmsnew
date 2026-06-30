@@ -48,6 +48,7 @@ class Repair extends CI_Controller {
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0' AND et_id = '$check->et_id'");           
         }
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        $data['new_accountability'] = $this->super_model->select_all_order_by("employees", "employee_name", "ASC");
         if($row_avail!=0){
             //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
             foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $et){
@@ -430,5 +431,30 @@ class Repair extends CI_Controller {
         // header('Content-Disposition: attachment; filename="Damage Summary Report.xlsx"');
         // readfile($exportfilename);
     }
+
+
+        public function update_accountability(){
+            $damage_id = $this->input->post('damage_id');
+            $employee_id = $this->input->post('employee_id');
+
+            // Update damage_info table
+            $data = array(
+                'accountable' => $employee_id
+            );
+            $this->super_model->update_where("damage_info", $data, "damage_id", $damage_id);
+
+            // Get the corresponding et_id
+            $et_id = $this->super_model->select_column_where("damage_info", "et_id", "damage_id", $damage_id);
+
+            // Update et_head table
+            $data2 = array(
+                'accountability_id' => $employee_id
+            );
+            $this->super_model->update_where("et_head", $data2, "et_id", $et_id);
+
+            // Return the damage_id
+            echo $damage_id;
+        }
+
 }
 ?>

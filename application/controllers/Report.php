@@ -7326,6 +7326,12 @@ public function print_history_lost(){
                 'series'=>$series
             );
             $this->super_model->insert_into("damage_series", $damage_data);
+
+            if($remove_accountability==1 && $remove_accountability==2){
+                $updated_accountable = $accountable;
+            }else{
+                $updated_accountable = $new_accountability;
+            }
             $data_damage = array(
                 'et_id'=>$et_id,
                 'incident_date'=>$date,
@@ -7343,7 +7349,7 @@ public function print_history_lost(){
                 'submitted_by'=>$submitted_by,
                 'checked_by'=>$checked_by,
                 'noted_by'=>$noted_by,
-                'accountable'=>$accountable,
+                'accountable'=>$updated_accountable,
                 'remove_accountability'=>$remove_accountability,
                 'create_date'=>date("Y-m-d H:i:s"),
                 'user_id'=>$this->input->post('user_id'),
@@ -12587,5 +12593,114 @@ public function print_history_lost(){
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="Equipment Tools Available Set.xlsx"');
         readfile($exportfilename);
+    }
+
+    public function seaaf_damage_report(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar', $this->dropdown);
+
+        // damage_id from URL
+        $damage_id = $this->uri->segment(3);
+        $data['damage_id'] = $damage_id;
+
+        // Get damage information
+        $damage = $this->super_model->select_row_where("damage_info", "damage_id", $damage_id);
+
+        $employee_id = "";
+        $et_id = "";
+        $ed_id = "";
+
+        foreach($damage as $d){
+            $employee_id = $d->accountable;
+            $et_id = $d->et_id;
+            $ed_id = $d->ed_id;
+        }
+
+        // Employee Information
+        $data['id'] = $employee_id;
+        $data['employee'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $employee_id);
+        $data['position'] = $this->super_model->select_column_where("employees", "position", "employee_id", $employee_id);
+        $data['aaf_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $employee_id);
+
+        // Check if ET exists
+        $row = $this->super_model->count_custom_where("et_head", "et_id='$et_id' AND cancelled='0'");
+
+        if($row != 0){
+
+            // Get ET Head
+            foreach($this->super_model->select_row_where("et_head", "et_id", $et_id) as $aaf){
+
+                $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $employee_id);
+                $data['date_issued'] = $this->super_model->select_column_where("et_details", "date_issued", "ed_id", $ed_id);
+                $data['department'] = $aaf->department;
+                $data['user_id'] = $_SESSION['fullname'];
+
+                $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
+
+                $qty = 1;
+
+                // Get ONLY the damaged item
+                foreach($this->super_model->select_row_where("et_details", "ed_id", $ed_id) as $det){
+
+                    $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $det->set_id);
+
+                    $count_set = $this->super_model->count_custom("
+                        SELECT et_head.et_id
+                        FROM et_details
+                        INNER JOIN et_head ON et_head.et_id = et_details.et_id
+                        WHERE set_id='$et_set_id'
+                        AND accountability_id='$employee_id'
+                        AND cancelled='0'
+                        AND damage='0'
+                    ");
+
+                    $total = $qty * $det->unit_price;
+
+                    $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+
+                    $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
+
+                    $set_curr = $this->super_model->select_column_where("et_set", "set_currency", "set_id", $det->set_id);
+
+                    $set_currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $set_curr);
+
+                    $set_total = $qty * $set_price;
+
+                    $data['details'][] = array(
+                        'set_id'            => $det->set_id,
+                        'et_set_id'         => $et_set_id,
+                        'acquisition_date'  => $det->acquisition_date,
+                        'asset_control_no'  => $det->asset_control_no,
+                        'et_desc'           => $aaf->et_desc,
+                        'unit'              => $unit,
+                        'qty'               => $qty,
+                        'date_issued'       => $det->date_issued,
+                        'unit_price'        => $det->unit_price,
+                        'brand'             => $det->brand,
+                        'type'              => $det->type,
+                        'model'             => $det->model,
+                        'serial'            => $det->serial_no,
+                        'currency'          => $currency,
+                        'set_price'         => $set_price,
+                        'set_currency'      => $set_currency,
+                        'set_total'         => $set_total,
+                        'total'             => $total,
+                        'count_set'         => $count_set,
+                    );
+                }
+            }
+
+        } else {
+
+            $data['details'] = array();
+            $data['department'] = '';
+            $data['type'] = '';
+            $data['date_issued'] = '';
+            $data['user_id'] = '';
+
+        }
+
+        $this->load->view('report/seaaf_damage_report', $data);
+        $this->load->view('template/footer');
     }
 }

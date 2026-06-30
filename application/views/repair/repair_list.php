@@ -1,6 +1,7 @@
 <script src="<?php echo base_url(); ?>assets/dist/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/dist/js/report.js"></script>
-
+<link src="<?php echo base_url(); ?>assets/select2/select2.min.css">
+<script src="<?php echo base_url();?>assets/dist/js/select2.min.js"></script>
 <div class="page-wrapper">
     <div class="container-fluid">
         <div class="row page-titles">
@@ -96,11 +97,28 @@
                                         <td class="p-b-10 p-t-10"><?php echo $d['model'];?></td>
                                         <td class="p-b-10 p-t-10"><?php echo $d['serial_no'];?></td>
                                         <td class="p-b-10 p-t-10"><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else if($d['repair']==1 && $d['count_ed_id'] < 1){ echo 'Repaired'; }?></td>
-                                        <td class="p-b-10 p-t-10"  align="center">
-                                            <a href="<?php echo base_url(); ?>report/damage_report_nav/<?php echo $d['damage_id']?>" class="btn btn-warning-alt text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
-                                                <i class="fa fa-print"></i>
-                                            </a>
+                                        <td class="p-b-10 p-t-10" align="center">
+                                            <div style="display:flex; justify-content:center; align-items:center; gap:5px;">
+                                                <a href="<?php echo base_url(); ?>report/damage_report_nav/<?php echo $d['damage_id']?>"
+                                                   class="btn btn-warning-alt text-white btn-sm"
+                                                   data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Print">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+
+                                                <a href="javascript:void(0);"
+                                                   class="btn btn-primary btn-sm"
+                                                   data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Change Accountability"
+                                                   onclick="showChangeAccountability('<?php echo $d['damage_id']; ?>',
+                                                                                     '<?php echo $d['accountable_id']; ?>')">
+                                                    <i class="fa fa-user"></i>
+                                                </a>
+                                            </div>
                                         </td>
+
                                     </tr>
                                     <?php $x++; } ?>                                        
                                 </tbody>
@@ -118,6 +136,40 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="changeAccountability" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4>Change Accountability</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="damage_id">
+
+                <label>Change Accountability</label>
+                <select id="new_accountability" name="new_accountability" class="form-control select2-accountability">
+                    <?php foreach($new_accountability as $na){ ?>
+                        <option value="<?php echo $na->employee_id; ?>">
+                            <?php echo $na->employee_name; ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-primary" onclick="updateAccountability()">
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('#damage_modal').on('hidden.bs.modal', function () {
@@ -125,5 +177,40 @@
             $('input[name="with_accountability"]').prop('checked', false);
         });
     });
+
+    $(function () {
+        $('#new_accountability').select2({
+            width: '100%',
+            dropdownParent: $('#changeAccountability')
+        });
+    });
+
+    function showChangeAccountability(id, current_employee)
+    {
+        $('#damage_id').val(id);
+
+        // Select the current employee
+        $('#new_accountability').val(current_employee).trigger('change');
+
+        $('#changeAccountability').modal('show');
+    }
+
+    function updateAccountability()
+    {
+        $.ajax({
+            url: "<?php echo base_url('repair/update_accountability'); ?>",
+            type: "POST",
+            data: {
+                damage_id: $('#damage_id').val(),
+                employee_id: $('#new_accountability').val()
+            },
+            success: function(res){
+                alert("Updated successfully");
+
+                // Redirect to damage report page
+                window.location.href = "<?php echo base_url('report/damage_report_nav/'); ?>" + $.trim(res);
+            }
+        });
+    }
 </script>
 

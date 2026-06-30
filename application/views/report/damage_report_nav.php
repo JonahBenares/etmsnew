@@ -305,6 +305,17 @@
             <br>
             <br>
         </div>
-        <center><a href="" id="printBtn" onclick="iprint()" class="btn btn-success btn-block m-b-50 animated headShake">Print</a></center>
+        <center>
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <a href="<?php echo base_url(); ?>report/seaaf_damage_report/<?php echo $id; ?>"
+                   target="_blank"
+                   class="btn btn-primary animated headShake">
+                    Open AAF Report
+                </a>
+                <a href="" id="printBtn" onclick="iprint(); return false;" class="btn btn-success animated headShake">
+                    Print
+                </a>
+            </div>
+        </center>
     </div>
 </div>
