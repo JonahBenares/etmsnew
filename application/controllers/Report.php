@@ -457,7 +457,6 @@ class Report extends CI_Controller {
         $to=$this->uri->segment(4);
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
-        $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
         $department = str_replace("%20", " ", ($this->uri->segment(7) !== NULL ? $this->uri->segment(7) : ''));
         $segment8 = $this->uri->segment(8, '');
         $item = urldecode(str_replace('%20%20', ', ', $segment8));
