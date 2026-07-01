@@ -69,7 +69,12 @@
                     <tr>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['asset_control_no'];?></td>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['acquisition_date'];?></td>
-                        <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['et_desc'];?></td>
+                        <td class="main-tab" align="center" style="font-size: 11px">
+                            <?php
+                                echo $det['et_desc']
+                                    . ($det['damaged'] == 1 ? ' <span style="color:red;"><b>(Damaged Item)</b></span>' : '');
+                            ?>
+                        </td>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['brand'];?></td>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['model'];?></td>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['serial'];?></td>

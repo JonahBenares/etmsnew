@@ -8495,6 +8495,7 @@ public function print_history_lost(){
                         'set_total'=>$set_total,
                         'total'=>$total,
                         'count_set'=>$count_set,
+                        'damaged'=>$det->damage,
                     );
                 }
             }
