@@ -458,6 +458,7 @@ class Report extends CI_Controller {
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7) ?? '');
+        $department = str_replace("%20", " ", ($this->uri->segment(7) !== NULL ? $this->uri->segment(7) : ''));
         $segment8 = $this->uri->segment(8, '');
         $item = urldecode(str_replace('%20%20', ', ', $segment8));
         // if(stripos($this->uri->segment(8), "%20%20") !== false) {
@@ -467,10 +468,10 @@ class Report extends CI_Controller {
         // }else{
         //     $item=urldecode($this->uri->segment(8));
         // }
-        $brand=str_replace("%20"," ",$this->uri->segment(9) ?? '');
-        $model=str_replace("%20"," ",$this->uri->segment(10) ?? '');
-        $type=str_replace("%20"," ",$this->uri->segment(11) ?? '');
-        $serial=str_replace("%20"," ",$this->uri->segment(12) ?? '');
+        $brand = str_replace("%20", " ", ($this->uri->segment(9) !== NULL ? $this->uri->segment(9) : ''));
+        $model = str_replace("%20", " ", ($this->uri->segment(10) !== NULL ? $this->uri->segment(10) : ''));
+        $type = str_replace("%20", " ", ($this->uri->segment(11) !== NULL ? $this->uri->segment(11) : ''));
+        $serial = str_replace("%20", " ", ($this->uri->segment(12) !== NULL ? $this->uri->segment(12) : ''));
         $damage=$this->uri->segment(13);
         $condition=$this->uri->segment(14);
         $placement=$this->uri->segment(15);
