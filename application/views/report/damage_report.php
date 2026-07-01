@@ -352,7 +352,7 @@
         <center>
             <div class="text-center">
                 <div style="display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap;">
-                    <a href="<?php echo base_url(); ?>report/seaaf_damage_report/<?php echo $id; ?>"
+                    <a href="<?php echo base_url(); ?>report/seaaf_damage_report/<?php echo $id; ?>" id="printBtn"
                        target="_blank"
                        class="btn btn-primary animated headShake">
                         Open AAF Report
