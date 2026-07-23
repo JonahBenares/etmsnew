@@ -2403,8 +2403,12 @@ public function edit_encode_transfer(){
                             );
                             $this->super_model->insert_into("asset_series", $asset_data);*/
 
-                            echo "<script>alert('Equipment/Tool successfully Updated!'); 
-                            window.location ='".base_url()."report/report_main'; </script>";
+                            echo 
+                            // "<script>alert('Equipment/Tool successfully Updated!'); 
+                            // window.location ='".base_url()."report/report_main'; </script>";
+                            
+                            "<script> alert('Equipment/Tool successfully Updated!');
+                            window.location.href = '" . base_url('encode/encode_report/' . $id) . "';</script>";
                     }    
                 }else {
                     $data = array(
@@ -2430,8 +2434,11 @@ public function edit_encode_transfer(){
                             'save_temp'=>1,
                         );
                         $this->super_model->update_where("et_head", $data_up, "et_id", $id);
-                        echo "<script>alert('Equipment/Tool successfully Updated!'); 
-                        window.location ='".base_url()."report/report_draft'; </script>";
+                        echo 
+                        // "<script>alert('Equipment/Tool successfully Updated!'); 
+                        // window.location ='".base_url()."report/report_draft'; </script>";
+                        "<script> alert('Equipment/Tool successfully Updated!');
+                         window.location.href = '" . base_url('encode/encode_report/' . $id) . "';</script>";
                     }
                 }    
             }
