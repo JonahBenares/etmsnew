@@ -15,7 +15,7 @@
                     <p style="margin: 0px"><?php echo TEL_NO;?></p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                   <h5><strong>SUMMARY OF EMPLOYEE'S ASSET ACCOUNTABILITY FORM</strong></h5>
+                   <h5><strong>ASSET CLEARANCE FORM</strong></h5>
                 </td>
             </tr>
         </table>
