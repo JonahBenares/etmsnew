@@ -8593,7 +8593,10 @@ public function print_history_lost(){
                     if ($det->damage == 1) {
                         $status = 'Damaged';
                     } else if ($is_common > 0) {
-                        $status = 'Common Item';
+                    // Get parent employee information
+                    $parent_employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id );
+                    // Show Common Item with employee name
+                    $status = 'Common accountability with ' . $parent_employee;
                     } else {
                         $status = '';
                     }
