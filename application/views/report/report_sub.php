@@ -154,6 +154,8 @@
                                     <span class="fa fa-clipboard"></span></a>
                                 <a href="<?php echo base_url(); ?>report/seaaf_report/<?php echo $id;?>" class="btn btn-info-alt btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                     <span class="fa fa-print"></span></a>
+                                <a href="<?php echo base_url(); ?>report/seaaf_report_status/<?php echo $id;?>" class="btn btn-secondary-alt btn-sm" data-toggle="tooltip" data-placement="top" title="Print with status">
+                                    <span class="fa fa-print"></span></a>
                             </div>
                         </h4>
                         <table class="table dataTable table-striped ">

@@ -42,7 +42,7 @@
             </table>
         </div>
         <div class="col-lg-12">
-                        <table width="100%" class="table-bordered">
+            <table width="100%" class="table-bordered">
                 <tr>
                     <td class="main-tab" width="7%" align="center"><strong>Asset #</strong></td>
                     <td class="main-tab" width="6%" align="center"><strong>Acquisition Date</strong></td>
@@ -54,6 +54,7 @@
                     <td class="main-tab" width="4%" align="center"><strong>U/M</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Cost</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
+                    <td class="main-tab" width="8%" align="center"><strong>Status</strong></td>
                 </tr>
 
             <?php
@@ -94,16 +95,7 @@
                         <td class="main-tab" align="center" style="font-size: 11px">
                             <?php echo $det['acquisition_date']; ?>
                         </td>
-                        <td class="main-tab" align="center" style="font-size: 11px">
-                            <?php
-                            echo $det['et_desc'];
-
-                            if ($det['damaged'] == 1) {
-                                echo ' <span style="color:red;"><b>(Damaged Item)</b></span>';
-                            }
-                            ?>
-                        </td>
-
+                        <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['et_desc']; ?></td>
                         <td class="main-tab" align="center" style="font-size: 11px">
                             <?php echo $det['brand']; ?>
                         </td>
@@ -130,6 +122,7 @@
                         <td class="main-tab" align="center" style="font-size: 11px"> <?php echo number_format((float)$det['total'], 2); ?> <small> <?php echo $det['currency']; ?> </small>
                         </td>
                         <?php } /* * Remember the current set_id. */ $previousId = $setId; ?>
+                        <td class="main-tab" align="center" style="font-size: 11px"> <?php echo $det['status']; ?> </td>
                     </tr>
             <?php } } else {?>
 

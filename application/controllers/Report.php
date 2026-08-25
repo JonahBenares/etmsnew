@@ -8517,6 +8517,123 @@ public function print_history_lost(){
         $this->load->view('template/footer');
     }
 
+    public function seaaf_report_status(){  
+        $this->load->view('template/header');
+        $this->load->view('template/navbar',$this->dropdown);
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACCOUNTABILITY FILTER
+        |--------------------------------------------------------------------------
+        | Parent = own items only
+        | Child = own items + parent items
+        */
+
+        $accountability_ids = array($id);
+
+        // if current employee is child
+        foreach($this->super_model->select_custom_where("employee_inclusion","child_id='$id' AND removed='0'") AS $c){
+
+            // include parent items
+            if(!in_array($c->parent_id, $accountability_ids)){
+                $accountability_ids[] = $c->parent_id;
+            }
+        }
+
+        $id_list = implode("','", $accountability_ids);
+
+        /*
+        |--------------------------------------------------------------------------
+        | MAIN
+        |--------------------------------------------------------------------------
+        */
+        $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
+        $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $id);
+        $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $id);
+        // $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
+        $row = 0;
+        foreach($this->super_model->custom_query(" SELECT * FROM et_head WHERE accountability_id IN ('$id_list') AND cancelled='0' ") AS $r){$row++; }
+        if($row!=0){
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$id) AS $em){
+                $status=$this->super_model->select_column_where("employees", "status", "employee_id", $em->child_id);
+                if($status==0){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "employee_id='$em->child_id' AND status='0'"), 
+                    );
+                }
+            }
+            // foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0' ORDER BY et_desc ASC") AS $aaf){
+            foreach($this->super_model->custom_query("SELECT * FROM et_head WHERE accountability_id IN ('$id_list') AND cancelled = '0' ORDER BY et_desc ASC") AS $aaf){
+                $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
+                $data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
+                $data['user_id'] =$_SESSION['fullname'];
+                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
+                $data['department'] =$aaf->department;
+                $qty = 1;
+
+                // Determine ONCE per aaf item: is this accountability_id shared via employee_inclusion?
+                $is_common = $this->super_model->count_custom_where("employee_inclusion", "parent_id='$aaf->accountability_id' AND removed='0'");
+
+                foreach($this->super_model->select_custom_where('et_details', "et_id='$aaf->et_id' AND obsolete='0' AND lost='0'") AS $det){
+                    //foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
+                    $et_set_id = $this->super_model->select_column_where("et_set","set_id",'set_id',$det->set_id);
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE set_id ='$et_set_id' AND accountability_id='$aaf->accountability_id' AND cancelled='0' AND damage='0'");
+                    $data['count_set']=$count_set;
+                    $total=$qty*$det->unit_price;
+                    $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                    $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$det->set_id);
+                    $set_curr = $this->super_model->select_column_where("et_set","set_currency",'set_id',$det->set_id);
+                    $set_currency = $this->super_model->select_column_where("currency","currency_name",'currency_id',$set_curr);
+                    $set_total=$qty*$set_price;
+
+                    // Status logic: Damaged takes priority over Common Item
+                    if ($det->damage == 1) {
+                        $status = 'Damaged';
+                    } else if ($is_common > 0) {
+                        $status = 'Common Item';
+                    } else {
+                        $status = '';
+                    }
+
+                    $data['details'][] = array(
+                        'set_id'=>$det->set_id,
+                        'et_set_id'=>$et_set_id,
+                        'acquisition_date'=>$det->acquisition_date,
+                        'asset_control_no'=>$det->asset_control_no,
+                        'et_desc'=>$aaf->et_desc,
+                        'unit'=>$unit,
+                        'qty'=>$qty,
+                        'date_issued'=>$det->date_issued,
+                        'unit_price'=>$det->unit_price,
+                        'brand'=>$det->brand,
+                        'type'=>$det->type,
+                        'model'=>$det->model,
+                        'serial'=>$det->serial_no,
+                        'currency'=>$currency,
+                        'set_price'=>$set_price,
+                        'set_currency'=>$set_currency,
+                        'set_total'=>$set_total,
+                        'total'=>$total,
+                        'count_set'=>$count_set,
+                        'damaged'=>$det->damage,
+                        'status'=>$status,
+                    );
+                }
+            }
+        }else {
+            $data['details'] = array();
+            $data['department'] =  '';
+            $data['type'] =  '';
+            $data['date_issued'] =  '';
+            $data['user_id'] =  '';
+        }
+        $this->load->view('report/seaaf_report_status',$data);
+        $this->load->view('template/footer');
+    }
+
     public function acf_report(){  
         $this->load->view('template/header');
         $this->load->view('template/navbar',$this->dropdown);
