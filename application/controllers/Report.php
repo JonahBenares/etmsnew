@@ -8450,6 +8450,7 @@ public function print_history_lost(){
         $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $id);
         $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $id);
+        $data['user_id'] =$_SESSION['fullname'];
         // $row=$this->super_model->count_custom_where("et_head","accountability_id='$id' AND cancelled='0'");
         $row = 0;
         foreach($this->super_model->custom_query(" SELECT * FROM et_head WHERE accountability_id IN ('$id_list') AND cancelled='0' ") AS $r){$row++; }
@@ -8467,7 +8468,6 @@ public function print_history_lost(){
                 $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
                 $data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
-                $data['user_id'] =$_SESSION['fullname'];
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
                 $data['department'] =$aaf->department;
                 $qty = 1;
@@ -8511,7 +8511,6 @@ public function print_history_lost(){
             $data['department'] =  '';
             $data['type'] =  '';
             $data['date_issued'] =  '';
-            $data['user_id'] =  '';
         }
         $this->load->view('report/seaaf_report',$data);
         $this->load->view('template/footer');
