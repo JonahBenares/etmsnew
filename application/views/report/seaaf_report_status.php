@@ -161,17 +161,28 @@
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom;<?php echo ($type != 2) ? 'text-align: center;' : '';?>">
                         <?php if($type == 2){ ?>
-                            <?php 
-                                if(!empty($child)){  
-                                    foreach($child as $c){ 
-                                        echo  "<div style='margin-top: 20px;'>".$c['emp'].', <div>'; 
-                                    } 
-                                }else{ 
-                                    echo $employee; 
-                                } 
+                            <?php
+                            if(!empty($child)){
+                                foreach($child as $c){
+                                    echo "<div style='margin-top:20px;'>".$c['emp']."</div>";
+                                }
+                            }else{
+                                echo $employee;
+                            }
                             ?>
-                        <?php } else { ?>
-                            <?php echo  $employee;?>
+
+                        <?php }else{ ?>
+
+                            <?php
+                            echo $employee;
+
+                            if(!empty($child)){
+                                foreach($child as $c){
+                                    echo "<div style='margin-top:20px;'>".$c['emp']."</div>";
+                                }
+                            }
+                            ?>
+
                         <?php } ?>
                     </td>
                     <td></td>

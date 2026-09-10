@@ -146,18 +146,18 @@
                 </tr>
             </table>
             <br>
-            <table width="100%">
+            <!-- <table width="100%">
                 <tr>
                     <td class="main-tab" style="text-indent:20%">I hereby acknowledge receipt of the company owned property/ies listed above for which I am accountable. I agree to maintain the property/ies in good condition and to return it when I cease working for the company, or earlier on request.  I promise to report any loss or damage immediately and further agree to use the said property for work related purposes.</td>
                 </tr>
             </table>
-            <br>
+            <br> -->
              <table width="100%">
                 <tr>
                     <td width="10%"></td>
                     <td width="26%" class="main-tab">Prepared by:</td>
                     <td width="10%"></td>
-                    <td width="26%" class="main-tab">Received by:</td>
+                    <td width="26%" class="main-tab">Acknowledged by:</td>
                     <td width="10%"></td>
                 </tr>
                 <tr>
